@@ -6,8 +6,9 @@
 
 ### 命令
 
-* [sudo/su](docs/commond/sudo-su.md)
-* [rz/sz](docs/commond/rz-sz.md)
+* [sudo/su](docs/command/sudo-su.md)
+* [rz/sz](docs/command/rz-sz.md)
+* [vim](docs/command/vim.md)
 
 ---
 
