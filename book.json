@@ -16,7 +16,8 @@
 		"sectionx@^3.1.0",
 		"chart@^0.2.1",
 		"local-video@^1.0.1",
-		"emphasize@^1.1.0"
+		"emphasize@^1.1.0",
+		"expandable-chapters@^0.2.0"
 	],
 	"pluginsConfig": {
 		"tbfed-pagefooter": {
