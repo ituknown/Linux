@@ -2,6 +2,11 @@
 
 * [Introduction](README.md)
 
+---
+
+## 命令
+
+* [sudo/su](docs/commond/sudo-su.md)
 
 ---
 

@@ -83,7 +83,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 
 不过输出格式有些不同：
 
-<u>ifconfig</u>
+**ifconfig**
 
 ```
 [root@localhost /]# ifconfig
@@ -106,7 +106,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 
-<u>ip addr</u>
+**ip addr**
 
 ```
 [root@localhost /]# ip addr
