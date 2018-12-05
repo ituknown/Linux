@@ -41,7 +41,7 @@ npm -qa | grep vim
 查看是否存在以上安装包：
 
 ```
-[root@vultr etc]# rpm -qa|grep vim
+[root@localhost ~]# rpm -qa|grep vim
 vim-minimal-7.4.629-5.el6.x86_64
 ```
 

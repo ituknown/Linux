@@ -1,13 +1,16 @@
 # Summary
 
-* [Introduction](README.md)
+### Linux
+
+* [Linux 简介](README.md)
+* [目录结构](docs/linux/file-structure.md)
 
 ---
 
 ### 命令
 
-* [sudo/su](docs/command/sudo-su.md)
-* [rz/sz](docs/command/rz-sz.md)
+* [sudo & su](docs/command/sudo-su.md)
+* [rz & sz](docs/command/rz-sz.md)
 * [vim](docs/command/vim.md)
 
 ---
