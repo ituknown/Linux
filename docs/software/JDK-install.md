@@ -79,19 +79,59 @@ vim profile
 在该文件中添加如下配置信息：
 
 ```
-# 添加 JVM 环境变量
+# JVM Environment
 JAVA_HOME=/usr/jvm/jdk1.8.0_60
-CLASSPATH=${JAVA_HOME}/lib
-PATH=${JAVA_HOME}/bin
-export JAVA_HOME CLASSPATH PATH
+CLASSPATH=.:${CLASSPATH}:${JAVA_HOME}/lib
+PATH=${PATH}:${JAVA_HOME}/bin
+export JAVA_HOME
+export CLASSPATH
+export PATH
 
 # 或者如下方式
 export JAVA_HOME=/usr/jvm/jdk1.8.0_60
-export CLASSPATH=${JAVA_HOME}/lib
-export PATH=${JAVA_HOME}/bin
+export CLASSPATH=.:${CLASSPATH}:${JAVA_HOME}/lib
+export PATH=${PATH}:${JAVA_HOME}/bin
 ```
 
->**注意：** `JAVA_HOME`、`CLASSPATH`、`PATH` 与 `=` 之间不能有空格！！！！
+<!--sec data-title="警告" data-id="section0" data-show=true ces-->
+
+`JAVA_HOME`、`CLASSPATH`、`PATH` 与 `=` 之间不能有空格！！！！
+
+```
+JAVA_HOME=/usr/jvm/jdk1.8.0_60
+CLASSPATH=.:${CLASSPATH}:${JAVA_HOME}/lib
+PATH=${PATH}:${JAVA_HOME}/bin
+```
+不能写成：
+```
+JAVA_HOME   = /usr/jvm/jdk1.8.0_60
+CLASSPATH   = .:${CLASSPATH}:${JAVA_HOME}/lib
+PATH        = ${PATH}:${JAVA_HOME}/bin
+```
+
+另外，在配置 `CLASSPATH` 时一定要将原 `CLASSPATH` 加上：
+
+```
+CLASSPATH=.:${CLASSPATH}:`JAVA_CLASSPATH`
+```
+
+`PATH` 也要将原 `PATH` 加上：
+
+```
+PATH=${PATH}:`JAVA_PATH`
+```
+
+否则在配置并应用后命令将不可使用。
+
+如输入 `vi`、`yum` 等命令不能使用，原因就是这里配置错误。如果配置错误后就需要进行重置 `PATH`，执行如下命令重置：
+
+```
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+```
+
+然后要仔细检查 `profile` 配置文件，检查是那部分配置错误并要修正再次应用即可！
+
+<!--endsec-->
 
 环境变量配置完成后输入如下指令
 
