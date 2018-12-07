@@ -3,7 +3,7 @@
 ### Linux
 
 * [Linux 简介](README.md)
-* [目录结构](docs/linux/file-structure.md)
+* [根目录结构](docs/linux/base-file-structure.md)
 
 ---
 
