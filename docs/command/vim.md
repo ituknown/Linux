@@ -35,7 +35,7 @@ vim-common-${version}
 输入命令：
 
 ```
-npm -qa | grep vim
+rpm -qa | grep vim
 ```
 
 查看是否存在以上安装包：
