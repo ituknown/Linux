@@ -1,6 +1,4 @@
-# vim 安装与使用
-
----
+# 前言
 
 `vim` 与 `vi` 都是Linux下多模式编辑器，不同的是 `vim` 是 `vi` 的省级版本。它不仅兼容 `vi` 的所有指令，而且还有一些新的特性。
 
@@ -16,13 +14,13 @@
 输入命令：
 
 ```
-[root@localhost ~]# vim
+$ vim
 -bash: vim: command not found 
 ```
 
 因此，在使用该命令之前我们需要先安装该命令。
 
-## vim 安装
+# vim 安装
 
 使用 `vim` 命令我们需要如下安装包：
 
@@ -35,26 +33,26 @@ vim-common-${version}
 输入命令：
 
 ```
-rpm -qa | grep vim
+$ rpm -qa | grep vim
 ```
 
 查看是否存在以上安装包：
 
 ```
-[root@localhost ~]# rpm -qa|grep vim
+$ rpm -qa|grep vim
 vim-minimal-7.4.629-5.el6.x86_64
 ```
 
 可以看到，只有一个 `vim-minimal` 安装包。因此需要安装另外两个安装包：
 
 ```
-yum -y install vim-enhanced
+$ yum -y install vim-enhanced
 ```
 
 以上安装包安装完成后输入命令 
 
 ```
-vim
+$ vim
 ```
 
 即进入并显示如下信息：

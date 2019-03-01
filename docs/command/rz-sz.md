@@ -1,14 +1,10 @@
-# rz / sz 文件上传下载
-
----
-
-## 简述
+# 简述
 
 通常，利用SSH管理远程Linux服务器时，经常需要与本地交互文件。当然，我们可以利用 `FTP`方式，比如通过 `Filezilla` 客户端软件。不过直接使用 `SSH` 软件（`SecureCRT`、`Xshell`）自带的上传和下载功能无疑使最方便快捷的。通常SSH软件支持的文件传输协议主要有 `ASCII`、`Xmodem`、`Zmodem` 等。
 
 `rz`、`sz` 是便是 `Linux/Unix` 同 `Windows` 进行 `ZModem` 文件传输的命令行工具，使用该命令前提需要安装 `lszrz` 包。
 
-## 文本传输协议
+# 文本传输协议
 
 文件传输是数据交换的主要形式。在进行文件传输时，为使文件能被正确识别和传送，我们需要在两台计算机之间建立统一的传输协议。这个协议包括了文件的识别、传送的起止时间、错误的判断与纠正等内容。常见的传输协议有以下几种：
 
@@ -20,20 +16,20 @@
 
 * `Zmodem`：`Zmodem` 采用了串流式（`streaming`）传输方式，传输速度较快，而且还具有自动改变区段大小和断点续传、快速错误侦测等功能。这是目前最流行的文件传输协议。
 
-## 安装 lszrz
+# 安装 lszrz
 
 单单是SSH客户端软件支持以上文件传输协议（`ASCIIXmodem`、`Ymodem`、`Zmodem·）还不行，我们的Linux服务器上也得安装相应的软件，以支持这些文件传输协议才行。在Linux上，`lrzsz` 就是完成此任务的，`lrzsz` 就是一个支持 `Zmodem` 传输协议的工具。我们通过 `sz/rz` 两个命令，分别发送/接收文件。如果我们的系统中没有安装 `lrzsz` 这个包，就会报错，安装即可解决。
 
 ```
-[root@localhost ~]# rz
+$ rz
 -bash: rz: command not found
-[root@localhost ~]# yum -y install lrzsz
+$ yum -y install lrzsz
 ```
 
 当然，在安装之前也可以使用 `yum search <package>` 命令进行查找 `lrzsz`：
 
 ```
-[root@localhost ~]# yum search lrzsz
+$ yum search lrzsz
 已加载插件：fastestmirror
 Loading mirror speeds from cached hostfile
  * base: mirrors.aliyun.com
@@ -46,7 +42,7 @@ lrzsz.x86_64 : The lrz and lsz modem communications programs
 安装日志如下所示：
 
 ```
-[root@localhost ~]# yum -y install lrzsz
+$ yum -y install lrzsz
 已加载插件：fastestmirror
 Loading mirror speeds from cached hostfile
  * base: mirrors.aliyun.com
@@ -93,12 +89,12 @@ Running transaction
 完毕！
 ```
 
-## rz 基本用法
+# rz 基本用法
 
 `rz` 中的 `r` 意为 `received`（接收），告诉客户端，我（服务器）要接收文件 `received by cilent`，就等同于客户端在上传。
 
 ```
-[root@localhost ~]# rz --help
+$ rz --help
 rz version 0.12.20
 Usage: rz [options] [filename.if.xmodem]
 Receive files with ZMODEM/YMODEM/XMODEM protocol
@@ -144,19 +140,19 @@ short options use the same arguments as the long ones
 想要接收文件直接输入命令 `rz` 即可：
 
 ```
-rz
+$ rz
 ```
 
 ![rz-window](images/rz-sz/rz-window.png)
 
 ![rz-file](images/rz-sz/rz-file.png)
 
-## sz 基本用法
+# sz 基本用法
 
 `sz` 中的 `s` 意为 `send`（发送），告诉客户端，我（服务器）要发送文件 `send to cilent`，就等同于客户端在下载。
 
 ```
-[root@localhost ~]# sz --help
+$ sz --help
 sz version 0.12.20
 Usage: sz [options] file ...
    or: sz [options] -{c|i} COMMAND
@@ -214,22 +210,22 @@ short options use the same arguments as the long ones
 **下载一个文件**
 
 ```
-sz fileName
+$ sz fileName
 ```
 
 **下载多个文件**
 
 ```
-sz fileName1 fileName2
+$ sz fileName1 fileName2
 ```
 
 **下载 dir 目录下所有文件，不包含 dir 下的文件夹**
 
 ```
-sz dir/*
+$ sz dir/*
 ```
 
-## 总结
+# 总结
 
 记住一点，不论是 `send` 还是 `received`，动作都是在服务器上发起的。我们习惯了说上传或是下载，其实大可不必。使用这两个命令，只要思考一点，是要把文件从服务器上发送出去，还是从客户端接收回来，就可以了。
 
