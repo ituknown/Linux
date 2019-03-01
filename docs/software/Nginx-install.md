@@ -24,7 +24,7 @@ statically from the source with nginx by using --with-pcre=<path> option.
 
 [PCRE]() 安装包可以在官网进行下载。[PCRE 官网传送门](https://sourceforge.net/projects/pcre/)
 
-![PCRE-download.png](./images/nginx/PCRE-download.png)
+![PCRE-download.png](_images/nginx/PCRE-download.png)
 
 下载完成后在 `/home/Nginx` 文件夹下上传 `pcre` 安装包并解压：
 
@@ -109,7 +109,7 @@ make[1]: Leaving directory `/home/Nginx/pcre'
 
 [zlib]() 安装包同样可以在官网进行下载。[zlib 官网传送门](http://www.zlib.net/)
 
-![zlib-download.png](./images/nginx/zlib-download.png)
+![zlib-download.png](_images/nginx/zlib-download.png)
 
 `zlib` 可以通过 `wget` 指令进行下载，这里以 `zlib-1.2.11` 为例：
 
@@ -130,7 +130,7 @@ Saving to: â€˜zlib-1.2.11.tar.gzâ€™
 
 另外，你也可以直接在历史归档中进行下载，[zlib 归档链接](http://www.zlib.net/fossils/)
 
-![zlib-archive.png](./images/nginx/zlib-archive.png)
+![zlib-archive.png](_images/nginx/zlib-archive.png)
 
 下载完成后解压即可：
 

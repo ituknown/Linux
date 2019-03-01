@@ -143,9 +143,9 @@ short options use the same arguments as the long ones
 $ rz
 ```
 
-![rz-window](images/rz-sz/rz-window.png)
+![rz-window](_images/rz-sz/rz-window.png)
 
-![rz-file](images/rz-sz/rz-file.png)
+![rz-file](_images/rz-sz/rz-file.png)
 
 # sz 基本用法
 

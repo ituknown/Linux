@@ -26,6 +26,7 @@
 
 * [JDK 安装](docs/software/JDK-install.md)
 * [Nginx 安装](docs/software/Nginx-install.md)
+* [MySQL 安装](docs/software/Mysql-install.md)
 
 ---
 
