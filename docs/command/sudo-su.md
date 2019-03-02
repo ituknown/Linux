@@ -28,19 +28,19 @@ operation requests superuser privilege
 先执行以下命令查看是否已存在该组，如果没有的话就创建创建一个（组是随意的，这里只是测试）：
 
 ```
-more /etc/group | grep temp
+# more /etc/group | grep temp
 ```
 
 执行以下命令进行创建 `temp` 组：
 
 ```
-groupadd temp
+# groupadd temp
 ```
 
 现在再次执行 `more /etc/group | grep temp` 命令查看是否创建成功：
 
 ```
-[root@localhost ~]# more /etc/group | grep temp
+#  more /etc/group | grep temp
 utempter:x:35:
 temp:x:1000:
 ```
@@ -50,7 +50,7 @@ temp:x:1000:
 现在在来在该组下创建一个用户 `user`。
 
 ```
-useradd -d /home/user -g temp -G temp user
+# useradd -d /home/user -g temp -G temp user
 ```
 
 > **useradd** 命令与 **groupadd** 命令该篇幅不做说明。
@@ -59,21 +59,21 @@ useradd -d /home/user -g temp -G temp user
 执行该命后看是否在 `/home` 下成功创建 `/user` 目录。成功创建即表示成功创建用户 `user`
 
 ```
-[root@localhost /]# cd /home/user/
+# cd /home/user/
 [root@localhost user]# 
 ```
 
 当然，也可以直接通过查看 `/etc/passwd` 中是否有该用户密码信息进行验证：
 
 ```
-[root@localhost /]# more /etc/passwd | grep user
+# more /etc/passwd | grep user
 user:x:1000:1000::/home/user:/bin/bash
 ```
 
 现在再来修改 `user` 用户密码。使用 `root` 用户执行 `passwd user`，按提示输入两次密码进行修改即可：
 
 ```
-[root@localhost /]# passwd user
+# passwd user
 更改用户 user 的密码 。
 新的 密码：
 重新输入新的 密码：
@@ -89,7 +89,7 @@ passwd：所有的身份验证令牌已经成功更新。
 `su` 命令有一下可选参数：
 
 ```
-[root@localhost /]# su --help
+# su --help
 
 用法：
  su [选项] [-] [USER [参数]...]

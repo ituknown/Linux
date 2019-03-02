@@ -57,4 +57,4 @@ $ vim
 
 即进入并显示如下信息：
 
-<div align=center>![vim](images/vim/vim.png)
+<div align=center>![](./_images/vim/vim.png)

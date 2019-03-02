@@ -4,24 +4,25 @@
 
 ```
 # 检验 Linux 系统版本信息
-$ uname -a
+$ uname -sr
+Linux 3.10.0-957.5.1.el7.x86_64
 ```
 
-如果输出结果包含有 `X86_32` 表明系统是 `64` 位，如果出现 `i686` 则说明是 `32` 位操作系统。
+如果输出结果包含有 `x86_64` 表明系统是 `64` 位，如果出现 `i686` 则说明是 `32` 位操作系统。
 
 进入 [oracle 官网](https://www.oracle.com/) 下载对应操作系统的 JDK 8 版本：
 
-<div align = center>![JDK-8](images/jvm/JDK-8.png)
+<div align = center>![JDK-8](./_images/jvm/JDK-8.png)
 
 另外，如果想下载历史版本 JDK 则需要在下载页面找到 JDK 归档栏：
 
-<div align = center>![JDK-Archive](images/jvm/JDK-Archive.png)
+<div align = center>![JDK-Archive](./_images/jvm/JDK-Archive.png)
 
 点击归档后既能看到所有 JDK 版本，点击下载即可！
 
-<div align = center>![JDK-list.png](images/jvm/JDK-list.png)
+<div align = center>![JDK-list.png](./_images/jvm/JDK-list.png)
 
-# 登录Linux，切换到 rooot 用户
+# 登录Linux，切换到 root 用户
 
 如果当前已是 root 用户不需要变更。否则：
 
