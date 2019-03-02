@@ -12,15 +12,15 @@ Linux 3.10.0-957.5.1.el7.x86_64
 
 进入 [oracle 官网](https://www.oracle.com/) 下载对应操作系统的 JDK 8 版本：
 
-<div align = center>![JDK-8](./_images/jvm/JDK-8.png)
+![JDK-8](./_images/jvm/JDK-8.png)
 
 另外，如果想下载历史版本 JDK 则需要在下载页面找到 JDK 归档栏：
 
-<div align = center>![JDK-Archive](./_images/jvm/JDK-Archive.png)
+![JDK-Archive](./_images/jvm/JDK-Archive.png)
 
 点击归档后既能看到所有 JDK 版本，点击下载即可！
 
-<div align = center>![JDK-list.png](./_images/jvm/JDK-list.png)
+![JDK-list.png](./_images/jvm/JDK-list.png)
 
 # 登录Linux，切换到 root 用户
 

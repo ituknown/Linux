@@ -28,7 +28,7 @@ statically from the source with nginx by using --with-pcre=<path> option.
 
 下载完成后在 `/home/Nginx` 文件夹下上传 `pcre` 安装包并解压：
 
-```bash
+```
 $ ll /home/Nginx/pcre-8.42.tar.gz
 -rw-r--r--. 1 root root 2081413 Feb 26 15:43 pcre-8.42.tar.gz
 
@@ -43,7 +43,7 @@ $ cd pcre
 
 进入文件夹后进行执行 `configure` 文件进行编译：
 
-```bash
+```
 $ ./configure
 
 checking for a BSD-compatible install... /usr/bin/install -c
@@ -71,7 +71,7 @@ checking for ar... ar
 
 完成后执行 `make` 命令：
 
-```bash
+```
 $ make
 
 rm -f pcre_chartables.c
@@ -86,7 +86,7 @@ make[1]: Entering directory `/home/Nginx/pcre'
 
 执行完毕后继续执行 `make install` 命令：
 
-```bash
+```
 $ make install
 
 make  install-am
@@ -113,7 +113,7 @@ make[1]: Leaving directory `/home/Nginx/pcre'
 
 `zlib` 可以通过 `wget` 指令进行下载，这里以 `zlib-1.2.11` 为例：
 
-```bash
+```
 $ wget http://www.zlib.net/zlib-1.2.11.tar.gz
 
 --2019-02-26 15:51:59--  http://www.zlib.net/zlib-1.2.11.tar.gz
@@ -134,8 +134,8 @@ Saving to: â€˜zlib-1.2.11.tar.gzâ€™
 
 下载完成后解压即可：
 
-```bash
-[root@localhost Nginx]# ll
+```
+$ ll
 drwxr-xr-x.  9 1169  1169   12288 Feb 26 15:45 pcre
 -rw-r--r--.  1 root root  2081413 Feb 26 15:43 pcre-8.42.tar.gz
 drwxr-xr-x. 14  501 games    4096 Feb 26 15:54 zlib
@@ -144,7 +144,7 @@ drwxr-xr-x. 14  501 games    4096 Feb 26 15:54 zlib
 
 进入 `zlib` 文件夹，依次执行 `make` `make install` 命令进行编译、安装：
 
-```bash
+```
 $ cd zlib
 $ ./configure 
 
@@ -198,7 +198,7 @@ chmod 644 /usr/local/include/zlib.h /usr/local/include/zconf.h
 
 需要注意，如果在编译过程中提示无权限，则需要执行如下命令进行获取全部权限：
 
-```bash
+```
 // <dir> 是文件夹
 $ chmod -R 777 <dir> 
 ```
@@ -209,7 +209,7 @@ $ chmod -R 777 <dir>
 
 将安装包上传至 `/home/Nginx` 文件夹进行解压、并进入 nginx 文件夹：
 
-```bash
+```
 $ pwd
 /home/Nginx
 
@@ -227,7 +227,7 @@ $ cd nginx
 
 在文件夹中你可以看到如下文件：
 
-```bash
+```
 $ ll
 
 total 732
@@ -248,15 +248,15 @@ drwxr-xr-x. 9 1001 1001     91 Feb 26 17:12 src
 
 下面进行编译和安装：
 
-```bash
-./configure --prefix=/home/Nginx/nginx
+```
+$ ./configure --prefix=/home/Nginx/nginx
 ```
 
 **说明：** `--prefix` 指定编译后文件产生路径，如果不指定则默认则解压后存储在 `/usr/local/nginx` 中，因此需要指定一下。
 
 执行 `make` 命令：
 
-```bash
+```
 $ make
 
 make -f objs/Makefile
@@ -270,7 +270,7 @@ cc -c -pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g  -I sr
 
 执行 `make install` 命令：
 
-```bash
+```
 $ make install
 
 make -f objs/Makefile install
@@ -281,7 +281,7 @@ test -d '/home/Nginx/nginx' || mkdir -p '/home/Nginx/nginx'
 
 到此即编译完成，看下文件夹是是否有 `sbin` 文件夹：
 
-```bash
+```
 $ ll
 
 total 736
