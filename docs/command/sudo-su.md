@@ -116,26 +116,27 @@ passwd：所有的身份验证令牌已经成功更新。
 比如，当前在 `root` 用户下，现在想要切换至 `user` 用户，执行以下命令：
 
 ```
-[root@localhost ~]# su - user
+# su - user
 上一次登录：二 12月  4 13:46:14 CST 2018pts/1 上
-[user@localhost ~]$ pwd
+$ pwd
 /home/user
-[user@localhost ~]$ 
+$ 
 ```
 
 成功切换至 `user` 用户。现在如果再想切换至 `root` 用户：
 
 ```
-[user@localhost ~]$ su - root
+$ su - root
 密码：
 su: 鉴定故障
-[user@localhost ~]$ 
+$ 
 ```
 
 提示这个错误，只需要输入 `exit` 退出 `user` 用户后进行查找 `sudoers` 进行修改权限：
 
 ```
-[root@localhost ~]# find / -name sudoers
+# find / -name sudoers
+
 /etc/sudoers
 /usr/share/doc/sudo-1.8.19p2/examples/sudoers
 ```
@@ -175,7 +176,7 @@ sudo su - root
 另外，如果没有在 `sudoers` 文件中增加 `user` 用户权限在切换用户时如果不使用 `sudo` 则会提示鉴权故障：
 
 ```
-[user@localhost ~]$ su - root
+$ su - root
 密码：
 su: 鉴定故障
 ```
@@ -183,7 +184,7 @@ su: 鉴定故障
 使用 `sudo` 则提示：
 
 ```
-user@localhost ~]$ sudo su root
+$ sudo su root
 user 不在 sudoers 文件中。此事将被报告。
 ```
 

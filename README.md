@@ -12,7 +12,7 @@ Linux就是一个类Unix。
 
 最开始的Linux版本被放置到一个FTP服务器上供大家自由下载，FTP服务器的管理 员认为这是Linus的Minix，因而就建了一个Linux目录来存放这些文件，于是Linux这个 名字就传开了，如今已经成了约定俗成的名称了。 目前Linux已经是一个完整的类UNIX操作系统了。下面就是Linux的吉祥物，一只可爱的小企鹅Tux（起因是因为Linus是芬兰人，因而挑 选企鹅作为吉祥物）：
 
-<div align=center>![Tux](images/Tux.png)
+![Tux](images/Tux.png)
 
 Linux是一个免费的操作系统，用户可以免费获得其源代码，并能够随意修改。它是在共用许可证GPL(General Public License)保护下的自由软件，也有好几种版本，如Red Hat Linux、Slackware，以及国内的Xteam Linux等。 
 

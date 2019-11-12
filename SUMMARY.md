@@ -12,13 +12,7 @@
 * [sudo & su](docs/command/sudo-su.md)
 * [rz & sz](docs/command/rz-sz.md)
 * [vim](docs/command/vim.md)
-
----
-
-### FAQ
-
-* [命令未发现](docs/FAQ/README.md)
-  + [ifconfig not found](docs/FAQ/commandNotFound/Command-Not-Found.md)
+* [curl](docs/command/curl.md)
 
 ---
 
@@ -33,3 +27,4 @@
 
 ---
 
+### FAQ
