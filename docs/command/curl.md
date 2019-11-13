@@ -135,13 +135,13 @@ $ curl -A "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.0)" http://www.linux.
 - 使用内置选项 `-o`：
 
 ```bash
-$ curl -o dodo1.jpg http://www.linux.com/dodo1.JPG
+$ curl -o logo1.jpg http://www.linux.com/logo1.JPG
 ```
 
 - 使用内置选项 `-O`：
 
 ```bash
-$ curl -O http://www.linux.com/dodo1.JPG
+$ curl -O http://www.linux.com/logo1.JPG
 ```
 
 这样就会以服务器上的名称保存文件到本地
@@ -151,32 +151,32 @@ $ curl -O http://www.linux.com/dodo1.JPG
 有时候下载图片可能前面的部分名称是一样的，就最后的尾椎名不一样：
 
 ```bash
-$ curl -O http://www.linux.com/dodo[1-5].JPG
+$ curl -O http://www.linux.com/logo[1-5].JPG
 ```
 
-这样就会把 `dodo1`、`dodo2`、`dodo3`、`dodo4`、`dodo5` 全部保存下来!
+这样就会把 `logo1`、`logo2`、`logo3`、`logo4`、`logo5` 全部保存下来!
 
 ## 循环下载并重命名
 
 ```bash
-$ curl -O http://www.linux.com/{hello,bb}/dodo[1-5].JPG
+$ curl -O http://www.linux.com/{hello,bb}/logo[1-5].jpg
 ```
 
-由于下载的 `hello` 与 `bb` 中的文件名都是 `dodo1`、`dodo2`、`dodo3`、`dodo4`、`dodo5`。因此第二次下载的会把第一次下载的覆盖，这样就需要对文件进行重命名。
+由于下载的 `hello` 与 `bb` 中的文件名都是 `logo1`、`logo2`、`logo3`、`logo4`、`logo5`。因此第二次下载的会把第一次下载的覆盖，这样就需要对文件进行重命名。
 
 ```bash
-$ curl -o #1_#2.JPG http://www.linux.com/{hello,bb}/dodo[1-5].JPG
+$ curl -o #1_#2.jpg http://www.linux.com/{hello,bb}/logo[1-5].jpg
 ```
 
-这样在 `hello/dodo1.JPG` 的文件下载下来就会变成 `hello_dodo1.JPG`，其他文件依此类推，从而有效的避免了文件被覆盖。
+这样在 `hello/logo1.jpg` 的文件下载下来就会变成 `hello_logo1.jpg`，其他文件依此类推，从而有效的避免了文件被覆盖。
 
 ## 通过 ftp 下载文件
 
 `curl` 提供两种从 `ftp` 中下载的语法：
 
 ```bash
-$ curl -O -u <username>:<password> ftp://www.linux.com/dodo1.JPG
-$ curl -O ftp://<username>:<password>@www.linux.com/dodo1.JPG
+$ curl -O -u <username>:<password> ftp://www.linux.com/logo1.jpg
+$ curl -O ftp://<username>:<password>@www.linux.com/logo1.jpg
 ```
 
 ## ftp 文件上传
@@ -184,19 +184,19 @@ $ curl -O ftp://<username>:<password>@www.linux.com/dodo1.JPG
 `curl` 不仅仅可以通过 `ftp` 下载文件，还可以上传文件。通过内置 `option:-T` 来实现：
 
 ```bash
-$ curl -T dodo1.JPG -u <username>:<password> ftp://www.linux.com/img/
+$ curl -T logo1.jpg -u <username>:<password> ftp://www.linux.com/img/
 ```
 
 ## 显示下载进度信息
 
 ```bash
-$ curl -# -O http://www.linux.com/dodo1.JPG
+$ curl -# -O http://www.linux.com/logo.jpg
 ```
 
 ## 隐藏下载进度信息
 
 ```bash
-$ curl -s -O http://www.linux.com/dodo1.JPG
+$ curl -s -O http://www.linux.com/logo.jpg
 ```
 
 # CURL 增删改查
@@ -224,7 +224,7 @@ $ curl -X POST [url] -H "Content-Type: application/json"
 $ curl -X POST [url] -H "Content-Type: application/json" -H "Token: xxxx"
 ```
 
-## 指定请求数据
+## 提交请求数据
 
 `curl` 请求数据可使用 `-d` 选项指定。
 
@@ -233,7 +233,7 @@ $ curl -X POST [url] -H "Content-Type: application/json" -H "Token: xxxx"
 - 提交 `Form` 表单数据：
 
 ```bash
-$ curl -X POST [url] -H "Content-Type: application/x-www-urlencoded" -d"username=张三&age=18"
+$ curl -X POST [url] -H "Content-Type: application/x-www-urlencoded" -d "username=张三&age=18"
 ```
 
 - 提交 `JSON` 格式数据：
@@ -244,9 +244,13 @@ $ curl -X POST [url] -H "Content-Type: application/json" -d'{"username": "张三
 
 ## 把文件内容作为要提交的数据
 
-如果要提交的数据不像前面例子中只有两个 `username: 张三` 键值对，当数据比较多，都写在命令行里很不方便，也容易出错，那么可以把数据内容先写到文件里，通过 `-d @filename` 的方式来提交数据。这是 `-d` 参数的一种使用方式，所以前面用到 `-d` 参数的地方都可以这样用。
+如果要提交的数据不像前面例子中只有两个 `username: 张三` 键值对，当数据比较多，都写在命令行里很不方便，也容易出错，那么可以把数据内容先写到文件里，
+通过 `-d @filename` 的方式来提交数据。这是 `-d` 参数的一种使用方式，所以前面用到 `-d` 参数的地方都可以这样用。
 
-实际上就是把 `-d` 参数值写在命令行里，变成了写在文件里。跟后面的 `multipart/form-data` 中上传文件的 `POST` 方式不是一回事。`@` 符号表明后面跟的是文件名，要读取这个文件的内容作为 `-d` 的参数。
+实际上就是把 `-d` 参数值写在命令行里，变成了写在文件里。跟后面的 `multipart/form-data` 中上传文件的 `POST` 方式不是一回事。`@` 符号表明后
+面跟的是文件名，要读取这个文件的内容作为 `-d` 的参数。
+
+- 提交 `JSON` 数据
 
 例如，有一个 `JSON` 文件 `data.json` 内容如下：
 
@@ -261,22 +265,53 @@ $ curl -X POST [url] -H "Content-Type: application/json" -d'{"username": "张三
 就可以通过如下方式来提交数据：
 
 ```bash
-$ curl -X POST "localhost:8080/user" -H "Content-Type: application/json" -d @data.json
+$ curl -X POST "localhost:8080/user" -H "Content-Type: application/json" -d @data.json -v
   或
-$ curl -X POST "localhost:8080/user" -H "Content-Type: application/json" --data-binary @data.json
+$ curl -X POST "localhost:8080/user" -H "Content-Type: application/json" --data-binary @data.json -v
 ```
 
-如果要用 `application/x-www-form-urlencoded` 方式提交，后端解析出来同样的数据，那么 `-d` 的参数文件（命名：`data.txt`）是如下样式（注意数组参数的写法）:
+- 提交 `form` 表单数据
+
+通常，我们提交表单数据的请求头都是： `application/x-www-form-urlencoded` 方式提交。以上面的 `JSON` 提交数据为例，将表单数据写入 `txt` 文件
+进行提交。
+
+文件名命名为：`data.txt`，上面的 `JSON` 数据写成如下样式（注意数组参数的写法）:
 
 ```
-username=张三&age=18&friends[]=Bob&friends[]=Linda
+username=张三&age=18&friends=Bob&friends=Linda
 ```
 
-请求示例：
+现在就可以使用如下方式进行提交数据：
 
 ```bash
-$ curl -X POST "localhost:8080/user" -H "Content-Type: application/json" -d @data.txt
+curl -XPOST "localhost:8080/user" -H "Content-Type: application/x-www-form-urlencoded" -d @data.txt -v
 ```
+
+> **注意：** 在示例中使用了 `-v` 选项，该选项作是输出请求的详细信息。以 `form` 请求为例，使用 `-v` 后输出信息如下：
+```
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> POST /txt HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+> Content-Type: application/x-www-form-urlencoded
+> Content-Length: 42
+> 
+* upload completely sent off: 42 out of 42 bytes
+< HTTP/1.1 200 
+< Content-Length: 0
+< Date: Wed, 13 Nov 2019 07:56:06 GMT
+< 
+* Connection #0 to host localhost left intact
+* Closing connection 0
+```
+>
+> 另外，在使用 `data.txt` 提交 `x-www-urlencoded` 数据时，默认的请求头就是 `Content-Type: application/x-www-form-urlencoded`，
+>所以可以不进行指定请求头。
+
 
 ## 文件上传
 
@@ -286,62 +321,78 @@ $ curl -X POST "localhost:8080/user" -H "Content-Type: application/json" -d @dat
 $ curl -X POST "localhost:3000/api/multipart" -F "raw=@raw.data" -F "hello=world"
 ```
 
-> **注意：** `-F` 选项默认使用请求头为 `multipart/form-data`，所以不需要明确指定。另外，`-F` 指定的键值对的形式，下面要具体说下：
+> **注意：** `-F` 选项默认使用请求头为 `multipart/form-data`，所以不需要明确指定。另外，`-F` 指定的键值对的形式，下面要具体说下。
 
 - 用户头像上传
 
-以上传用户头像为例：
+以上传用户头像为例，在上传用户头像是设置请求头 `Token`：
 
 ```bash
-$ curl -X POST "localhost:8080/customer/uploadUserHeadImg/1006" -H "token: D6919E6F581CE9B5CCEAB5C9B148FB8D" -H"Content-Type: multipart/form-data" -F "headImg=@wechat.jpg" -v
+$ curl -X POST "localhost:8080/user/upload/1006" -H "token: D6919E6F581CE9B5CCEAB5C9B148FB8D" -F "headImg=@wechat.jpg" -v
+  或
+$ curl -X POST "localhost:8080/user/upload/1006" -H "token: D6919E6F581CE9B5CCEAB5C9B148FB8D" -H"Content-Type: multipart/form-data" -F "headImg=@wechat.jpg" -v
 ```
 
-> `-v` 选项可输出请求详细信息，一般建议指定。
+加 `-v` 选项后，请求信息如下所示：
 
-`-F` 选项的键值对需要特别说明！用下面一段 `java` 示例程序进行演示说明：
-
-```java
-@RestController
-@RequestMapping("/customer")
-public class Customer {
-
-    @PostMapping("/uploadUserHeadImg")
-    public void uploadUserHeadImg(MultipartHttpServletRequest multipartHttpServletRequest) {
-        try {
-            Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-
-            while (iterator.hasNext()) {
-
-                String original = iterator.next();
-                MultipartFile multipartFile = multipartHttpServletRequest.getFile(original);
-
-                System.out.println(original);
-                
-            }
-
-        } catch (Exception e) {
-            // TODO: 2019/11/12 Handler IO Exceprion
-        }
-    }
-}
+```
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> POST /upload HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+> Content-Length: 124078
+> Content-Type: multipart/form-data; boundary=------------------------055839905a1fc177
+> Expect: 100-continue
+> 
+< HTTP/1.1 100 
+* We are completely uploaded and fine
+< HTTP/1.1 200 
+< Content-Length: 0
+< Date: Wed, 13 Nov 2019 08:04:14 GMT
+< 
+* Connection #0 to host localhost left intact
+* Closing connection 0
 ```
 
-这段程序中，输出的 `original` 将会是：`headImg` 而不是图片的名字 `wechat.jpg`。
-
-现在使用 `MultipartFile` 类替换 `MultipartHttpServletRequest`：
+**另外，对于 `-F` 选项的键值对需要特别说明！用下面一段 `java` 示例程序进行演示说明：**
 
 ```java
-@RestController
-@RequestMapping("/customer")
-public class Customer {
+@PostMapping("/upload")
+public void upload(MultipartHttpServletRequest multipartHttpServletRequest) {
+    Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+    while (iterator.hasNext()) {
 
-    @PostMapping("/uploadUserHeadImg")
-    public void uploadUserHeadImg(@RequestParam("/headImg") MultipartFile file) {
-        String original = file.getOriginalFilename();
+        String key = iterator.next();
+        System.out.println("key: " + key);
+        MultipartFile multipartFile = multipartHttpServletRequest.getFile(key);
+        assert multipartFile != null;
+        String original = multipartFile.getOriginalFilename();
 
         System.out.println(original);
     }
 }
 ```
 
-现在这段程序输出的 `original` 就会是 `wechat.jpg` 而不是 `headImg` 了，这里需要注意！！！！
+这段程序中，输出信息如下：
+
+```
+key: headImg
+wechat.jpg
+```
+
+现在使用 `MultipartFile` 类替换 `MultipartHttpServletRequest`：
+
+```java
+@PostMapping("/upload")
+public void upload(@RequestParam("/headImg") MultipartFile file) {
+    String original = file.getOriginalFilename();
+
+    System.out.println(original);    // ==> wechat.jpg
+}
+```
+
+这里需要注意！！！！
