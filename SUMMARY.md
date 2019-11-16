@@ -13,6 +13,7 @@
 * [rz & sz](docs/command/rz-sz.md)
 * [vim](docs/command/vim.md)
 * [curl](docs/command/curl.md)
+* [nmap](docs/command/nmap.md)
 
 ---
 
