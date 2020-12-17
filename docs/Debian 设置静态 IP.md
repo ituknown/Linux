@@ -6,10 +6,10 @@ Ubuntu 也是基于 Debian 的发行版本，所以本篇文章不仅适用于 D
 
 Debian 的网络配置分两种：老版本使用的是 network，新版本使用的是 netplan 进行网络配置。看下下面的 Tabel 表格：
 
-| 网络配置 | 影响系统                    | 文件位置       |
-| :------- | :-------------------------- | :------------- |
-| network  | Debian10之前 / Ubuntu18之前 | `/etc/network` |
-| netplan  | Debian10开始 / Ubuntu18开始 | `/etc/netplan` |
+| 网络配置 | Debian           | Ubuntu           | 文件位置       |
+| :------- | :--------------- | :--------------- | :------------- |
+| network  | Debian10之前版本 | Ubuntu18之前版本 | `/etc/network` |
+| netplan  | Debian10开始     | Ubuntu18开始     | `/etc/netplan` |
 
 知道这些区别之后就开始做具体说明。首先，先介绍基于 netplan 的网络配置
 
