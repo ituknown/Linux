@@ -2,9 +2,9 @@
 
 Ubuntu 也是基于 Debian 的发行版本，所以本篇文章不仅适用于 Debian 同样也适用于 Ubuntu。
 
-唯一需要说明的是，当前 Debian 的最新版本是 10.7。而 Debian 自 10 之后的网络配置与 10 之前的版本有些区别。这个区别就导致 Debian 10 之前的版本配置适用于 Ubuntu 18.0 之前的版本，自从 Debian 10 开始的版本的网络配置适用于 Ubuntu18.0 及之后的版本。
+唯一需要说明的是，当前 Debian 的最新版本是 10.7。而 Debian 自 10 开始的网络配置做了调整。这个区别就导致 Debian 10 之前的版本配置适用于 Ubuntu 18.0 之前的版本，自从 Debian 10 开始的版本的网络配置适用于 Ubuntu18.0 及之后的版本。
 
-Debian 的网络配置分两种：老版本使用的是 network，新版本使用的是 netplan 进行网络配置。看下下面的 Tabel 表格：
+Debian 的网络配置分两种：老版本使用的是 network，新版本使用的是 netplan 进行网络配置。看下下面的 Tabel 表格进行确定你应该选择哪种方式进行网络配置：
 
 | 网络配置 | Debian           | Ubuntu           | 文件位置       |
 | :------- | :--------------- | :--------------- | :------------- |
@@ -107,7 +107,7 @@ ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 
 指定了网络接口后就可以进行设置该接口下指定的 IP 是静态还是动态了。
 
-在以往的配置中都是 `dncp` 替换为 `static`，但是 `netplan` 中不同，使用 yes 或 no 表示使用静态还是动态。
+在以往基于 Netwoek 的配置中都是将 `dncp` 替换为 `static` 表示使用静态 IP，但是 `netplan` 则不同，使用 yes 或 no 表示使用静态还是动态。
 
 可以看到我这里配置的是 `dhcp4: no` 表示静态 IPv4。如果你要设置静态 IPv6 就设置 `dhcp6: no` 就好。
 
