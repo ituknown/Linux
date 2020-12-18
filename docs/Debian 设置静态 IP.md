@@ -1,4 +1,4 @@
-# Debian 设置静态IP
+# 前言
 
 Ubuntu 也是基于 Debian 的发行版本，所以本篇文章不仅适用于 Debian 同样也适用于 Ubuntu。
 
