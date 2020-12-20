@@ -2,14 +2,12 @@
 
 Ubuntu 也是基于 Debian 的发行版本，所以本篇文章不仅适用于 Debian 同样也适用于 Ubuntu。
 
-唯一需要说明的是，当前 Debian 的最新版本是 10.7。而 Debian 自 10 开始的网络配置做了调整。这个区别就导致 Debian 10 之前的版本配置适用于 Ubuntu 18.0 之前的版本，自从 Debian 10 开始的版本的网络配置适用于 Ubuntu18.0 及之后的版本。
+唯一需要说明的是，Ubuntu 自18.0 开始关于网络的配置做了调整。在 18.0 之前使用的网络配置是 Network，18.0 以及之后的网络使用 Netplan 进行网络配置。
 
-Debian 的网络配置分两种：老版本使用的是 network，新版本使用的是 netplan 进行网络配置。看下下面的 Tabel 表格进行确定你应该选择哪种方式进行网络配置：
-
-| 网络配置 | Debian           | Ubuntu           | 文件位置       |
-| :------- | :--------------- | :--------------- | :------------- |
-| network  | Debian10之前版本 | Ubuntu18之前版本 | `/etc/network` |
-| netplan  | Debian10开始     | Ubuntu18开始     | `/etc/netplan` |
+| 网络配置 | Debian           | Ubuntu            | 文件位置       |
+| :------- | :--------------- | :---------------- | :------------- |
+| network  | Debian各系列版本 | Ubuntu18 之前版本 | `/etc/network` |
+| netplan  |                  | Ubuntu18 开始     | `/etc/netplan` |
 
 知道这些区别之后就开始做具体说明。首先，先介绍基于 netplan 的网络配置
 
@@ -182,7 +180,11 @@ ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 
 # 基于 Network 配置网络
 
-基于 network 的网络配置文件是在 `/etc/network` 文件夹下，配置文件叫做 `interfaces`。
+基于 network 的网络配置文件是在 `/etc/network` 文件夹下，配置文件叫做 `interfaces`。有关该文件的配置可以使用 `man` 命令查看详细信息：
+
+```bash
+$ man interfaces
+```
 
 其他的不做过多解释，直接进行配置： 
 
@@ -253,14 +255,14 @@ iface lo inet loopback
 # The primary network interface
 allow-hotplug ens33
 iface ens33 inet static
-address 192.168.1.81  
-netmask 255.255.255.0    
-gateway 192.168.1.1 
+     address 192.168.1.81  
+     netmask 255.255.255.0    
+     gateway 192.168.1.1 
 ```
 
 | 注意                                                         |
 | :----------------------------------------------------------- |
-| 在 `etc/network/interfaces` 配置文件中不要在配置信息行后面使用注释，否则之后可能会导致网络重启失败！！！！ |
+| 在 `etc/network/interfaces` 配置文件中不要在配置信息行后面使用注释，否则之后可能会导致网络重启失败。另外，看上面的配置信息，注意缩进！！！！ |
 
 最后重启网络：
 
