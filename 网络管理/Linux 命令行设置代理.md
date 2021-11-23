@@ -100,7 +100,28 @@ $ enableproxy
 $ disableproxy
 ```
 
-是不是很简单？
+是不是很简单？现在来测试一下：
+
+```bash
+$ enableproxy
+```
+
+然后使用 `curl` 看是否能够正常连接 Google：
+
+```bash
+$ curl google.com
+```
+
+如果能够得到类似如下的输出就说明正常没问题了：
+
+```html
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="http://www.google.com/">here</A>.
+</BODY></HTML>
+```
 
 
 
