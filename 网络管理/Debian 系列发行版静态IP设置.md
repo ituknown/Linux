@@ -273,10 +273,57 @@ $ ip -c addr show
 输出示例：
 
 ![multiple-ip-1637832393lrIgXO](http://linux-media.knowledge.ituknown.cn/NetworkManager/Debian-StaticIP/multiple-ip-1637832393lrIgXO.png)
-​
+
+现在再来看下如果发行版没有 `iproute2` 网络管理工具多静态 IP 该如何配置：
+
+
+## 基于 Legacy​ 配置多静态 IP
+
+这种方式与基于 `iproute2` 的配置最大的区别就是网卡上，来看下将基于 `iproute2` 转换为 Legacy​ 的配置形式：
+
+
+```bash
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+
+# 配置自启 ens33 网卡
+auto ens33
+allow-hotplug ens33
+# 静态 IP 配置
+iface ens33 inet static
+     address 172.17.13.167/24
+     gateway 172.17.13.254
+
+# 第二个静态 IP
+auto ens33:0
+allow-hotplug ens33:0
+iface ens33:0 inet static
+     address 172.17.13.168/24
+
+# 第三个静态 IP
+auto ens33:1
+allow-hotplug ens33:1
+iface ens33:1 inet static
+     address 172.17.13.169/24
+```
+
+看到了，最大的区别就是网卡。使用 Legacy​ 配置多静态 IP 主要使用的是虚拟网卡的概念。我们的物理网卡是 ens33，而下面的 `ens33:[0-255]` 就是虚拟网卡。
+
+另一个区别是，虚拟网卡也要使用 `auto` 和 `allow-hotplug` 进行激活，否则也是不生效的。
+
+最后，也是最重要的一点是千万不要在虚拟网卡上配置除了 `address` 之外的任何信息。这点相比较基于 `iproute2` 的配置更加显著！
+
+之后重启网络就可以了~
+
+
 ## 录屏信息
 
-下面是使用 [asciinema](https://asciinema.org) 工具录制的 Shell 操作示例：
+下面是使用 [asciinema](https://asciinema.org) 工具录制的 Shell 操作示例。该示例基于 `iproute2` 的网络配置，可以参考下：
 
 [![asciicast](https://asciinema.org/a/451110.svg)](https://asciinema.org/a/451110)
 
@@ -284,7 +331,6 @@ $ ip -c addr show
 
 
 [https://wiki.debian.org/NetworkConfiguration](https://wiki.debian.org/NetworkConfiguration)
-​
 
 [https://askubuntu.com/questions/143819/how-do-i-configure-my-static-dns-in-interfaces](https://askubuntu.com/questions/143819/how-do-i-configure-my-static-dns-in-interfaces)
 ​
