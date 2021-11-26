@@ -323,23 +323,298 @@ iface ens33:1 inet static
 
 ## 录屏信息
 
-下面是使用 [asciinema](https://asciinema.org) 工具录制的 Shell 操作示例。该示例基于 `iproute2` 的网络配置，可以参考下：
+下面是使用 [asciinema](https://asciinema.org) 工具录制的 Shell 操作示例。该示例演示了静态 IP 的配置，同时分别基于 `iproute2` 和 Legacy 演示了多静态 IP 配置，可以参考下：
 
 [![asciicast](https://asciinema.org/a/451110.svg)](https://asciinema.org/a/451110)
 
-# 资源链接
+
+# 基于 Netplan 配置网络
+
+**说明：** Ubuntu 自 18 开始基于 `Netplan` 作为网络管理工具。这里我基于 Ubuntu20 做说明，下面是我的系统信息：
+
+```
+   Static hostname: vm
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: 575a6b796de64be7af5e8d0006ea2978
+           Boot ID: eefcb16f68d54945b0c89cc3a10da65e
+    Virtualization: vmware
+  Operating System: Ubuntu 20.04.3 LTS
+            Kernel: Linux 5.11.0-40-generic
+      Architecture: x86-64
+```
+
+`Netplan` 的配置与 `Network` 的配置文件有个很大的区别就是 `Netplan` 使用的是 YAML 配置文件。它的网络配置文件在 `/etc/netplan` 目录下面。该目录下可能存在一个或多个配置文件，比如我这里就只有一个网络配置文件：
 
 
-[https://wiki.debian.org/NetworkConfiguration](https://wiki.debian.org/NetworkConfiguration)
+```bash
+$ ls /etc/netplan/
+01-network-manager-all.yaml
+```
 
-[https://askubuntu.com/questions/143819/how-do-i-configure-my-static-dns-in-interfaces](https://askubuntu.com/questions/143819/how-do-i-configure-my-static-dns-in-interfaces)
-​
+这里要特别强调一下，每个系统下 Netplan 配置文件名可能是不同的，所以不要做拿来主义~
 
-# FAQ
-## Temporary failure in name resolution DNS？
+从文件命名也能看出一些区别，它是一个基于 YAML 的配置文件。来看下这个配置文件中的内容：
 
 
-该问题的可能原因是网关配置错误，比如按照上述本文说明配置的 IP 地址为： `192.168.0.112/24` 。那么网段就是 `192.168.0` ，所以网关的地址就是 `192.168.0.1~225` 之间，具体是其中的哪一个可以使用 `netstat -rn` 命令进行确定。
+```bash
+$ cat /etc/netplan/01-network-manager-all.yaml
+```
+
+示例：
+
+```yaml
+# Let NetworkManager manage all devices on this system
+network:
+  version: 2
+  renderer: NetworkManager
+```
+
+这个 YAML 配置文件中的所有信息我们都可以使用 `man netplan` 命令查看，另外也可以直接查看 [netplan.io 官网](https://netplan.io) 或者 [Ubuntu 20.04 netplan 使用说明页面](http://manpages.ubuntu.com/manpages/focal/en/man5/netplan.5.html)。
+
+下面是 netplan 在实际中用的比较多的配置选项示例：
+
+```yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    id0:
+      # 是否立即启动
+      optional: false
+      # IPv4 动态配置
+      dhcp4: true
+      # IPv6 动态配置
+      dncp6: true
+      # 静态IP地址
+      addresses:
+        # IPv4 地址
+        - 10.0.0.10/24
+        - 11.0.0.11/24
+        # IPv6 地址
+        - "2001:1::1/64"
+      # 网关
+      gateway4: 172.16.0.1
+      gateway6: "2001:4::1"
+      # DNS
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      # MAC 地址
+      macaddress: 52:54:00:6b:3c:59
+      # 路由
+      routes:
+        - to: 0.0.0.0/0
+          via: 10.0.0.1
+          metric: 100
+        - to: 0.0.0.0/0
+          via: 11.0.0.1
+          metric: 100
+    id1:
+      # ...
+
+```
+
+当前还有很多其他的配置信息，如 WIFI 连接以及认证，这里就不过介绍了。可以自行查阅 [netplan.io 官网](https://netplan.io) 或者 [Ubuntu netplan 使用说明页面](http://manpages.ubuntu.com/manpages/focal/en/man5/netplan.5.html)。
+
+下面来具体说下这些配置：
+
+最开始的 `network` 和 `version` 是固定的不要做任何修改。至于 `renderer` 指定的是网络渲染模式，值主要有两个，分别是 `networkd` 和 `NetworkManager`。同样的也不需要修改，使用默认即可。需要说明的是，在 Ubuntu18 中似乎没有这个配置，所以你完全可以忽略
+
+**ethernets 配置**
+
+`ethernets` 指的是网络接口，也就是我们常说的网卡。比如上面示例中的 `id0` 和 `id1` 就是具体的网卡名。想要查看自己的网卡名可以使用下面的命令：
+
+```bash
+$ ip -c link show
+```
+
+输出示例：
+
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 00:0c:29:2e:e9:70 brd ff:ff:ff:ff:ff:ff
+    altname enp2s1
+```
+
+可以看到，我的网络接口名（网卡）就是 ens33。至于 lo，指的是回环网络接口。所以之后想要配置自己的网络时就将上面示例中的 `id0` 修改为自己的网络接口名就好了。
+
+在 `id0` 下面的所有配置都是用于配置该网卡的信息，如 `addresses` 就是用于指定静态 IP 了~
+
+**optional 配置**
+
+`optional` 接受的是一个 Bool 值。它表示的是当前网络接口是否需要等待所有的设备都准备就绪后再启动该网络接口，如果设置为 true 就表示不需要等待，立即启动的意思。默认为 false！
+
+**dhcp4 和 dhcp6 配置**
+
+`dhcp4` 和 `dhcp6` 接受的是一个 Bool 值。分别表示 IPv4 和 IPv6 是否使用动态配置。你可以查看自己 YAML 配置文件中的初始配置，它的值通常被指定为 true，表示动态获取网络。这也是为什么我们连接网络后虽然没有做任何配置就有 IP 的原因。
+
+如果想要使用配置静态的 IP，那么久需要将该配置设置为 false 或直接删掉即可（默认就为 false）。
+
+**addresses 配置**
+
+这个指的就是具体的 IP 了，也就是我们要设置的静态 IP，可以指定多个，最重要的一点时同时可以指定 IPv4 和 IPv6。比如示例中的配置就指定了两个 IPv4 和一个 IPv6 地址，如下：
+
+```yaml
+addresses:
+  # IPv4 地址
+  - 10.0.0.10/24
+  - 11.0.0.11/24
+  # IPv6 地址
+  - "2001:1::1/64"
+
+# 或者
+addresses: [ "10.0.0.10/24", "11.0.0.11/24", "2001:1::1/64"]
+```
+
+当然前提是 `dhcp4` 或 `dhcp6` 的值要为 false 才行。
+
+**gateway4 和 gateway6 配置**
+
+这个就是网关的配置了，分别用于配置 IPv4 和 IPv6 的网关。除非你有网关服务器，否则使用当前局域网内的默认网关 IP 就好，可以使用下面的命令获取：
+
+```bash
+$ ip -c route list
+default via 172.17.21.254 dev ens33 proto dhcp metric 100
+169.254.0.0/16 dev ens33 scope link metric 1000
+172.17.21.0/24 dev ens33 proto kernel scope link src 172.17.21.107 metric 100
+```
+
+其中 default 对应的 IP 就是我们的网关 IP 了，所以也完全可以直接使用下面的命令获取：
+
+```bash
+$ ip -c route list default
+```
+
+**nameservers 配置**
+
+这个指的就是我们的 DNS 配置了，DNS 服务器使用 `addresses` 进行指定。示例：
+
+```yaml
+nameservers:
+  addresses: [8.8.8.8, 8.8.4.4, 114.114.114.114]
+
+# 或使用下面的形式
+
+nameservers:
+  addresses:
+    - 8.8.8.8
+    - 8.8.4.4
+    - 114.114.114.114
+```
+
+当然了，`nameservers` 还有其他的配置参数，如 search。这里就不多说了，可以参考文章最后的[资源链接🔗](#资源链接)。
+
+**macaddress 配置**
+
+这个指的就是 MAC 地址，你可以使用下面的命令查看当前系统上网卡的 MAC 地址：
+
+```bash
+$ ip -c link show
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 00:0c:29:2e:e9:70 brd ff:ff:ff:ff:ff:ff
+    altname enp2s1
+```
+
+可以看到，我的网络接口 ens33 对应的 MAC 地址就是 `00:0c:29:2e:e9:70`。所以你可以使用 `macaddress` 指定一个新的 MAC 地址测试下。
+
+
+**routes 配置**
+
+这个指的就是路由表配置了，想怎么配置就看你自己了。在配置之前呢先使用下面的命令查看下自己当前路由表信息，之后配置后在执行下看下效果：
+
+```bash
+$ ip -c route list
+default via 172.17.21.254 dev ens33 proto dhcp metric 100
+169.254.0.0/16 dev ens33 scope link metric 1000
+172.17.21.0/24 dev ens33 proto kernel scope link src 172.17.21.107 metric 100
+```
+
+这些就是 `Netplan` 的主要配置了，当然如果仅仅只是配置静态 IP 只需要配置其中某几项即可，下面来看下：
+
+## 配置静态 IP
+
+该介绍的都已经说了，所以直接看配置即可：
+
+```yaml
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    ens33:
+      dhcp4: false
+      addresses: [ "172.17.21.107/24" ]
+      gateway4: 172.17.21.254
+```
+
+之后使用下面的命令重启网络即可：
+
+```bash
+$ sudo netplan apply
+```
+
+## 多静态 IP 配置
+
+直接看配置即可，与之前一样：
+
+```yaml
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    ens33:
+      dhcp4: false
+      addresses: [ "172.17.21.107/24", "172.17.21.108/24" ]
+      gateway4: 172.17.21.254
+```
+
+| **注意**                                                     |
+| :----------------------------------------------------------- |
+| 在进行设置静态 IP 时，如果指定的 IP 不是当前机器正在使用的 IP 的话一定要保证选择的 IP 并没有被占用。在配置该 IP 之前先使用 `ping` 命令看能否 PING 的通，如果通了就表示该 IP 已被占用，就不能进行设置成该 IP 了。 |
+
+
+
+## 配置 DNS
+
+```yaml
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    ens33:
+      dhcp4: false
+      addresses: [ "172.17.21.107/24" ]
+      gateway4: 172.17.21.254
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 114.114.114.114
+```
+
+之后安装下面的命令执行看 DNS 解析记录：
+
+```bash
+$ sudo netplan --debug generate
+$ sudo netplan apply
+
+# 之后查看解析记录
+$ systemd-resolve --status
+```
+
+下面是使用 [asciinema](https://asciinema.org) 工具录制的 Shell 操作示例。该示例演示了 DNS 配置及查看解析示例，可以参考下：
+
+[![asciicast](https://asciinema.org/a/451587.svg)](https://asciinema.org/a/451587)
+
+# Temporary failure in name resolution DNS？
+
+
+该问题的可能原因是网关配置错误，比如按照上述本文说明如果配置的 IP 地址为： `192.168.0.112/24` 。那么网段就是 `192.168.0` ，所以网关的地址就是 `192.168.0.1~225` 之间，具体是其中的哪一个可以使用 `ip -c route list default` 命令进行确定。
 
 
 如果将网关地址设置为 `192.168.1.1` 那么肯定会出现该错误的。
@@ -371,241 +646,24 @@ DNS=114.114.114.114 8.8.8.8
 目前笔者知道的解决方式就这两种，如果还是无法解决该问题就向度娘、谷歌求助了~
 
 
+# 资源链接
 
+[https://wiki.debian.org/NetworkConfiguration](https://wiki.debian.org/NetworkConfiguration)
 
+[https://askubuntu.com/questions/143819/how-do-i-configure-my-static-dns-in-interfaces](https://askubuntu.com/questions/143819/how-do-i-configure-my-static-dns-in-interfaces)
 
-# 基于 Netplan 配置网络
+[https://lists.debian.org/debian-user/2017/09/msg00911.html](https://lists.debian.org/debian-user/2017/09/msg00911.html)
 
+[https://unix.stackexchange.com/questions/641228/etc-network-interfaces-difference-between-auto-and-allow-hotplug](https://unix.stackexchange.com/questions/641228/etc-network-interfaces-difference-between-auto-and-allow-hotplug)
 
-netplan 与之前的版本的网络配置有些区别，它的网络配置文件在 `/etc/netplan` 目录下面。该目录下可能存在一个或多个配置文件，比如我这里就只有一个网络配置文件：
+[http://manpages.ubuntu.com/manpages/cosmic/man5/interfaces.5.html](http://manpages.ubuntu.com/manpages/cosmic/man5/interfaces.5.html)
 
+[https://wiki.ubuntu.org.cn/Ubuntu服务器入门指南](https://wiki.ubuntu.org.cn/Ubuntu服务器入门指南)
+​
+[https://ubuntu.com/core/docs/networkmanager](https://ubuntu.com/core/docs/networkmanager)
 
-```bash
-$ ls /etc/netplan/
+[http://manpages.ubuntu.com/manpages/jammy/en/man5/netplan.5.html](http://manpages.ubuntu.com/manpages/jammy/en/man5/netplan.5.html)
 
-50-cloud-init.yaml
-```
+[netplan vs NetworkManager on Ubuntu 18.04 and above](https://askubuntu.com/questions/1122757/netplan-vs-networkmanager-on-ubuntu-18-04-and-above)
 
 
-从文件命名也能看出一些区别，它是一个基于 YAML 的配置文件。这个文件中默认有些配置信息：
-
-
-```bash
-$ cat /etc/netplan/50-cloud-init.yaml
-
-network:
-  ethernets:
-    ens33:
-      dhcp4: true
-  version: 2
-```
-
-
-当前还有其他的一些配置信息，我们暂时先不管。我们由于要进行配置静态网络所以我们首先需要查找一些基本的配置信息：
-
-
-**查找网关**
-
-
-```bash
-$ netstat -rn
-
-Kernel IP routing table
-Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
-0.0.0.0         192.168.0.1     0.0.0.0         UG        0 0          0 ens33
-172.17.0.0      0.0.0.0         255.255.0.0     U         0 0          0 docker0
-192.168.0.0     0.0.0.0         255.255.255.0   U         0 0          0 ens33
-```
-
-
-其中第一条输出信息中的 IP `192.168.0.1` 就是我们的网关，先记下。
-
-
-**查找 DNS**
-
-
-这个 DNS 直接在 `/etc/resolv.conf` 中进行查找即可：
-
-
-```bash
-$ cat /etc/resolv.conf | grep nameserver
-nameserver 127.0.0.53
-```
-
-
-可以看到，我这是在局域网内，所以 DNS 服务地址是 `127.0.0.53` 。
-
-
-但是如果在配置静态 IP 时将 DNS 解析地址设置成该值就无法连接网络。比如 `ping baidu.com` 时就会提示如下错误：
-
-
-```
-Temporary failure in name resolution DNS
-```
-
-
-所以，在配置静态 IP 时我们需要将 DNS 解析地址设置为 `114.114.114.114` 或者 `8.8.8.8` 。
-
-
-其中 `114.114.114.114` 是国内的 DNS 解析地址， `8.8.8.8` 是谷歌的 DNS 解析地址。在设置 DNS 解析时，如果仅仅设置为 `8.8.8.8` 的话在国内..... ，所以在实际使用中最好将两者全部配置上去。
-
-
-找到上面的两个信息之后就开始做具体配置了，关于 YAML 配置文件有哪些配置信息可以使用 man 命令查看 netplan 的详细信息，介绍的很详细。
-
-
-```bash
-man netplan
-```
-
-
-先来看下我的配置文件中内容：
-
-
-```yaml
-network:
-  version: 2
-  ethernets:
-    ens33:
-      dhcp4: no
-      optional: no
-      addresses:
-      - 192.168.0.112/24
-      gateway4: 192.168.0.1
-      nameservers:
-        addresses:
-        - 114.114.114.114 # 国内 DNS 解析地址
-        - 8.8.8.8 # 谷歌 DNS 解析地址
-```
-
-
-`network.version` 这个信息是死的，不用管。我们主要关心的是 `network.ethernets` 网卡下的配置信息。
-
-
-`ens33` 指的是网络接口，大多数用的的网络接口名都是 `ens0`。怎么知道自己的网络接口名呢？直接使用 `ifconfig` 命令查看输出的信息，其中包含自己 IP 的那个就是你的网络接口名，比如我的：
-
-
-```bash
-$ ifconfig
-
-...
-ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.0.117  netmask 255.255.255.0  broadcast 192.168.0.255
-        inet6 fe80::20c:29ff:fecd:48cf  prefixlen 64  scopeid 0x20<link>
-        ether 00:0c:29:cd:48:cf  txqueuelen 1000  (Ethernet)
-        RX packets 140745  bytes 93399083 (93.3 MB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 28012  bytes 2392981 (2.3 MB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-...
-```
-
-
-指定了网络接口后就可以进行设置该接口下指定的 IP 是静态还是动态了。
-
-
-在以往基于 Netwoek 的配置中都是将 `dncp` 替换为 `static` 表示使用静态 IP，但是 `netplan` 则不同，使用 yes 或 no 表示使用静态还是动态。
-
-
-可以看到我这里配置的是 `dhcp4: no` 表示静态 IPv4。如果你要设置静态 IPv6 就设置 `dhcp6: no` 就好。
-
-
-`optional` 指的是是否为可选，不懂啥意思，不配置也没关系。
-
-
-在之后就是 `addresses` 的配置了，这里就是进行设置你要设置的静态 IP，支持多个，也支持数组输入，示例：
-
-
-```yaml
-network:
-  version: 2
-  ethernets:
-    ens33:
-      dhcp4: no
-      optional: no
-      addresses:
-      - 192.168.0.112/24
-      - 192.168.0.117/24
-
-# 或者
-
-network:
-  version: 2
-  ethernets:
-    ens33:
-      dhcp4: no
-      optional: no
-      addresses: [192.168.0.112/24, 192.168.0.117/24]
-```
-
-
-再之后就是进行配置网关了，与 `dhcp` 一样，也是支持配置 IPv4 和 IPv6。比如上面我配置的是 IPv4，IP 就是文章开始查找得到的 IP：
-
-
-```yaml
-network:
-  version: 2
-  ethernets:
-    ens33:
-      gateway4: 192.168.0.1 # 配置 IPv4 网关
-      # gateway6: # 配置 IPv6 网关
-```
-
-
-`nameservers` 配置的是 DNS 解析服务器，下面的属性 `addresses` 是配置具体的 DNS 服务器地址。同样支持多个和支持数组输入：
-
-
-```yaml
-network:
-  version: 2
-  ethernets:
-    ens33:
-      nameservers:
-        addresses:
-        - 114.114.114.114   # 国内首选 DNS 解析地址
-        - 8.8.8.8           # 国外谷歌 DNS 解析地址
-```
-
-
-最后保存即可，输入如下命令使配置生效：
-
-
-```bash
-sudo netplan apply
-```
-
-
-之后在查看自己的 IP 就发现 IP 变成了自己配置的 IP 了，即使关机重启 IP 也不再发生变化了：
-
-
-```bash
-$ ifconfig
-
-...
-ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.0.112  netmask 255.255.255.0  broadcast 192.168.0.255
-        inet6 fe80::20c:29ff:fecd:48cf  prefixlen 64  scopeid 0x20<link>
-        ether 00:0c:29:cd:48:cf  txqueuelen 1000  (Ethernet)
-        RX packets 140745  bytes 93399083 (93.3 MB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 28012  bytes 2392981 (2.3 MB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-...
-```
-
-
-
-| 注意 |
-| --- |
-| 在进行设置静态 IP 时，如果指定的 IP 不是当前机器正在使用的 IP 的话一定要保证选择的 IP 并没有被占用。在配置该 IP 之前先使用 `ping` 命令看能否 PING 的通，如果通了就表示该 IP 已被占用，就不能进行设置成该 IP 了。 |
-
-
-
-https://lists.debian.org/debian-user/2017/09/msg00911.html
-
-https://unix.stackexchange.com/questions/641228/etc-network-interfaces-difference-between-auto-and-allow-hotplug
-
-http://manpages.ubuntu.com/manpages/cosmic/man5/interfaces.5.html
-
-https://wiki.ubuntu.org.cn/Ubuntu服务器入门指南
