@@ -277,7 +277,7 @@ $ ip -c addr show
 现在再来看下如果发行版没有 `iproute2` 网络管理工具多静态 IP 该如何配置：
 
 
-## 基于 Legacy​ 配置多静态 IP
+### 基于 Legacy​ 配置多静态 IP
 
 这种方式与基于 `iproute2` 的配置最大的区别就是网卡上，来看下将基于 `iproute2` 转换为 Legacy​ 的配置形式：
 
@@ -319,6 +319,66 @@ iface ens33:1 inet static
 最后，也是最重要的一点是千万不要在虚拟网卡上配置除了 `address` 之外的任何信息。这点相比较基于 `iproute2` 的配置更加显著！
 
 之后重启网络就可以了~
+
+## 关于 DNS 问题
+
+在 [Debian 官网中有一篇对网络配置的介绍](https://wiki.debian.org/NetworkConfiguration)，其中就有介绍在 `/etc/network/interfaces` 配置文件中配置网卡 DNS 问题：
+
+![debian-nameservers-doc-1637928644Jv2CjN](http://linux-media.knowledge.ituknown.cn/NetworkManager/Debian-StaticIP/debian-nameservers-doc-1637928644Jv2CjN.png)
+
+总结下来就是在具体网卡后面写一个 `dns-nameservers` 的配置，与 `gateway` 和 `address` 一样需要有缩进，在后面写上 DNS 服务器的 IP 即可，示例如下：
+
+
+```bash
+auto ens33
+allow-hotplug ens33
+iface ens33 inet static
+     address 192.168.1.8/24
+     gateway 192.168.1.1
+     dns-nameservers: 114.114.114.114 8.8.8.8
+```
+
+正常来说重启网络就好了，但我不管怎么重启都是不生效的：
+
+```bash
+$ systemctl daemon-reload
+$ systemctl restart networking.service
+$ systemctl restart systemd-resolved.service
+```
+
+查询结果：
+
+```bash
+$ systemd-resolve --status
+
+Global
+         Protocols: +LLMNR +mDNS -DNSOverTLS DNSSEC=no/unsupported
+  resolv.conf mode: foreign
+Current DNS Server: 192.168.1.1 # 没有变化
+       DNS Servers: 192.168.1.1
+
+Link 2 (ens33)
+Current Scopes: LLMNR/IPv4 LLMNR/IPv6
+     Protocols: -DefaultRoute +LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+```
+
+同样的，我也在 stackoverflow 上查找该问题，但所有的答案都是告诉你在 `interfaces` 配置文件中指定 `dns-nameservers` 即可！
+
+所以这个问题我再 Debian 上没有解决。但是啊，但是！我在 CentOS7 上使用 `dns-nameservers` 配置居然是好的！所以我就很难理解，说明一下我使用的 Debian 发行版信息如下：
+
+```
+   Static hostname: vm
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: 9c64e747f66c4418abec5f2d52ff36e4
+           Boot ID: 6cbb1426f0f644d2b108f4b486b16c4e
+    Virtualization: vmware
+  Operating System: Debian GNU/Linux 11 (buster)
+            Kernel: Linux 5.10.0-9-amd64
+      Architecture: x86-64
+```
+
+好吧，关于这个问题还是要去社区寻求答案吧~
 
 ## 录屏示例
 
