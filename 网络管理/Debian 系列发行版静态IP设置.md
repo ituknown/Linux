@@ -88,7 +88,7 @@ $ ip -c addr show
 
 而 `allow-hotplug` 则是当内核从网络接口检测到热插拔事件后才会启动该网络接口。如果系统启动时该网络接口没有插入网线，则系统不会启动该网卡。系统启动后，如果插入网线，系统会自动启动该网络接口。
 
-有关 `auto` 可 `allow-hotplug` 的区别可参考文章最后的资源链接🔗。
+有关 `auto` 可 `allow-hotplug` 的区别可参考文章最后的[资源链接🔗](#资源链接)。
 
 **现在再来说下 `iface` 配置：**：
 
@@ -320,8 +320,7 @@ iface ens33:1 inet static
 
 之后重启网络就可以了~
 
-
-## 录屏信息
+## 录屏示例
 
 下面是使用 [asciinema](https://asciinema.org) 工具录制的 Shell 操作示例。该示例演示了静态 IP 的配置，同时分别基于 `iproute2` 和 Legacy 演示了多静态 IP 配置，可以参考下：
 
