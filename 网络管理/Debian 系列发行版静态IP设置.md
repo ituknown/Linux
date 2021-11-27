@@ -362,19 +362,25 @@ Current Scopes: LLMNR/IPv4 LLMNR/IPv6
      Protocols: -DefaultRoute +LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
 ```
 
+**Note：** 如果你在执行 `systemd-resolve --status` 遇到如下错误说明已没有启动 `systemd-resolved.service` 服务，执行下运行命令就好：`sudo systemctl restart systemd-resolved.service`。
+
+```
+Failed to get global data: Unit dbus-org.freedesktop.resolve1.service not found.
+```
+
 同样的，我也在 stackoverflow 上查找该问题，但所有的答案都是告诉你在 `interfaces` 配置文件中指定 `dns-nameservers` 即可！
 
-所以这个问题我再 Debian 上没有解决。但是啊，但是！我在 CentOS7 上使用 `dns-nameservers` 配置居然是好的！所以我就很难理解，说明一下我使用的 Debian 发行版信息如下：
+所以这个问题我再 Debian 上没有解决，所以我就很难理解。说明一下我使用的 Debian 发行版信息如下：
 
 ```
    Static hostname: vm
          Icon name: computer-vm
            Chassis: vm
-        Machine ID: 9c64e747f66c4418abec5f2d52ff36e4
-           Boot ID: 6cbb1426f0f644d2b108f4b486b16c4e
+        Machine ID: 99c0e11c8499491293588694271066b8
+           Boot ID: 50cc642779e841d3bbd4ad5a40b0dbbd
     Virtualization: vmware
-  Operating System: Debian GNU/Linux 11 (buster)
-            Kernel: Linux 5.10.0-9-amd64
+  Operating System: Debian GNU/Linux 10 (buster)
+            Kernel: Linux 4.19.0-14-amd64
       Architecture: x86-64
 ```
 
