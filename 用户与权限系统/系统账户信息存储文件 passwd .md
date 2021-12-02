@@ -347,4 +347,6 @@ $ grep nologin /etc/passwd
 
 --
 
+参考：https://en.wikipedia.org/wiki/User_identifier
+
 完结，撒花🎉🎉🎉~
