@@ -1,26 +1,26 @@
 # 前言
 
-Linux 系统文件 `/etc/shadow` 才真正是用于存储系统用户密码信息的文件。该文件存储的数据与 `/etc/passwd` 文件存储的用户信息是一一对应的，即使一个用户没有 “明确” 设置密码数据，在 `/etc/shadow` 文件中也会有一个对应的密码行配置数据。
+Linux 系统文件 `/etc/shadow` 才真正是用于存储系统用户密码信息的文件（现在操作系统 `/etc/passwd` 文件仅存储账号信息）。该文件存储的数据与 `/etc/passwd` 文件存储的账号信息是一一对应的，即使新建的用户没有 “明确” 设置密码数据，在 `/etc/shadow` 文件中也会有一个对应的密码行配置数据。
 
-你可以使用 `ls -l` 命令查看下 `/etc/shadow` 文件的权限值设置，在 Debian 中你会看到权限是640（`rw-r-----`）：
+Linux 对 `/etc/shadow` 权限设置的权限特别的高，普通用户连查看的权限都没有。你可以使用 `ls -l` 命令查看下 `/etc/shadow` 文件的权限值设置，在 Debian 中你会看到权限是640（`rw-r-----`）：
 
 ```bash
 $ ls -l /etc/shadow
 -rw-r----- 1 root shadow 1265 Nov 30 16:15 /etc/shadow
 ```
 
-但是在 CentOS 你会发现它的权限值限制的更绝，居然全是 `---------`，如下：
+但是在 RHEL/CentOS 你会发现它的权限限制的更绝，居然是 `---------`，如下：
 
 ```bash
 $ ls -l /etc/shadow
 ----------. 1 root root 615 Nov 30 17:48 /etc/shadow
 ```
 
-这也变相的提醒了在使用中，我们绝对不能手动去修改 `/etc/shadow` 文件中的内容！你可能会有疑问，在 CentOS 系统中该文件的权限已经是 `---------` 了，即使想要修改也没法啊。
+这也变相的提醒使用者，绝对不能手动去修改 `/etc/shadow` 文件中的内容！你可能会有疑问，在 CentOS 系统中该文件的权限已经是 `---------` 了，用户即使想要修改也没办法啊。
 
-之所以说不能手动去修改的原因是 Linux 系统中有一个 BUG 一般存在的用户，即 root。root 用户是 Linux 系统中的特殊超级管理员，使用 root 用户在操作时是可以无视任何文件的权限设置的。
+图样图神破，在 Linux 系统中有一个 BUG 一般存在的用户，即 root。root 用户是 Linux 系统中的特殊超级管理员，root 用户在操作系统文件时是可以无视任何文件的权限设置的。
 
-最典型的就是普通用户的 Home 用户，比如在 CentOS 中 Home 用户的权限都是 `rwx------`。普通用户是无权限进入和读取的，但是使用 root 用户的话，所以一定要注意！
+最典型的就是普通用户的 Home 目录，比如在 CentOS 中 Home 目录的权限都是 `rwx------`。普通用户是无权限进入和读取其他用户的数据文件的，但是这对 root 用户是没有任何作用的，所以当使用1 root 用户时一定要格外的注意！
 
 现在，我们来看下这个文件中的数据格式：
 
@@ -35,7 +35,7 @@ $ ls -l /etc/shadow
 
 与 `/etc/passwd` 文件内容一样，每一行就是一个用户的密码信息，并且每行的数据格式也是固定的。
 
-数据格式如下（`:` 符号是分隔符）：
+数据格式如下（`:` 符号是数据分隔符）：
 
 ```
 kali:$6$air519$ImP9aw:18940:0:99999:7:7:7:
@@ -44,7 +44,7 @@ kali:$6$air519$ImP9aw:18940:0:99999:7:7:7:
 |             |         |   |   |   | | +-------> 8. Account Expiration date（账号失效日期）
 |             |         |   |   |   | +---------> 7. Password inactivity period（密码过期宽限日期）
 |             |         |   |   |   +-----------> 6. Password warning period（密码过期前 x 天警告信息提示）
-|             |         |   |   +---------------> 5. Maximum password age（每个 x 天必须修改一次密码，否则将会过期）
+|             |         |   |   +---------------> 5. Maximum password age（每隔 x 天必须修改一次密码，否则将会过期）
 |             |         |   +-------------------> 4. Minimum password age（密码修改后，x 天内不允许重复修改）
 |             |         +-----------------------> 3. Last password change date（密码最近修改时间）
 |             +---------------------------------> 2. Encrypted （密码）
@@ -69,7 +69,9 @@ $ id exampleuser
 id: 'exampleuser': no such user
 ```
 
-**Note：** 如果用户存在的话记得先使用 `userdel exampleuser` 命令删除。
+|**Note** |
+|:--|
+|如果用户存在的话记得先使用 `userdel -r exampleuser` 命令删除。|
 
 **2. 创建 `exampleuser` 用户（需要使用 `root` 或具有超级管理员权限的用户，如 `sudo`）：**
 
@@ -83,6 +85,7 @@ $ sudo useradd exampleuser
 $ grep exampleuser /etc/passwd /etc/shadow
 ```
 
+输出结果：
 
 ```
 /etc/passwd:exampleuser:x:1002:1002::/home/exampleuser:/bin/sh
@@ -95,20 +98,22 @@ $ grep exampleuser /etc/passwd /etc/shadow
 
 # 密码
 
-密码原本是存在在 `/etc/passwd` 文件中的，不过现在计算机为了安全性而将密码移动到了 `/etc/shadow` 文件中了。而密码在 `/etc/shadow` 文件中是使用加密算法进行加密存储的，比如刚刚创建的 `exampleuser` 的密码数据：
+密码原本是存在在 `/etc/passwd` 文件中的，不过现代计算机为了安全性而将密码移动到了 `/etc/shadow` 文件中了。而密码在 `/etc/shadow` 文件中是使用加密算法进行加密存储的，比如刚刚创建的 `exampleuser` 的密码数据：
 
 ```
 /etc/shadow:exampleuser:!:18964:0:99999:7:::
-                        _
+                        -
                         |
                         +-------> 密码数据
 ```
 
-刚创建的用户的密码位是使用 `!` 标识的，标识这个用户处于锁定（或禁用）状态。被锁定状态的用户是没法进行系统登录的，只有给新用户设置密码后才行进行登录。
+刚创建的用户的密码位被 `!` 标识（在某些发行版使用的是 `!!`），表示这个用户处于锁定（或禁用）状态。处于锁定状态的用户是没法进行系统登录的，只有给新用户设置密码后才行进行登录。
 
 需要说明的是，对于刚创建的用户在不同的 Linux 发行版上符号 `!` 有些不同，在 Debian 系列发行版上使用的是 `!`。但是呢，在 RHEL/CentOS 系列上使用的是 `!!`。
 
-这两则表示的是含义相同，而且在 StackExchange 上也有关于这两个之间区别的问题，可以点击链接拜读下大佬的回答：[StackExchange：Difference between ! vs !! vs * in /etc/shadow](https://unix.stackexchange.com/questions/252016/difference-between-vs-vs-in-etc-shadow)
+这两则表示的是含义相同，而且在 StackExchange 上也有关于这两个之间区别的问题，可以点击链接拜读下大佬的回答：
+
+[StackExchange：Difference between ! vs !! vs * in /etc/shadow](https://unix.stackexchange.com/questions/252016/difference-between-vs-vs-in-etc-shadow)
 
 下面是 RHEL/CentOS 发行版 `!!` 示例：
 
@@ -142,20 +147,22 @@ exampleuser:$6$SlPOg$gl8o1ENFVt6:18964:0:99999:7:::
 
 **`$type$` 指的是密码的加密方式**，有如下几种：
 
-`$1$` – MD5
-`$2a$` – Blowfish
-`$2y$` – Eksblowfish
-`$5$` – SHA-256
-`$6$` – SHA-512
+- `$1$` – MD5
+- `$2a$` – Blowfish
+- `$2y$` – Eksblowfish
+- `$5$` – SHA256
+- `$6$` – SHA512
 
-比如上面示例中的是 `$6$`，表示的就是我们的密码 `"123456"` 使用的是 SHA512 算法计算摘要。你可能会奇怪，为什么系统选择的是 SHA512 而不是 MD5 呢？这个默认的加密方式其实是在 `/etc/login.defs` 文件中配置的，既可以使用下面的命令查看你自己系统中配置的默认加密方式：
+比如上面示例中我们给 `exampleuser` 设置的新密码，`$type$` 值是 `$6$`，表示的就是我们的密码 `"123456"` 使用的是 SHA512 算法计算摘要。你可能会奇怪，为什么系统选择的是 SHA512 而不是 MD5 呢？
+
+这个默认的算法其实是在 `/etc/login.defs` 文件中配置的，你可以使用下面的命令查看你自己系统中配置的默认加密算法：
 
 ```bash
 $ grep ENCRYPT_METHOD /etc/login.defs
 ENCRYPT_METHOD SHA512  <=== SHA512
 ```
 
-如果你想修改为 MD5 就使用 `vim` 编辑下该文件将 `ENCRYPT_METHOD` 配置修改为你想要的加密方式即可！
+如果你想修改为 MD5 就使用 `vim` 编辑下该文件，将 `ENCRYPT_METHOD` 配置修改为你想要的加密方式即可！
 
 另外，为了密码的安全性在计算摘要之前通常还要加盐 **`salt`**，比如上面示例中加的盐就是 `"SlPOg"`（省略后的），最后的 `"hashed"` 才是加盐后的摘要数据（当然是省略后的数据）。
 
@@ -163,7 +170,7 @@ ENCRYPT_METHOD SHA512  <=== SHA512
 
 除了上面的之外还有一个情况，格式为：`!$type$salt$hashed`，即在正常的密码前面有个 `!`。你只要记住，凡是密码以 `!` 开头的账户都是表示密码处于锁定状态，区别就是有没有设置过密码问题。
 
-还是以 `exampleuser` 用于为例，当前我们已经使用 `chpasswd` 命令给该用户设置了密码。现在就可以使用该用户正常登录系统了（如 `ssh`）：
+还是以 `exampleuser` 用户为例，当前我们已经使用 `chpasswd` 命令给该用户设置了密码。现在就可以使用该用户正常登录系统了（如 `ssh`）：
 
 ```bash
 $ ssh exampleuser@host
@@ -185,7 +192,7 @@ exampleuser:!S$6$SlPOg$gl8o1ENFVt6:18964:0:99999:7:::
                      +--------------> 密码前面多了一个 !
 ```
 
-好了，现在该用户就表示被锁定了。此时你就无法使用 exampleuser 用户进行系统的登录了：
+好了，现在该用户就表示被锁定了。此时你就无法使用 `exampleuser` 用户进行系统的登录了：
 
 ```bash
 $ ssh exampleuser@172.16.110.128
@@ -269,12 +276,12 @@ $ grep MIN_DAYS /etc/login.defs
 PASS_MIN_DAYS	0
 ```
 
-你可以使用 root 用户编辑噶文件，修改 `PASS_MIN_DAYS` 的值新建一个用户测试一下。
+你可以使用 root 用户编辑该文件，修改 `PASS_MIN_DAYS` 的值然后新建一个用户测试一下。
 
 还是以 `exampleuser` 用户为例，它的最近修改日期是 2021.12.04，正好是我写这篇博文的时间。因为该用户当前的下次修改时间的值为 0，没有做任何限制所以我是可以随意修改的：
 
 ```bash
-$ id
+$ id  <== 下使用 id 命令查看当前登录用户
 uid=1002(exampleuser) gid=1002(exampleuser) groups=1002(exampleuser)
 
 $ passwd  <== 修改密码
@@ -383,7 +390,7 @@ exampleuser:$6$0oi$IqThWVs7i4p0bGj/:18965:3:7:7:::
 PASS_WARN_AGE	7
 ```
 
-比如当前 `exampleuser` 用户的密码信息是每个7天修改一次密码，并且在过期前7天内会给出警告提示。也就是说，当前 `exampleuser` 就会有提示信息。现在使用 `exampleuser` 登录下系统看看：
+比如当前 `exampleuser` 用户的密码信息是每隔 7 天修改一次密码，并且在过期前7天内会给出警告提示。也就是说，当前 `exampleuser` 就会有提示信息。现在使用 `exampleuser` 登录下系统看看：
 
 ```bash
 $ ssh exampleuser@172.16.110.128
@@ -468,4 +475,4 @@ exampleuser:$6$0oiUGj:18965:3:7:7:7:18992:
 
 --
 
-完结，撒花~
+完结，撒花🎉🎉🎉~
