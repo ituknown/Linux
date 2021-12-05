@@ -151,49 +151,18 @@ examplesysuser:x:998:997::/home/examplesysuser:/bin/sh
 
 # 用户组ID
 
-与用户一样，用户组也有自己的ID，被称为 GID。而这个 GID 的分配策略与 UID 也是一样的。**0 是 root 用户组**，1000 以下用于系统超级管理员分配以及安装脚本自动分配，1000 以上才是供我们创建组时分配的 GID。
-
-与 UID 一样，不同的 Linux 发行版对 GID 也有自己的限制：
-
-```bash
-$ grep GID /etc/login.defs
-GID_MIN			 1000
-GID_MAX			60000
-#SYS_GID_MIN		  100
-#SYS_GID_MAX		  999
-```
-
-另外，很重要的一点一定要记住。**`/etc/passwd` 文件中的用户 GID 是该用户的主要组ID（Primary GID）**，会在之后进行说明！！！！
-
-使用 `useradd` 命令创建用户时，默认会创建对应的用户组，用户组与用户名同名。
-
-比如超级管理员 `root` 用户的 GID：
-
-```
-root:x:0:0:root:/root:/bin/bash
-         -
-         |
-         +--------------------> root 的 GID 为 0
-```
-
-比如之前我们创建的普通用户 `exampleuser`：
+每个用户初始都会默认分配一个与用户同名的用户组，这个组我们一般称为主要组，这个数据记录的就是主要组的ID：
 
 ```
 exampleuser:x:1003:1003::/home/exampleuser:/bin/sh
                    [--]
                     |
-                    +----------------------> GID 为 1003
+                    +----------> 组ID
 ```
 
-再比如刚刚创建的系统用户 `examplesysuser`：
+你可能会有疑问，这里只记录一个组ID，那如果某个用户有多个组呢？好问题，不过这个问题会有一个专门博文介绍，具体是见 [系统用户组信息存储文件 group](./系统用户组信息存储文件%20group.md)。
 
-```
-examplesysuser:x:998:997::/home/examplesysuser:/bin/sh
-                     [-]
-                      |
-                      +-------------------> GID小于 1000
-```
-
+反正呢，这里你只需要记住，在 `/etc/passwd` 文件中记录的用户组是该用户的主要组，与文件的权限有关即可。
 
 
 # 用户的注释信息
