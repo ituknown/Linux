@@ -1,4 +1,4 @@
-****# 前言
+# 前言
 
 本文呢，就来聊聊 `/etc/group` 用户组数据存储文件，系统中的所有组都被存储到噶文件中。相比较用户存储文件 `/etc/passwd` 而言，用户组数据就比较简单了，下面来说下。
 
@@ -22,7 +22,7 @@ kali:x:1000:saned
  +--------------------------> 1. 组名
 ```
 
-## 组名
+# 组名
 
 当我们新建一个用户时，默认会创建一个同名的组，而该组就会称为新创建用户的主要组。比如我们新建一个 `exampleuser` 用户：
 
@@ -61,7 +61,7 @@ $ sudo useradd webuser
 useradd: group webuser exists - if you want to add this user to that group, use -g.
 ```
 
-结果显而易见，用户么有创建成功。但是会提示你可以使用 `-g` 参数进行关联，现在使用 `-g` 参数重新创建用户，命令如下：
+结果显而易见，用户没有创建成功。但是会提示你可以使用 `-g` 参数进行关联，现在使用 `-g` 参数重新创建用户，命令如下：
 
 ```bash
 $ sudo useradd -g 1003 webuser
@@ -78,7 +78,7 @@ $ grep webuser /etc/passwd /etc/group
 嗯，现在就知道怎么回事了吧？
 
 
-## 组密码
+# 组密码
 
 什么？组还有密码？当然了，组也是有密码的，那这是怎么回事呢？
 
@@ -100,7 +100,7 @@ examplegroup:x:1002:exampleusesr
 其他就不做过多介绍了，没啥意义。
 
 
-## 组ID
+# 组ID
 
 与用户一样，用户组也有自己的ID，被称为 GID。而这个 GID 的分配策略与 UID 也是一样的。**0 是 root 用户组**，1000 以下用于系统超级管理员分配以及安装脚本自动分配，1000 以上才是供我们创建组时分配的 GID。
 
@@ -119,7 +119,7 @@ GID_MAX			 60000
 也就是说，通常可由用户分配的 GID 为 1000 ~ 60000。
 
 
-## 组成员
+# 组成员
 
 最后，来看下组中最重要的数据：组的成员。
 
@@ -172,4 +172,5 @@ $ grep exampleuser /etc/passwd /etc/group
 完结，撒花🎉🎉🎉~
 
 https://www.cyberciti.biz/faq/understanding-etcgroup-file/
+
 https://www.networkworld.com/article/3409781/mastering-user-groups-on-linux.html
