@@ -13,8 +13,8 @@ jobs:
         uses: Yikun/hub-mirror-action@master
 
         with:
-          src: "github/${{ github.repository_owner }}"
-          dst: "gitee/${{ secrets.GITEE_USER }}"
+          src: github/ituknown
+          dst: github/ituknown
 
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           dst_token: ${{ secrets.GITEE_TOKEN }}
@@ -23,6 +23,6 @@ jobs:
 
           clone_style: ssh
 
-          force_update: true
+          # force_update: true
 
           static_list: ${{ github.event.repository.name }}
