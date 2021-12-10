@@ -14,7 +14,7 @@ jobs:
 
         with:
           src: github/ituknown
-          dst: github/ituknown
+          dst: gitee/ituknown
 
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           dst_token: ${{ secrets.GITEE_TOKEN }}
