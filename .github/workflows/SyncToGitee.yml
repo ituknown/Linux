@@ -9,9 +9,8 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Mirror the Github repos to Gitee.
+      - name: Mirror With Force Push (git push -f)
         uses: Yikun/hub-mirror-action@master
-
         with:
           src: github/ituknown
           dst: gitee/ituknown
@@ -19,10 +18,8 @@ jobs:
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           dst_token: ${{ secrets.GITEE_TOKEN }}
 
-          account_type: org
+          static_list: "Linux"
+          clone_style: "ssh"
 
-          clone_style: ssh
-
-          # force_update: true
-
-          static_list: ${{ github.event.repository.name }}
+          force_update: true
+          debug: true
