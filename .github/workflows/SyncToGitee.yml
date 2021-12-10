@@ -8,13 +8,12 @@ on:
       - VIM
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-20.04
     steps:
-      - name: Sync To Gitee
-        uses: wearerequired/git-mirror-action@master
+      - uses: wearerequired/git-mirror-action@master
         env:
           SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
         with:
-          source-repo: git@github.com:ituknown/Linux.git
-          destination-repo: git@gitee.com:ituknown/Linux.git
+          source-repo: "git@github.com:ituknown/Linux.git"
+          destination-repo: "git@gitee.com:ituknown/Linux.git"
