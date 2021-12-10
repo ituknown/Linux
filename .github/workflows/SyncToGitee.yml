@@ -11,7 +11,7 @@ jobs:
       dst_token: ${{ secrets.GITEE_TOKEN }}
       gitee_user: ${{ secrets.GITEE_USER }}
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
           # 组织之间同步, 默认为用户 user
           account_type: org
 
-          clone_style: ssh
+          clone_style: https
 
           # 直接取当前项目的仓库名
           static_list: ${{ github.event.repository.name }}
