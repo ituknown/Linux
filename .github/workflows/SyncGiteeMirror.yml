@@ -48,7 +48,7 @@ jobs:
           dst_token:  ${{ secrets.GITEE_TOKEN }}
           
           # org or user, default is user
-          # account_type: org
+          account_type: org
           
           # current repostory name
           static_list: ${{ github.event.repository.name }}
