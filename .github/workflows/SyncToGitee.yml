@@ -1,32 +1,25 @@
 name: sync to gitee
-
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  run:
-    name: Run
-    runs-on: ubuntu-latest
+  repo-sync:
+    runs-on: ubuntu-20.04
+
     steps:
-    
-    - name: Checkout source code
-      uses: actions/checkout@v1
-      
-    - name: Mirror Github to Gitee
-      uses: ./.
-      with:
-        src: github/ituknown
-        dst: gitee/ituknown
-        dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
-        dst_token: ${{ secrets.GITEE_TOKEN }}
-        account_type: org
-        
-        static_list: "Linux"
-        # clone_style: "ssh"
-        
-        # Only sync normal repo
-        
-        # black_list: 'test'
-        # white_list: 'normal,test,empty'
-        
-        force_update: true
-        debug: true
+      - name: Mirror With Force Push (git push -f)
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/ituknown
+          dst: gitee/ituknown
+
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+
+          static_list: "Linux"
+          clone_style: "ssh"
+
+          force_update: true
+          debug: true
