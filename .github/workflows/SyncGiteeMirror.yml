@@ -12,18 +12,18 @@ jobs:
     
       # Gitee Private Key
       # https://gitee.com/profile/sshkeys
-      dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+      GITEE_PRI_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
       
       # Gitee Token
       # https://gitee.com/profile/personal_access_tokens
-      dst_token: ${{ secrets.GITEE_TOKEN }}
+      GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
       
       # The Gitee User
       # If the current repository belongs to an organization, the value of 
       # the gitee_user variable must be set to the name of the organization, 
       # such as ituknown. 
       # Otherwise, it needs to be set to the personal username of github
-      gitee_user: ${{ secrets.GITEE_USER }}
+      GITEE_USER: ${{ secrets.GITEE_USER }}
       
     runs-on: ubuntu-latest
     
@@ -38,13 +38,14 @@ jobs:
         if: env.dst_key && env.dst_token && env.gitee_user
         
         with:
+        
           # github source
           src: 'github/${{ github.repository_owner }}'
           # gitee source
-          dst: 'gitee/${{ gitee_user }}'
+          dst: 'gitee/${{ env.GITEE_USER }}'
           
-          dst_key: ${{ dst_key }}
-          dst_token:  ${{ dst_token }}
+          dst_key: ${{ env.GITEE_PRI_KEY }}
+          dst_token:  ${{ env.GITEE_TOKEN }}
           
           # org or user, default is user
           # account_type: org
