@@ -25,7 +25,7 @@ jobs:
       # the gitee_user variable must be set to the name of the organization, 
       # such as ituknown. 
       # Otherwise, it needs to be set to the personal username of github
-      gitee_user: ${{ secrets.GITEE_USER }}
+      gitee_user: ${{ secrets.GITEE_ORG_USER }}
     
     steps:
       - uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
           # github source
           src: 'github/${{ github.repository_owner }}'
           # gitee source
-          dst: 'gitee/${{ secrets.GITEE_USER }}'
+          dst: 'gitee/${{ secrets.GITEE_ORG_USER }}'
           
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           dst_token:  ${{ secrets.GITEE_TOKEN }}
