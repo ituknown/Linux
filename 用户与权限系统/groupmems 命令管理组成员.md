@@ -1,6 +1,6 @@
 # 前言
 
-`groupmems` 命令用于管理组成员。可以向指定组添加成员，删除某个组内的指定成员。该命令语法如下：
+`groupmems` 命令用于管理组成员。可以向指定组添加成员，删除指定组内的某个成员。该命令语法如下：
 
 ```bash
 groupmems -g [group] [-ad] [user]
@@ -11,10 +11,10 @@ groupmems -g [group] [-lp]
 下面是可选参数说明：
 
 ```
--g,--group:   指定具体组，可以是组的ID也可以是组的名称。
--a,--add:     向指定组添加成员，可以是用户的ID也可以是名称
--d,--delete:  删除组内的某个成员，可以是用户的ID也可以是名称
--l,--list:    列出指定组内的说明成员
+-g,--group:   指定具体组，可以是 GID 也可以是组的名称。
+-a,--add:     向指定组添加成员，可以是 UID 也可以是名称
+-d,--delete:  删除组内的某个成员，可以是 UID 也可以是名称
+-l,--list:    列出指定组内所有成员
 -p,--purge:   清空组内的所有成员
 ```
 
@@ -78,7 +78,7 @@ Password:
 groupmems: PAM: Authentication failure
 ```
 
-原因是因为 Ubuntu 系统没有设置有效的 root 账户，我们在装系统时通常会要求设置一个超级管理员账号（可用于执行 `sudo` 命令）但却没有设置 `root` 的密码。如果你查看 `/etc/shadow` 文件的 root 密码信息你会发现是一个 `!` 符号：
+原因是因为 Ubuntu 系统没有设置有效的 root 账户，我们在装系统时通常会要求设置一个超级管理员账号（可用于执行 `sudo` 命令）。但 Ubuntu 仅仅是创建一个超级管理员账号，并没有设置 `root` 的密码。如果你查看 `/etc/shadow` 文件的 root 密码信息你会发现是一个 `!` 符号：
 
 ```bash
 $ sudo grep root /etc/shadow
@@ -92,8 +92,6 @@ $ sudo passwd root
 ```
 
 之后再执行，输入密码后就没问题了：
-
-then
 
 ```bash
 $ sudo groupmems -g examplegroup -a webuser
