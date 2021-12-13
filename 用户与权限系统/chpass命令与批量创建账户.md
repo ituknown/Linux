@@ -42,9 +42,9 @@ echo "username:newpasswd" | sudo chpasswd [-c]
 如果需要给多个用户设置密码可以使用下面的形式（通常是直接从文件中那个读取账号的新密码信息）：
 
 ```bash
-$ sudo chpasswd [-c]   <==== 会自动重启一行
-username1:newpasswd    <==== 在新行里输入账户和密码信息, 如果有多个用户就回车继续输入
-username2:newpasswd    <==== 如果这个是最后一个用户就使用 ctrl + d 组合键确认结束
+$ sudo chpasswd [-c]   # <==== 回车后会自动重启一行
+username1:newpasswd    # <==== 在新行里输入账户和密码信息, 如果有多个用户就回车继续输入
+username2:newpasswd    # <==== 如果这个是最后一个用户就使用 ctrl + d 组合键确认结束
 ```
 
 因为 `chpasswd` 只有超级管理员才能使用，所以在语法中特别使用了 `sudo` 命令进行了强调。
@@ -94,9 +94,9 @@ $ sudo chage -d 0 webuser
 
 ```bash
 $ sudo chage -l webuser
-Last password change					: password must be changed  <== 强制密码必须修改
-Password expires					: password must be changed  <== 强制密码必须修改
-Password inactive					: password must be changed  <== 强制密码必须修改
+Last password change					: password must be changed  # <== 强制密码必须修改
+Password expires					: password must be changed  # <== 强制密码必须修改
+Password inactive					: password must be changed  # <== 强制密码必须修改
 Account expires						: never
 Minimum number of days between password change		: 0
 Maximum number of days between password change		: 99999
@@ -105,7 +105,7 @@ Number of days of warning before password expires	: 7
 
 好了，现在当新用户登录时就会强制设置新密码了。下面是在 Debian Buster 上的示例：
 
-```bash
+```
 $ ssh webuser@172.16.110.128
 webuser@172.16.110.128's password:   <==== 输入超级管理员设置的初始密码 123456 就可以登陆了
 You are required to change your password immediately (administrator enforced)
@@ -130,9 +130,9 @@ Connection to 172.16.110.128 closed.  <=== 密码设置成功, 自动登出
 怎么样？是不是很棒？
 
 
-# 使用 passwd 命令修改账户密码（Only CentOS）
+# 使用 passwd 命令修改账户密码（Only RHEL/CentOS）
 
-在 CentOS 发行版中，`passwd` 有一个可选参数可用于从标准输入流中读取密码数据，我们可以利用该参数达到与 `chpasswd` 命令的目的。
+在 RHEL/CentOS 发行版中，`passwd` 有一个可选参数可用于从标准输入流中读取密码数据，我们可以利用该参数达到与 `chpasswd` 命令的目的。
 
 
 CentOS 中 `passwd` 命令参数介绍（`passwd --help`）：
