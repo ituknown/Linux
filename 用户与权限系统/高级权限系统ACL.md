@@ -12,7 +12,7 @@ ACL 的全称是 **file access control lists**。简单粗暴点说就是文件�
 
 | **用户** | **权限**     |
 | :------- | :----------- |
-| 所属着   | 读、写、执行 |
+| 所属者   | 读、写、执行 |
 | 所属组   | 读、写、执行 |
 | 其他用户 | 读           |
 
@@ -86,16 +86,16 @@ acl_perms 则是重点，语法如下：
 
 ```bash
 # 设置文件有效权限
-[d[efault]:] m[ask][:] [:perms]
+[d[efault]:] m[ask][:] [:rwx]
 
 # 设置用户级别权限
-[d[efault]:] [u[ser]:]uid [:perms]
+[d[efault]:] [u[ser]:]uid [:rwx]
 
 # 设置组级别权限
-[d[efault]:] g[roup]:gid [:perms]
+[d[efault]:] g[roup]:gid [:rwx]
 
 # 设置其他用户权限
-[d[efault]:] o[ther][:] [:perms]
+[d[efault]:] o[ther][:] [:rwx]
 ```
 
 **1）** `default,d` 与文件夹有关，就是继承的意思。比如创建了一个文件夹，设置 ACL 为 `rw`。但是这个 `rw` 仅仅是针对该文件夹，如果你在文件夹下面再创建一个文件的话，你会发现这个新的文件没有 `rw` 权限。
@@ -116,7 +116,7 @@ user:u1,u2,u3:perms
 
 |**注意**|
 |:------|
-|`u1`、`u2` 可以是具体的用户名，也可以是 UID |
+|`u1`、`u2` 可以是具体的用户名，也可以是 UID。 |
 
 **4）** `group,g` 指定具体的组，可以是组的名称也可以是 ID。示例：
 
@@ -127,11 +127,11 @@ group:g1,g2,g3:perms
 
 |**注意**|
 |:------|
-|`g1`、`g2` 可以是具体的组名，也可以是 GID |
+|`g1`、`g2` 可以是具体的组名，也可以是 GID。 |
 
 **5）** `other,o` 就是其他用户了，没啥好说的，实际上谁会使用 ACL 去设置其他用户的权限呢？
 
-**6）** `perms` 就是我们常用的权限值 `rwx`。
+**6）** `rwx` 就是我们常用的权限值。
 
 
 # ACL 牛刀小试
@@ -179,7 +179,7 @@ total 0
 注意看在权限后面有个 `+`，这就表示有 ACL 权限。来看下权限信息：
 
 ```bash
-$ sudo getfacl readme
+$ getfacl readme
 ```
 
 输出如下：
@@ -189,7 +189,7 @@ $ sudo getfacl readme
 # owner: webuser
 # group: example
 user::rw-
-user:acluser:rw-  <== 注意这里
+user:acluser:rw-  # <== 注意这里
 group::r--
 mask::rw-
 other::r--
@@ -212,7 +212,7 @@ $ getfacl readme
 # group: example
 user::rw-
 user:acluser:rw-
-user:kali:--x     <== 又多了一个 kali
+user:kali:--x     # <== 又多了一个 kali
 group::r--
 mask::rwx
 other::r--
@@ -230,7 +230,7 @@ $ getfacl readme
 # owner: webuser
 # group: example
 user::rw-
-user:kali:--x  <== 只有 kali 这个用户, 没有 acluser
+user:kali:--x  # <== 只有 kali 这个用户, 没有 acluser
 group::r--
 mask::r-x
 other::r--
@@ -335,6 +335,7 @@ $ sudo setfacl -b dir
 现在我们使用 `default` 参数设置 ACL 权限：
 
 ```bash
+# 使用 default 使权限继承
 $ sudo setfacl -m d:user:webuser:rw dir
 
 # 创建子文件
@@ -346,7 +347,7 @@ $ getfacl dir/readme1
 # owner: kali
 # group: kali
 user::rw-
-user:webuser:rw-  <== 继承文件夹 ACL 权限
+user:webuser:rw-    # <== 继承文件夹 ACL 权限
 group::rwx			#effective:rw-
 mask::rw-
 other::r--
@@ -359,11 +360,13 @@ $ sudo setfacl -m d:user:webuser:rw dir
 $ sudo setfacl -m user:kali:rw dir
 ```
 
-由于在给 `kali` 用户设置 ACL 权限是没有使用 `default`，所以子文件继承的 ACL 只会包含 `webuser`，不会包含 `kali`。这个需要特别注意。
+|**注意**|
+|:------|
+|由于在给 `kali` 用户设置 ACL 权限是没有使用 `default`，所以子文件继承的 ACL 只会包含 `webuser`。但是给用户 `kali` 设置 ACL 权限时没有指定 `default` 进行权限继承，所以子文件中就不包含该用户的 ACL 权限值，这个需要特别注意。|
 
 # 给用户组设置 ACL 权限
 
-这个用户与用户一致，给参数 `user` 换成 `group` 即可：
+这个与用户一致，给参数 `user` 换成 `group` 即可：
 
 ```bash
 setfacl -m g[roup]:[groups...]:[rwx] [file|dir]...
@@ -421,14 +424,14 @@ $ getfacl dir/readme
 # owner: kali
 # group: kali
 user::rw-
-user:erha:rwx   <== 在这呢
+user:erha:rwx   # <== 在这呢
 group::rw-
 mask::rwx
 other::r--
 ```
 
 
-# 有限权限 mask
+# 有效权限 mask
 
 这个就特重要了，之前给用户和组设置的权限都与这个有效权限有关。比如如果文件的有效权限是 `rw`，但是你给用户设置的权限是 `rx`，那么该用户实际能使用的权限只会有 `r`。就是说，用户的实际权限是设置的权限与文件的有效权限取1交集。
 
@@ -503,10 +506,11 @@ setfacl [-R] -b [file|dir]...
 $ setfacl -R -b dir
 ```
 
---
+# 参考链接🔗
 
 https://linux.die.net/man/1/setfacl
 https://www.ibm.com/docs/en/zos/2.4.0?topic=scd-setfacl-set-remove-change-access-control-lists-acls
 
+--
 
 完结，撒花🎉🎉🎉~
