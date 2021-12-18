@@ -104,10 +104,10 @@ exampleuser:x:1003:1003::/home/exampleuser:/bin/sh
 
 ```bash
 $ grep UID /etc/login.defs
-UID_MIN			 1000    <== 允许创建的UID的最小值
-UID_MAX			60000    <== 允许创建的UID的最大值
-#SYS_UID_MIN		  100    <== 系统用户UID允许最小值
-#SYS_UID_MAX		  999    <== 系统用户UID允许最大值
+UID_MIN			 1000    # 允许创建的UID的最小值
+UID_MAX			60000    # 允许创建的UID的最大值
+#SYS_UID_MIN		  100    # 系统用户UID允许最小值
+#SYS_UID_MAX		  999    # 系统用户UID允许最大值
 ```
 
 --
