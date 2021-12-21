@@ -1,4 +1,4 @@
-# 前言
+****# 前言
 
 `passwd` 命令主要用户修改账号密码，该命令在平时使用时主要有如下两种形式语法：
 
@@ -25,7 +25,7 @@ sudo passwd [options] [username]
 
 当然了，这里还是简单的介绍下的。
 
-下面是部分可选参数说明，当然了还有其他的可选参数，如修改密码有效期。但本文不会介绍，因为修改账号密码的过期时间更推荐使用 [chage 命令](./chage%20命令说明.md)。
+下面是部分可选参数说明，当然了还有其他的可选参数，如修改密码有效期。但本文不会介绍，因为修改账号密码的过期时间更推荐使用 [chage 命令](./chage%20命令.md)。
 
 主要可选参数如下：
 
@@ -95,13 +95,13 @@ $ sudo passwd -e [username]
 
 ```bash
 $ sudo chage -l xiaoming
-Last password change					: 12月 19, 2021
-Password expires					: never
-Password inactive					: never
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : 12月 19, 2021
+Password expires                                    : never
+Password inactive                                   : never
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 现在使用 `-e` 参数使密码立即过期：
@@ -115,13 +115,13 @@ passwd: password expiry information changed.    # 设置成功了
 
 ```bash
 $ sudo chage -l xiaoming
-Last password change					: password must be changed(强制必须修改密码)
-Password expires					: password must be changed(强制必须修改密码)
-Password inactive					: password must be changed(强制必须修改密码)
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : password must be changed(强制必须修改密码)
+Password expires                                    : password must be changed(强制必须修改密码)
+Password inactive                                   : password must be changed(强制必须修改密码)
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 下次用户 `xiaoming` 再登录时就要必须修改一下密码了。示例：
@@ -267,13 +267,13 @@ $ chage -l xiaoming
 输出示例：
 
 ```
-Last password change					: 12月 19, 2021
-Password expires					: never
-Password inactive					: never
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : 12月 19, 2021
+Password expires                                    : never
+Password inactive                                   : never
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 这回是不是一目了然了？
