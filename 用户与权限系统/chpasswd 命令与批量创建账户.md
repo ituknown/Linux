@@ -39,12 +39,22 @@ $ sudo passwd webuser
 echo "username:newpasswd" | sudo chpasswd [-c]
 ```
 
-如果需要给多个用户设置密码可以使用下面的形式（通常是直接从文件中那个读取账号的新密码信息）：
+如果需要给多个用户设置密码可以使用下面的形式。一个用户占一行，格式为：`username:newpasswd`，之后使用 `ctrl + d` 结束输入即可：
 
 ```bash
-$ sudo chpasswd [-c]   # <==== 回车后会自动重启一行
-username1:newpasswd    # <==== 在新行里输入账户和密码信息, 如果有多个用户就回车继续输入
-username2:newpasswd    # <==== 如果这个是最后一个用户就使用 ctrl + d 组合键确认结束
+$ sudo chpasswd [-c]
+username1:newpasswd
+username2:newpasswd
+```
+
+或者直接从文件中读取账号的新密码信息：
+
+```bash
+$ cat employee.txt
+username1:newpasswd
+username2:newpasswd
+
+$ sudo chpasswd < employee.txt
 ```
 
 因为 `chpasswd` 只有超级管理员才能使用，所以在语法中特别使用了 `sudo` 命令进行了强调。
@@ -84,7 +94,13 @@ webuser:$6$Xmp96fcby8eMYgy0$EQYUEf12.Ss6lMBDetdjHIhcNyAhnxlsy6lDE5bNgEIaa55b2U09
 
 # 强制首次登录设置新密码
 
-所以我们需要使用下面的命令将密码最近一次修改日期重置为0：
+强制首次登录修改密码可以使用 `passwd` 命令（推荐方式）和 `chage` 命令实现，如下：
+
+```bash
+sudo passwd -e webuser
+```
+
+另外也可以使用 `chage` 命令将密码最近一次修改日期重置为 0 来达到下次登录强制修改密码的目的：
 
 ```bash
 $ sudo chage -d 0 webuser
@@ -94,13 +110,13 @@ $ sudo chage -d 0 webuser
 
 ```bash
 $ sudo chage -l webuser
-Last password change					: password must be changed  # <== 强制密码必须修改
-Password expires					: password must be changed  # <== 强制密码必须修改
-Password inactive					: password must be changed  # <== 强制密码必须修改
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                  : password must be changed  # <== 强制密码必须修改
+Password expires                                      : password must be changed  # <== 强制密码必须修改
+Password inactive                                     : password must be changed  # <== 强制密码必须修改
+Account expires                                       : never
+Minimum number of days between password change        : 0
+Maximum number of days between password change        : 99999
+Number of days of warning before password expires     : 7
 ```
 
 好了，现在当新用户登录时就会强制设置新密码了。下面是在 Debian Buster 上的示例：
