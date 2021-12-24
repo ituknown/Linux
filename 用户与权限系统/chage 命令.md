@@ -54,26 +54,26 @@ $ sudo chage -l [username]
 
 ```bash
 $ sudo chage -l exampleuser
-Last password change					: 12月 19, 2021
-Password expires					: never
-Password inactive					: never
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : 12月 19, 2021
+Password expires                                    : never
+Password inactive                                   : never
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 很显然，直接使用 `-l` 参数输出的信息看起来不太好理解，所以对于日期我们可以指定以 `YYYY-MM-DD` 格式进行输出。加上参数 `-i` 即可：
 
 ```bash
 $ sudo chage -li exampleuser
-Last password change					: 2021-12-19
-Password expires					: never
-Password inactive					: never
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : 2021-12-19
+Password expires                                    : never
+Password inactive                                   : never
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 现在看起来就舒服多了~
@@ -96,13 +96,13 @@ $ sudo chage -d 2020-01-01 exampleuser
 
 ```bash
 $ sudo chage -li exampleuser
-Last password change					: 2020-01-01 # 最近修改日期
-Password expires					: never
-Password inactive					: never
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : 2020-01-01 # 最近修改日期
+Password expires                                    : never
+Password inactive                                   : never
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 现在是不是变了？另外呢，我们还可以查看下 `/etc/shadow` 中记录的最近修改日期：
@@ -125,18 +125,18 @@ $ sudo chage -d 0 exampleuser
 
 # 看起日期数据
 $ sudo chage -li exampleuser
-Last password change					: password must be changed # 要求强制修改
-Password expires					: password must be changed
-Password inactive					: password must be changed
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : password must be changed # 要求强制修改
+Password expires                                    : password must be changed
+Password inactive                                   : password must be changed
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 之所以这样的原因就是因为这个账号的密码信息中有每隔 99999 天必须强制修改一次密码，现在我们直接将密码的最近修改时间设置为0了，就表示过期了。因此呢就会触发这个条件了~
 
-虽然说这个参数有这个作用但是想要设置强制修改密码更推荐使用 `passwd` 的日期过期参数来实现，可以参考下 [passwd 命令介绍](./passwd%20命令介绍.md#设置密码立即过期首次登录强制修改密码only-root)。
+虽然说这个参数有这个作用但是想要设置强制修改密码更推荐使用 `passwd` 的日期过期参数来实现，可以参考下 [passwd 命令](./passwd%20命令.md#设置密码立即过期首次登录强制修改密码only-root)。
 
 
 # 限制指定天数内不允许重复修改密码
@@ -157,13 +157,13 @@ $ sudo chage -m 7 exampleuser
 
 ```bash
 $ sudo chage -li exampleuser
-Last password change					: password must be changed
-Password expires					: password must be changed
-Password inactive					: password must be changed
-Account expires						: never
-Minimum number of days between password change		: 7 # 密码修改后 7 天内不允许重复修改
-Maximum number of days between password change		: 99999
-Number of days of warning before password expires	: 7
+Last password change                                : password must be changed
+Password expires                                    : password must be changed
+Password inactive                                   : password must be changed
+Account expires                                     : never
+Minimum number of days between password change      : 7 # 密码修改后 7 天内不允许重复修改
+Maximum number of days between password change      : 99999
+Number of days of warning before password expires   : 7
 ```
 
 # 设置每隔指定天数必须修改密码
@@ -186,13 +186,13 @@ $ sudo chage -M 30 exampleuser
 
 ```bash
 $ sudo chage -li exampleuser
-Last password change					: password must be changed
-Password expires					: password must be changed
-Password inactive					: password must be changed
-Account expires						: never
-Minimum number of days between password change		: 7
-Maximum number of days between password change		: 30 # 每隔 30 天必须修改一次密码
-Number of days of warning before password expires	: 7
+Last password change                                : password must be changed
+Password expires                                    : password must be changed
+Password inactive                                   : password must be changed
+Account expires                                     : never
+Minimum number of days between password change      : 7
+Maximum number of days between password change      : 30 # 每隔 30 天必须修改一次密码
+Number of days of warning before password expires   : 7
 ```
 
 # 设置密码过期警告
@@ -220,13 +220,13 @@ $ sudo chage -m 0 -M 30 -W 40 exampleuser
 
 # 看下日期数据
 $ sudo chage -li exampleuser
-Last password change					: 2021-12-19
-Password expires					: 2022-01-18
-Password inactive					: never
-Account expires						: never
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 30
-Number of days of warning before password expires	: 40
+Last password change                                : 2021-12-19
+Password expires                                    : 2022-01-18
+Password inactive                                   : never
+Account expires                                     : never
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 30
+Number of days of warning before password expires   : 40
 ```
 
 现在使用 `su` 命令测试下：
@@ -274,13 +274,13 @@ $ sudo chage -E 2022-01-01 exampleuser
 
 ```bash
 $ sudo chage -li exampleuser
-Last password change					: 2021-12-19
-Password expires					: 2022-01-18
-Password inactive					: 2022-02-17
-Account expires						: 2022-01-01 # 账号失效日期
-Minimum number of days between password change		: 0
-Maximum number of days between password change		: 30
-Number of days of warning before password expires	: 40
+Last password change                                : 2021-12-19
+Password expires                                    : 2022-01-18
+Password inactive                                   : 2022-02-17
+Account expires                                     : 2022-01-01 # 账号失效日期
+Minimum number of days between password change      : 0
+Maximum number of days between password change      : 30
+Number of days of warning before password expires   : 40
 ```
 
 另外，也可以看下 `/etc/shadow` 中记录的修改后的数据：
