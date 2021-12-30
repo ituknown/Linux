@@ -169,6 +169,31 @@ $ ls
 baidu.png
 ```
 
+# 禁止 root 远程登录
+
+`root` 用户是系统管理员用户，不受系统任何权限限制，因此直接对外网暴露 `root` 用户是很危险的。为了系统安全我们通常会禁止直接使用 `root` 用户远程登录，仅对外开发权限比较低的用户，当需要执行某些超级管理员操作时再使用 `su` 命令切换到 `root` 用户即可。
+
+禁止 `root` 用户远程登录只需要修改 sshd 服务的配置文件 `/etc/ssh/sshd_config`，将 `PermitRootLogin` 的值设置为 `no` 即可：
+
+```bash
+PermitRootLogin no
+```
+
+`PermitRootLogin` 意为允许 root 用户登录，可选值有四个：
+
+|**参数类别**|**是否允许ssh登陆**|**登录方式**|
+|:---|:---|:--|:---|:---|
+|`without-password`|允许|除密码以外的登录方式，如 rsa 认证|Debian 默认值|
+|`forced-commands-only`|允许|仅允许使用密钥||
+|`yes`|允许|没有限制|RHEL/CentOS默认值|
+|`no`|不允许|N/A||
+
+修改之后重启下 `sshd` 服务即可：
+
+```bash
+$ sudo systemctl restart sshd
+```
+
 # rsa 实现免密登录
 
 有没有发现每次使用 `ssh username@host:port` 命令很累，而且每次都要输入密码。有没有什么解决办法呢？当然有了，使用 rsa 非对称加密即可~
