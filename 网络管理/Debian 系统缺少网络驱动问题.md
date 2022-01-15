@@ -8,17 +8,17 @@
 
 但是怎么找网络驱动呢？
 
-其实在 Debian 的软件库中有一个叫非官方软件的软件仓库，对应的地址是：https://cdimage.debian.org/cdimage/unofficial/。而我们的网络驱动就不属于官方软件包，所以如果你想要什么驱动的话就到这个仓库下找即可，如果真的找不到再去驱动官网去找。
+其实在 Debian 的软件库中有一个叫非官方软件的软件仓库，对应的地址是：[https://cdimage.debian.org/cdimage/unofficial/](https://cdimage.debian.org/cdimage/unofficial/)。而我们的网络驱动就不属于官方软件包，所以如果你想要什么驱动的话就到这个仓库下找即可，如果真的找不到再去驱动官网去找。
 
 同样的，这里还牵扯到 free 和 non-free 的问题，Debian 号称自由软件，所以对应的就是 free，因此只要不是 Debian 官方软件都属于 non-free。这一点可以在 Debian 的系统 ISO 文件中可以体现出来，在它的 ISO 文件中固件（驱动）对应的目录叫 firmware-free：
 
 ![debian11-iso-deb-1642254184zV3DpY](http://linux-media.knowledge.ituknown.cn/NetworkManager/Debian-NoNetworkDriver/debian11-iso-deb-1642254184zV3DpY.png)
 
-网络驱动属于 firmware，因此我们需要到 Debian 的固件目录下下载，地址是：https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/。
+网络驱动属于 firmware，因此我们需要到 Debian 的固件目录下下载，地址是：[https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/](https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/)。
 
 在该目录下会有对应的操作系统版本，文件夹的名称是对应版本的代号。比如 Debian11 的代号是 bullseye，所以我到该目录下下载即可。需要特别强调的是，虽然 Debian11 的代号是 bullseye，但是这个大版本下会有许多小版本，比如 11.0、11.1。所以在 firmware 目录下通常还会分具体的小版本。我们找某个软件包应该优先到具体的小版本下找，如果没有找到需要的软件包再考虑去其他小版本下找，防止存在兼容性问题。
 
-Debian 的驱动程序都被打包成一个 firmware.zip 文件（这个包里面有许多驱动，但并不是所有的驱动都在里面，如果没有你需要的驱动可以去驱动官网下载）。比如我的 bullseye 小版本是 11.0，对应的 firmware.zip 地址就是 https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/bullseye/11.0.0/firmware.zip 了，下载即可。
+Debian 的驱动程序都被打包成一个 firmware.zip 文件（这个包里面有许多驱动，但并不是所有的驱动都在里面，如果没有你需要的驱动可以去驱动官网下载）。比如我的 bullseye 小版本是 11.0，对应的 firmware.zip 地址就是 [https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/bullseye/11.0.0/firmware.zip](https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/bullseye/11.0.0/firmware.zip) 了，下载即可。
 
 下载完成之后借助 U 盘拷贝到我们的 Debian 系统中，然后解压。解压后会看到许多 deb 软件包，不需要全部安装。我们只需要找我们需要的驱动程序即可，执行下面的命令来确定我们的网络驱动信息：
 
