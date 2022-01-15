@@ -52,3 +52,13 @@ $ sudo dpkg -i firmware-realtek_20210315-3_all.deb firmware-iwlwifi_20210315-3_a
 ![show-setting-wifi-after-install-driver-1642255884SXZ9pe](http://linux-media.knowledge.ituknown.cn/NetworkManager/Debian-NoNetworkDriver/show-setting-wifi-after-install-driver-1642255884SXZ9pe.png)
 
 这就大功告成了~
+
+--
+
+参考与资源链接：
+
+https://www.reddit.com/r/debian/comments/d4xz53/how_to_install_wifi_drivers_on_debian
+
+https://wiki.debian.org/WiFi#Availability_of_compatible_WiFi_chipsets
+
+https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/bullseye/11.0.0/
