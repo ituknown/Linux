@@ -12,6 +12,8 @@ Debian 系统在安装后经常会遇到无法连接网络的问题，这个原�
 
 解决方式也很简单，安装驱动即可！那怎么找网络驱动呢？
 
+# 获取网络驱动
+
 其实在 Debian 的软件库中有一个叫非官方软件的软件仓库，对应的地址是：[https://cdimage.debian.org/cdimage/unofficial/](https://cdimage.debian.org/cdimage/unofficial/)。这里面收录了许多非 Debian 官方的软件包，比如网络驱动就不属于官方软件包，所以如果你想要什么驱动的话就到这个仓库下找即可，如果真的找不到再去驱动官网去找。
 
 Debian 将所有的驱动模块都打包成 firmware 文件，即固件的意思。因此我们需要到 Debian 的固件目录下下载，地址是：[https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/](https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/)。
