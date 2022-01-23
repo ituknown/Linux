@@ -21,13 +21,13 @@
 
 # 配置示例
 
-```
+```vim
 " 显示行号
 set number "同 set nu
 
 " 默认不显示行号, 如果显示设置不显示行号只需要在前面加上 no 前缀即可. 示例:
 "set nonumber
-    
+
 " 突出当前行
 set cursorline "同 set cul
 
