@@ -130,15 +130,3 @@ The document has moved
 | 这个配置文件可以是用户目录下的配置文件（通常是 `~/.profile`），也可以是系统级别的配置文件（`/etc/profile`）。如果你只想要自己使用的话建议修改用户级别的配置文件即可，但是如果你想要所有登录该系统的用户都能够使用该配置命令（`enableproxy` 和 `disableproxy`）那就应该修改 `/etc/profile` 系统级别配置文件。 |
 
 
-## 持久设置（不推荐）
-
-直接将下面的命令写到配置文件级别：
-
-```bash
-export http_proxy=http://127.0.0.1:10808
-export https_proxy=http://127.0.0.1:10808
-export ftp_proxy=http://127.0.0.1:10808
-export all_proxy=socks5://127.0.0.1:10808
-```
-
-这种方式并不推荐，因为没有 [推荐方式🔗](#推荐方式) 中介绍的 `alias` 命令灵活。而且想要关闭代理只能去修改配置文件才行，了解即可~
