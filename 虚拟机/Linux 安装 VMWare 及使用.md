@@ -129,7 +129,6 @@ sudo mokutil --import VMWARE16.der
 
 ![restart-enroll-mok-1644547762PwL3Kn](http://linux-media.knowledge.ituknown.cn/VirtualMachine/VMware/restart-enroll-mok-1644547762PwL3Kn.png)
 
-
 **7）测试模块**
 
 重启后我们可以使用下面的命令测试下驱动模块是否正常（注意 `VMWARE16.der` 文件名）：
