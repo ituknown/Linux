@@ -143,7 +143,7 @@ mokutil --test-key VMWARE16.der
 之后 VMware 就能正常使用了~
 
 
-----
+--
 
 
 [https://askubuntu.com/questions/1096052/vmware-15-error-on-ubuntu-18-4-could-not-open-dev-vmmon-no-such-file-or-dire](https://askubuntu.com/questions/1096052/vmware-15-error-on-ubuntu-18-4-could-not-open-dev-vmmon-no-such-file-or-dire)
