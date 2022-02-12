@@ -34,8 +34,35 @@ sudo ./VMware-Workstation-Full-16.2.1-18811642.x86_64.bundle
 ![vm-install-done-16445475393KyDbk](http://linux-media.knowledge.ituknown.cn/VirtualMachine/VMware/vm-install-done-16445475393KyDbk.png)
 
 
-# Could not open /dev/vmmon: No such file or directory？
+# Before you can run VMware, several modules must be compiled and loaded into the running kernel?
 
+第一次运行 VMware 时可能会遇到 VMware Kernel Module Updater的错误：
+
+「VMware Kernel Module Updater
+Before you can run VMware, several modules must be compiled and loaded into the running kernel.」
+
+截图如下：
+
+![faq-vmware-kernel-module-updater-1644646722bjpQXWdg](http://linux-media.knowledge.ituknown.cn/VirtualMachine/VMware/faq-vmware-kernel-module-updater-1644646722bjpQXWdg.png)
+
+解决方式很简单，只需要淡定的关闭窗口，然后在命令终端执行如下命令：
+
+```bash
+sudo apt-get update
+sudo apt-get install g++
+sudo apt-get install build-essential linux-headers-$(uname -r)
+```
+
+命令正常执行后重新打开 VMware，此时还会有 VMware Kernel Module Updater 提示。我们只需要继续点击安装编译即可：
+
+![vmware-kernel-mudule-update-install-1644647072n0piQ0Va](http://linux-media.knowledge.ituknown.cn/VirtualMachine/VMware/vmware-kernel-mudule-update-install-1644647072n0piQ0Va.png)
+
+然后静待编译完成就好了：
+
+![vmware-kernel-mudule-update-compiling-1644647353yNpEJPoG](http://linux-media.knowledge.ituknown.cn/VirtualMachine/VMware/vmware-kernel-mudule-update-compiling-1644647353yNpEJPoG.png)
+
+
+# Could not open /dev/vmmon: No such file or directory？
 
 我使用的是 Ubuntu 20.04LTS 发行版，当我创建一个虚拟机准备运行时时却给我一个错误的弹窗提示：
 
