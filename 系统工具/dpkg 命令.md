@@ -168,5 +168,3 @@ $ sudo dpkg -P qqmusic
 Purging configuration files for qqmusic (1.1.3) ...
 ```
 
-```bash
-
