@@ -52,7 +52,7 @@ $ sudo cp ~/DownloadJetBrains/JetBrainsMono* /usr/share/fonts/JetBrains/
 
 |**注意**|
 |:------|
-|将字体文件拷贝至 `/usr/share/fonts/JetBrains/` 目录之后通常情况下需要设置文件权限，即执行命令：<br/><br/>`sudo chmod -R 744 /usr/share/fonts/JetBrains` <br/><br/>表示当前用户有读写执行权限，该用户所属组及其他用户仅有读和执行权限（不过在大多数 Linux 发行版中是不需要设置）。|
+|将字体文件拷贝至 `/usr/share/fonts/JetBrains/` 目录之后通常情况下需要设置文件权限，即执行如下命令：<br/><br/>`sudo chmod -R 744 /usr/share/fonts/JetBrains` <br/><br/>表示当前用户有读写执行权限，该用户所属组及其他用户仅有读和执行权限（不过在大多数 Linux 发行版中是不需要设置）。|
 
 
 现在还需要为其生成核心字体信息，防止 Linux 找不到 `mkfontscale`、`mkfontdir`。进入 `/usr/share/fonts/JetBrains/` 目录执行如下命令：
@@ -82,13 +82,18 @@ $ sudo fc-cache -fv
 
 |**注意**|
 |:------|
-|另外，上面的示例使用的是超级管理员（ `sudo` ）权限，如果你是普通用户切又无法获取超级管理员权限你又想使用自定义字体。<br/><br/>那么，你也可以直接在用户目录（ `~/.font` ）下安装该字体。该文件是个隐藏文件，如果没有需要自行创建： `mkdir -p ~/.fonts` 。之后的步骤与之前相同，将字体文件拷贝至该目录下即可！|
+|上面的示例使用的是超级管理员（`sudo`）权限，如果你是普通用户切又无法获取超级管理员权限你又想使用自定义字体。<br/><br/>那么，你也可以直接在用户目录（`~/.font`）下安装该字体。该文件是个隐藏文件，如果没有需要自行创建： `mkdir -p ~/.fonts` 。之后的步骤与之前相同，将字体文件拷贝至该目录下即可！|
 
-最后，安装完成后执行如下命令查看安装的字体文件：
+最后，安装完成后可以使用 Linux 系统查看字体的命令 `fc-list` 来验证字体文件是否安装成功：
+
 
 ```bash
 $ fc-list | grep "JetBrains"
+```
 
+输出示例：
+
+```
 /usr/share/fonts/JetBrains/JetBrainsMono-Bold-Italic.ttf: JetBrains Mono:style=Bold Italic
 /usr/share/fonts/JetBrains/JetBrainsMono-Medium-Italic.ttf: JetBrains Mono,JetBrains Mono Medium:style=Medium Italic,Italic
 /usr/share/fonts/JetBrains/JetBrainsMono-ExtraBold.ttf: JetBrains Mono,JetBrains Mono ExtraBold:style=ExtraBold,Regular
@@ -98,9 +103,3 @@ $ fc-list | grep "JetBrains"
 /usr/share/fonts/JetBrains/JetBrainsMono-Bold.ttf: JetBrains Mono:style=Bold
 /usr/share/fonts/JetBrains/JetBrainsMono-ExtraBold-Italic.ttf: JetBrains Mono,JetBrains Mono ExtraBold:style=ExtraBold Italic,Italic
 ```
-
-`fc-list` 命令是 Linux 系统查看字体的命令，具体有关信息可以使用 `man` 命令查看。
-
-最后，以终端为例。在 `Preferebnces` 选择该字体即可：
-
-![ChooseFont-1649989608zL8h07yv](http://linux-media.knowledge.ituknown.cn/KnowledgeNotes/CustomFonts/ChooseFont-1649989608zL8h07yv.png)
