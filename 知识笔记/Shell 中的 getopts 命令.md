@@ -12,12 +12,12 @@ getopts 命令标准格式如下：
 getopts [option[:]] [DESCPRITION] [VARIIABLE]
 ```
 
-| **参数** | **说明** |
-| :--- | :--- |
-| `option` | 表示脚本可使用的参数选项，比如上面的示例中的 `-m` 和 `-f` 就是我们在 shell 中**定义**的可选参数。 |
-| `:` | 表示可选参数（`option`）后面可以跟随参数值。比如上面的 `-m` 后面的 standalone 就是具体的参数值，如果可选参数 option 后面没有 `:` 标识就表示该参数后面不可跟参数值。 |
-| `DESCPRITION` | 表示参数 `option:` 的具体值。注意，可选参数后面一定要跟随 `:` 符号。 |
-| `VARIIABLE`  | 表示将某个选项保存到设置的变量 `VARIIABLE` 中。 |
+| **参数**      | **说明**                                                                                                                                                            |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `option`      | 表示脚本可使用的参数选项，比如上面的示例中的 `-m` 和 `-f` 就是我们在 shell 中**定义**的可选参数。                                                                   |
+| `:`           | 表示可选参数（`option`）后面可以跟随参数值。比如上面的 `-m` 后面的 standalone 就是具体的参数值，如果可选参数 option 后面没有 `:` 标识就表示该参数后面不可跟参数值。 |
+| `DESCPRITION` | 表示参数 `option:` 的具体值。注意，可选参数后面一定要跟随 `:` 符号。                                                                                                |
+| `VARIIABLE`   | 表示将某个选项保存到设置的变量 `VARIIABLE` 中。                                                                                                                     |
 
 
 看下下面的 develop-compose.sh 示例：
@@ -213,4 +213,5 @@ unknown arg -x
 参考链接：
 
 [https://man7.org/linux/man-pages/man1/getopts.1p.html](https://man7.org/linux/man-pages/man1/getopts.1p.html)
+
 [https://www.ibm.com/docs/en/aix/7.1?topic=g-getopts-command](https://www.ibm.com/docs/en/aix/7.1?topic=g-getopts-command)
