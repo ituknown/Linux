@@ -110,7 +110,7 @@ done
 /bin/bash develop-compose.sh -m standalone -f ./conf/app.config -o -r
 ```
 
-输出结果如下（下面输出美化了下格式）：
+输出结果如下：
 
 ```
 参数列表
