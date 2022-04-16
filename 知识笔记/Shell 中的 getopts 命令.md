@@ -1,10 +1,12 @@
+# 前言
+
 在编写 shell 脚本时我们经常需要接收外部传递的参数，比如有个 `develop-compose.sh` 脚本：
 
 ```bash
 /bin/bash develop-compose.sh -m standalone -f ./conf/app.config
 ```
 
-其中，`-m`、`-f` 就是我们设置的可选参数。这其实就是 [getopts](https://en.wikipedia.org/wiki/Getopts) 这个命令的功能。
+命令中的 `-m`、`-f` 就是脚本 develop-compose 中的可选参数。而实现该功能主要是借助于 [getopts](https://en.wikipedia.org/wiki/Getopts) 命令。
 
 getopts 命令标准格式如下：
 
@@ -12,12 +14,12 @@ getopts 命令标准格式如下：
 getopts [option[:]] [DESCPRITION] [VARIIABLE]
 ```
 
-| **参数**      | **说明**                                                                                                                                                            |
-| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **参数**       | **说明**                                                                                                                                                |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `option`      | 表示脚本可使用的参数选项，比如上面的示例中的 `-m` 和 `-f` 就是我们在 shell 中**定义**的可选参数。                                                                   |
-| `:`           | 表示可选参数（`option`）后面可以跟随参数值。比如上面的 `-m` 后面的 standalone 就是具体的参数值，如果可选参数 option 后面没有 `:` 标识就表示该参数后面不可跟参数值。 |
-| `DESCPRITION` | 表示参数 `option:` 的具体值。注意，可选参数后面一定要跟随 `:` 符号。                                                                                                |
-| `VARIIABLE`   | 表示将某个选项保存到设置的变量 `VARIIABLE` 中。                                                                                                                     |
+| `:`           | 表示可选参数（`option`）后面可以跟随参数值。比如上面的 `-m` 后面的 standalone 就是具体的参数值，如果可选参数 option 后面没有 `:` 标识就表示该参数后面不可跟参数值。          |
+| `DESCPRITION` | 表示参数 `option:` 的具体值。注意，可选参数后面一定要跟随 `:` 符号。                                                                                             |
+| `VARIIABLE`   | 表示将某个选项保存到设置的变量 `VARIIABLE` 中。                                                                                                               |
 
 
 看下下面的 develop-compose.sh 示例：
@@ -45,14 +47,16 @@ done
 我们就可以在 while 循环中循环获取参数值：
 
 -m 值为 standalone
+
 -f 值为 ./conf/app.config
+
 -o 和 -r 仅仅用于设置标识符
 
 # getopts 说明
 
 `getopts` 是 Linux 中的内置函数，主要用于循环中。每次 while 循环执行时，`getopts` 函数都会**检查下一个命令参数**。
 
-**如果这个参数出现在 `options` 中（上面 `while` 循环中定义的 `m:f:or`），则表示是合法选项，否则不是合法选项。**
+**如果这个参数出现在 `options` 中(上面 `while` 循环中定义的 `m:f:or`），则表示是合法选项，否则不是合法选项。**
 
 如果合法，会将选项保存在 `VARIABLE` 这个变量中。 除此之外，`getopts` 还包含两个内置变量：`OPTARG` 和 `OPTIND`。
 
@@ -110,11 +114,11 @@ done
 参数列表
 -m standalone -f ./conf/app.config -o -r
 
-参数    参数值                 索引
--m      standalone           3
--f      ./conf/app.config    5
--o                           6
--r                           7
+参数     参数值                 索引
+-m      standalone             3
+-f      ./conf/app.config      5
+-o                             6
+-r                             7
 ```
 
 `$*` 表示的是所有的参数列表，所以会输出 `-m standalone -f ./conf/app.config -o -r`。
@@ -134,6 +138,8 @@ done
 **4)** 读取参数 r，r 参数后面没有 `:` 标识。所以 `optind+=1` 输出索引为 8。
 
 现在相信就明白 getopts 在 shell 中该怎么玩了吧？
+
+# 扩展
 
 在实际中我们经常会看到下面的写法：
 
@@ -176,10 +182,10 @@ done
 -m standalone -f ./conf/app.config -o -r -x
 
 参数    参数值                索引
--m     standalone           3
--f     ./conf/app.config    5
--o                          6
--r                          7
+-m     standalone            3
+-f     ./conf/app.config     5
+-o                           6
+-r                           7
 develop-compose.sh: illegal option -- x
 unknown arg -
 ```
@@ -191,10 +197,10 @@ unknown arg -
 -m standalone -f ./conf/app.config -o -r -x
 
 参数    参数值                索引
--m     standalone           3
--f     ./conf/app.config    5
--o                          6
--r                          7
+-m     standalone            3
+-f     ./conf/app.config     5
+-o                           6
+-r                           7
 unknown arg -x
 ```
 
