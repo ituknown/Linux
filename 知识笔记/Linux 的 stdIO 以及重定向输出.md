@@ -50,7 +50,7 @@ $ echo $?
 
 |**NOTE**|
 |:---------|
-|上面的 `$?` 是 Linux 中的元字符，有兴趣的可以看下：[Linux Shell 前导符 $](https://www.yuque.com/daoyou/linux/gu72hz#r1hme)。|
+|上面的 `$?` 是 Linux 中的元字符，有兴趣的可以看下：[Linux Shell 前导符 $](./Linux%20%E5%8F%98%E9%87%8F%E5%89%8D%E5%AF%BC%E7%AC%A6%20%24.md)。|
 
 那么什么样的流才能被称为标准错误呢？说直接点标准错误就是程序在执行过程中出了错误，并输出相应的信息。
 
