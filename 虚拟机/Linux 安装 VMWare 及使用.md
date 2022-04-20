@@ -124,8 +124,8 @@ openssl req -new -x509 -newkey rsa:2048 -keyout VMWARE16.priv -outform DER -out 
 **3）然后使用我们刚刚生成的密钥对 Linux 的两个内核模块进行签名：**
 
 ```bash
-sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./VMWARE16.priv ./VMWARE16.der $(modinfo -n vmmon)
-sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./VMWARE16.priv ./VMWARE16.der $(modinfo -n vmnet)
+sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./VMWARE16.priv ./VMWARE16.der $(sudo modinfo -n vmmon)
+sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./VMWARE16.priv ./VMWARE16.der $(sudo modinfo -n vmnet)
 ```
 
 同样的，这个命令使用的 `VMWARE16.priv` 和 `VMWARE16.der` 文件是你在上一步生成的，如果你在上一步修改了文件名这里也要做相应的修改，不要做拿来主义！
@@ -133,7 +133,7 @@ sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./VMWARE16.priv
 **4）检查签名是否正确：**
 
 ```bash
-tail $(modinfo -n vmmon) | grep "Module signature appended"
+tail $(sudo modinfo -n vmmon) | grep "Module signature appended"
 ```
 
 不出意外地话你会得到一个提示：`Binary file (standard input) matches`。
