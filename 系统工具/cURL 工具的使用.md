@@ -287,4 +287,74 @@ $ curl -T /opt/software/ubunti-18.iso -u webuser:admin123 ftp://172.17.5.2:9000/
 
 这个就比较厉害了，也是我们日常工作中用于接口测试最常用的姿势。
 
-cURL 有个 -X 参数，用于发送具体的网络请求，即：GET、PUT、DELETE、POST 等等。
+cURL 有个 -X 参数，用于发送具体的网络请求，即：GET、PUT、DELETE、POST 等等。下面以 POST 请求为例，其他同理：
+
+## POST multipart/form-data 单文件上传
+
+```BASH
+curl -X POST http://localhost:8080/upload \
+  -F "file=@/Users/appleboy/test.zip" \
+  -H "Content-Type: multipart/form-data"
+```
+
+对应的后台代码（Go语言为例）：
+
+```go
+func main() {
+	router := gin.Default()
+	// Set a lower memory limit for multipart forms (default is 32 MiB)
+	router.MaxMultipartMemory = 8 << 20  // 8 MiB
+	router.POST("/upload", func(c *gin.Context) {
+		// Single file
+		file, _ := c.FormFile("file")
+		log.Println(file.Filename)
+
+		// Upload the file to specific dst.
+		c.SaveUploadedFile(file, dst)
+
+		c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
+	})
+	router.Run(":8080")
+}
+```
+
+## POST multipart/form-data 多文件上传
+
+```bash
+curl -X POST http://localhost:8080/upload \
+  -F "upload[]=@/Users/appleboy/test1.zip" \
+  -F "upload[]=@/Users/appleboy/test2.zip" \
+  -H "Content-Type: multipart/form-data"
+```
+
+对应的后台代码（Go语言为例）：
+
+```go
+func main() {
+	router := gin.Default()
+	// Set a lower memory limit for multipart forms (default is 32 MiB)
+	router.MaxMultipartMemory = 8 << 20  // 8 MiB
+	router.POST("/upload", func(c *gin.Context) {
+		// Multipart form
+		form, _ := c.MultipartForm()
+		files := form.File["upload[]"]
+
+		for _, file := range files {
+			log.Println(file.Filename)
+
+			// Upload the file to specific dst.
+			c.SaveUploadedFile(file, dst)
+		}
+		c.String(http.StatusOK, fmt.Sprintf("%d files uploaded!", len(files)))
+	})
+	router.Run(":8080")
+}
+```
+
+### POST application/json 请求
+
+```bash
+$ curl -X POST "localhost:9200/bank" \
+  -H 'Content-Type: application/json' \
+  --data '{"name": "John Doe" }'
+```
