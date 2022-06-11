@@ -424,7 +424,7 @@ func main() {
 **方式一：**
 
 ```bash
-$ curl -XPOST "localhost:8080/account" -H 'Content-Type: application' -d'{
+curl -XPOST "localhost:8080/account" -H 'Content-Type: application' -d'{
 "username": "LiLei",
 "age": 18
 }'
@@ -445,7 +445,7 @@ $ curl -XPOST "localhost:8080/account" -H 'Content-Type: application' -d'{
 我们可以使用 `--data-binary` 参数从文件中读取二进制流来发起请求，任何数据在网络中其实都是以二进制流的形式传输的。我们只需要指定 `Content-Type` 就可以达到与方式一等效的请求（实际上方式一也是二进制流）：
 
 ```bash
-$ curl -XPOST "localhost:8080/account" -H "Content-Type: application/json" --data-binary "@_file/accounts.json"
+curl -XPOST "localhost:8080/account" -H "Content-Type: application/json" --data-binary "@_file/accounts.json"
 ```
 
 对应的后台代码（Go语言为例）：
