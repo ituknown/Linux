@@ -202,6 +202,74 @@ jdk-9.tar.gz
 $ curl -O http://ip:port/software/jdk-[7-9].tar.gz
 ```
 
+## 连接超时
+
+设置连接超时时间：
+
+```bash
+--connect-timeout <seconds>
+```
+
+示例：
+
+```bash
+$ curl --connect-timeout 1 google.com
+curl: (28) Connection timed out after 1000 milliseconds
+```
+
+## 失败重试
+
+在请求或下载文件时如果由于网络问题终止下载，我们可以设置失败重试参数：
+
+```bash
+--retry-all-errors            遇到任何错误都进行失败重试
+--retry <num>                 连续失败重试次数
+--retry-delay <seconds>       重试延迟间隔
+--retry-max-time <seconds>    最大重试时间(优先级大于 retry*retry-delay)
+```
+
+示例：
+
+**失败重试：**
+
+```bash
+$ curl --connect-timeout 1 --retry-all-errors --retry 3 google.com
+curl: (28) Connection timed out after 1001 milliseconds
+Warning: Problem : timeout. Will retry in 1 seconds. 3 retries left.
+curl: (28) Connection timed out after 1001 milliseconds
+Warning: Problem : timeout. Will retry in 2 seconds. 2 retries left.
+curl: (28) Connection timed out after 1001 milliseconds
+Warning: Problem : timeout. Will retry in 4 seconds. 1 retries left.
+curl: (28) Connection timed out after 1001 milliseconds
+```
+
+**失败重试间隔：**
+
+```bash
+$ curl --connect-timeout 1 --retry 3 --retry-delay 3 google.com
+curl: (28) Connection timed out after 1001 milliseconds
+Warning: Problem : timeout. Will retry in 3 seconds. 3 retries left.
+curl: (28) Connection timed out after 1001 milliseconds
+Warning: Problem : timeout. Will retry in 3 seconds. 2 retries left.
+curl: (28) Connection timed out after 1001 milliseconds
+Warning: Problem : timeout. Will retry in 3 seconds. 1 retries left.
+curl: (28) Connection timed out after 1001 milliseconds
+```
+
+**最大重试时间：**
+
+
+正常来说，最大重试时间是 `retry` * `retry-delay`，但是我们可以通过指定 `--retry-max-time` 来重置最大失败时间。比如设置的重试次数是3，重试间隔为 3s，理论上失败时间到达 9s 才会取消继续执行。但是如果将 `--retry-max-time` 设置为 6 秒，那么实际上只会重试两次就终止了。
+
+```bash
+$ curl --connect-timeout 1 --retry 3 --retry-delay 3 --retry-max-time 6 google.com
+curl: (28) Connection timed out after 1001 milliseconds
+Warning: Problem : timeout. Will retry in 3 seconds. 3 retries left.
+curl: (28) Connection timed out after 1000 milliseconds
+Warning: Problem : timeout. Will retry in 3 seconds. 2 retries left.
+curl: (28) Connection timed out after 1001 milliseconds
+```
+
 
 # 设置代理服务器
 
@@ -351,10 +419,61 @@ func main() {
 }
 ```
 
-### POST application/json 请求
+## POST application/json 请求
+
+**方式一：**
 
 ```bash
-$ curl -X POST "localhost:9200/bank" \
-  -H 'Content-Type: application/json' \
-  --data '{"name": "John Doe" }'
+$ curl -XPOST "localhost:8080/account" -H 'Content-Type: application' -d'{
+"username": "LiLei",
+"age": 18
+}'
+```
+
+
+**方式二：**
+
+这种方式是从文件中读取二进制流文件数据传输，适用于大 JSON 数据请求。比如一个 JSON 文件 `account.json` 在当前 `_file` 目录下，内容为：
+
+```json
+{
+	"username": "LiLei",
+	"age": 18
+}
+```
+
+我们可以使用 `--data-binary` 参数从文件中读取二进制流来发起请求，任何数据在网络中其实都是以二进制流的形式传输的。我们只需要指定 `Content-Type` 就可以达到与方式一等效的请求（实际上方式一也是二进制流）：
+
+```bash
+$ curl -XPOST "localhost:8080/account" -H "Content-Type: application/json" --data-binary "@_file/accounts.json"
+```
+
+对应的后台代码（Go语言为例）：
+
+```go
+type Account struct {
+	Username string `json:username`
+	Age      uint8  `json:age`
+}
+
+func main() {
+	router := gin.Default()
+	router.POST("/account", func(c *gin.Context) {
+
+		account := new(Account)
+
+		if err := c.ShouldBindJSON(account); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "read data fail",
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "ok"
+		})
+	})
+
+	router.Run(":8080")
+}
 ```
