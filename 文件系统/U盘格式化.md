@@ -251,3 +251,5 @@ https://linux.die.net/man/8/mkfs
 https://stackoverflow.com/questions/11928982/what-is-the-difference-between-vfat-and-fat32-file-systems
 
 https://www.howtogeek.com/443342/how-to-use-the-mkfs-command-on-linux/
+
+https://www.thegeekdiary.com/mkfs-ext4-command-examples-in-linux/
