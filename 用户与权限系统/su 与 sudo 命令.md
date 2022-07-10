@@ -100,3 +100,88 @@ openjdk              8-jdk-buster     e512716a5569   4 months ago    514MB
 ```
 
 是不是很 nice？
+
+# sudo 命令
+
+相比较与 `su` 命令，在实际使用中更多的还是使用 `sudo` 命令。`su` 命令的缺点是必须切换到指定用户才能执行命令，而 `sudo` 命令则不同，可在不切换用户的情况下执行单条命令。
+
+不过 `sudo` 命令不是每个 Linux 发行版都默认安装，所以如果你当前系统上没有该命令的话需要先安装才行：
+
+**Debian系列：**
+
+```bash
+apt install -y sudo
+```
+
+**RHEL系列：**
+
+```bash
+yum install -y sudo
+```
+
+安装完成之后还不能直接使用，我们还需要将用户加到 `/etc/sudoers` 配置文件中才行。该配置文件数据格式如下：
+
+```bash
+[%]root	 ALL=(ALL:ALL)  [NOPASSWD:]  ALL
+[-----]  [-] [-------]  [---------]  [-]
+   |      |      |           |        |
+   |      |      |           |        +-------> 可执行的命令, 默认 ALL
+   |      |      |           +----------------> 免密(可选)
+   |      |      +----------------------------> 可切换的身份, 默认 ALL
+   |      +-----------------------------------> 登陆者来源主机名, 默认 ALL
+   +------------------------------------------> 使用者账号, 如果是组需要在前面加上 %
+```
+
+想要编辑该配置文件必须要使用 root 用户才行：
+
+```bash
+vim /etc/sudoers
+
+# 或
+
+visudo
+```
+
+比如我想将我当前用户 `ituknown` 加到 `sudo` 配置文件中：
+
+```bash
+ituknown	ALL=(ALL:ALL) ALL
+```
+
+之后想要执行任何管理员命令，只需要在前面加上 `sudo` 前缀就好了，比如查看密码文件：
+
+```bash
+$ sudo cat /etc/shadow
+```
+
+不过当我们回车后提示我们需要输入当前用户的命令才能继续执行，看起来比较烦。如果想要每次执行命令时都能免密执行，只需要在配置文件中加上 `NOPASSWD:` 就好了，如下：
+
+```bash
+ituknown	ALL=(ALL:ALL) NOPASSWD: ALL
+```
+
+另外，如果存在多个用户需要执行管理员命令场景的话，每次编辑 `sudoers` 配置文件也比较烦。所以更好的做法是使用用户组，比如创建一个 `sudos` 用户组：
+
+```bash
+groupadd sudos
+```
+
+之后将该组加到配置文件中即可：
+
+```bash
+%sudos	ALL=(ALL:ALL) ALL
+
+# 如果想要该组下的用户免密执行, 就加上 NOPASSWD:
+%sudos	ALL=(ALL:ALL) NOPASSWD: ALL
+```
+
+之后我们只需要将需要执行管理员命令的用户加到该组下就好了，比如将用户 `ituknown` 加入到该组（`sudos`）：
+
+```bash
+sudo groupmems -g sudos -a ituknown
+```
+
+
+--
+
+https://command-not-found.com/sudo
