@@ -87,8 +87,10 @@ $ sudo dpkg -i firmware-realtek_20210315-3_all.deb firmware-iwlwifi_20210315-3_a
 
 参考与资源链接：
 
+https://www.debian.org/releases/bullseye/amd64/ch06s04.en.html#idm2828
+
+https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/
+
 https://www.reddit.com/r/debian/comments/d4xz53/how_to_install_wifi_drivers_on_debian
 
 https://wiki.debian.org/WiFi#Availability_of_compatible_WiFi_chipsets
-
-https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/bullseye/11.0.0/
