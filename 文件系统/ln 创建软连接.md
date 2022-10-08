@@ -134,6 +134,13 @@ ln: replace '/usr/lib/golang/go'? y
 $ sudo ln -sf ~/sdk/go1.18.3 /usr/lib/golang/go
 ```
 
+**Note：** 虽然 `-f` 参数可以实现强制覆盖，但在有些时候可能由于权限问题无法预期执行，所以在这种情况下建议直接使用 `rm` 命令删除符号链接然后再进行关联。示例：
+
+```bash
+$ rm -f /usr/lib/golang/go
+$ ln -s ~/sdk/go1.18.3 /usr/lib/golang/go
+```
+
 之后再看下 go 版本：
 
 ```bash
