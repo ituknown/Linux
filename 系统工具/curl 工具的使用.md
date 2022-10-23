@@ -353,9 +353,27 @@ $ curl -T /opt/software/ubunti-18.iso -u webuser:admin123 ftp://172.17.5.2:9000/
 
 # CRUD 请求
 
-这个就比较厉害了，也是我们日常工作中用于接口测试最常用的姿势。
+这个就比较厉害了，cURL 不仅可以用于文件上传下载，还能发送 GET、PUT、DELETE、POST 等请求，这也是我们日常工作中用于接口测试最常用的姿势。
 
-cURL 有个 -X 参数，用于发送具体的网络请求，即：GET、PUT、DELETE、POST 等等。下面以 POST 请求为例，其他同理：
+下面是几个主要的参数：
+
+```log
+-X, --request <command>    : 发送指定请求 <GET, HEAD, POST and PUT>
+-I, --head                 : 发送 HEAD 请求
+
+-i, --include              : 用于输出响应头(配合 --request 参数使用)
+-v, --verbose              : 用于输出请求以及响应头
+
+-H, --header               : 请求请求头
+
+-F, --form <name=content>  : 发送 Form 请求
+                             默认会使用 application/x-www-form-urlencoded,
+                             如果要发送文件最好配合 -H 参数指定 multipart/form-data
+
+-d, --data <data>          : 发送文本或二进制数据, 需要配合 -H 参数使用
+```
+
+看几个简单的示例（以 POST 请求做说明，其他同理）：
 
 ## POST multipart/form-data 单文件上传
 
