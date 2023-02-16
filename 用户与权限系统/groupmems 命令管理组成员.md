@@ -12,6 +12,7 @@ groupmems -g [group] [-lp]
 
 ```
 -g,--group:   指定具体组，可以是 GID 也可以是组的名称。
+
 -a,--add:     向指定组添加成员，可以是 UID 也可以是名称
 -d,--delete:  删除组内的某个成员，可以是 UID 也可以是名称
 -l,--list:    列出指定组内所有成员
@@ -20,17 +21,17 @@ groupmems -g [group] [-lp]
 
 |**Note**|
 |:-------|
-|`groupmems` 命令数据超级管理员权限命令，普通用户无法使用。|
+| `groupmems` 命令数据超级管理员权限命令，普通用户无法使用。|
 
 # 添加组成员
 
-先创建一个组 `examplegroup`：
+先创建一个组 `examplegroup` ：
 
 ```bash
 $ sudo groupadd examplegroup
 ```
 
-我当前操作环境有一个用户 `webuser`，信息如下：
+我当前操作环境有一个用户 `webuser` ，信息如下：
 
 ```bash
 $ id webuser
