@@ -1,14 +1,13 @@
 # su 用户身份切换命令
 
-`su` 命令主要用于切换当前登录用户的身份，比如当前 Linux 系统上有两个用户：`ituknown` 和 `kaka`。在登录系统时你使用的是 `ituknown` 用户，当你登录成功之后如果想要切换到 `kaka` 这个用户该怎么办呢？
+`su` 命令主要用于切换当前登录用户的身份，比如当前 Linux 系统上有两个用户： `ituknown` 和 `kaka` 。在登录系统时你使用的是 `ituknown` 用户，当你登录成功之后如果想要切换到 `kaka` 这个用户该怎么办呢？
 
-通常的做法是先登出（`logout`），然后再使用 `kaka` 这个用户登录即可！但是呢，Linux 系统了一个更方便的命令 `su`，可以实现在不登出的情况下随意切换当前用户身份！
+通常的做法是先登出（ `logout` ），然后再使用 `kaka` 这个用户登录即可！但是呢，Linux 系统了一个更方便的命令 `su` ，可以实现在不登出的情况下随意切换当前用户身份！
 
 现在看下 `su` 命令的常用语法参数：
 
 ```bash
 su [- [USER] | -l USER] [-c COMMAND]
-
 
 说明:
 
@@ -17,7 +16,7 @@ su [- [USER] | -l USER] [-c COMMAND]
 -c : 以交互的方式执行单条命令
 ```
 
-`su` 命令其实与 `/etc/passwd` 文件有关。我们都知道，当一个用户登录成功后通常都会有一个默认 SHELL（如果在创建用户时指定的话），比如我当前的 `ituknown` 用户，该用户的默认 SHELL 就是 `/bin/bash`：
+`su` 命令其实与 `/etc/passwd` 文件有关。我们都知道，当一个用户登录成功后通常都会有一个默认 SHELL（如果在创建用户时指定的话），比如我当前的 `ituknown` 用户，该用户的默认 SHELL 就是 `/bin/bash` ：
 
 ```bash
 $ id
@@ -34,9 +33,9 @@ $ sudo cat /etc/passwd | grep ituknown
 ituknown:x:1000:1002:ituknown:/home/ituknown:/bin/bash
 ```
 
-当然了，默认 SHELL 是可以修改的，可以参考下 [系统用户管理#登录hell](系统用户管理.md#登录-shell)。
+当然了，默认 SHELL 是可以修改的，可以参考下 [系统用户管理#登录Shell](系统用户管理.md#登录-shell)。
 
-之说以这里会说下默认 SHELL 是因为当我们使用 `su` 命令切换用户身份时其实会重新加载要切换用户的 SHELL 环境。这个其实很好理解，正常来说，我登录系统的用户是 `ituknown`，那么我的 HOME 环境变量就是 `/home/ituknown`。结果当我切换到 root 用户后环境变量就变了：
+之说以这里会说下默认 SHELL 是因为当我们使用 `su` 命令切换用户身份时其实会重新加载要切换用户的 SHELL 环境。这个其实很好理解，正常来说，我登录系统的用户是 `ituknown` ，那么我的 HOME 环境变量就是 `/home/ituknown` 。结果当我切换到 root 用户后环境变量就变了：
 
 ```bash
 $ echo $HOME # 当前用户的 HONE 环境变量
@@ -49,7 +48,7 @@ Password:
 /root
 ```
 
-所以，`su` 命令会重新加载指定用户的 SHELL 环境！
+所以， `su` 命令会重新加载指定用户的 SHELL 环境！
 
 `su` 命令使用起来很简单，到这里基本上该说得都说了，来看下简单的示例：
 
@@ -103,21 +102,11 @@ openjdk              8-jdk-buster     e512716a5569   4 months ago    514MB
 
 # sudo 命令
 
-相比较与 `su` 命令，在实际使用中更多的还是使用 `sudo` 命令。`su` 命令的缺点是必须切换到指定用户才能执行命令，而 `sudo` 命令则不同，可在不切换用户的情况下执行单条命令。
+相比较与 `su` 命令，在实际使用中更多的还是使用 `sudo` 命令。 `su` 命令的缺点是必须切换到指定用户才能执行命令，而 `sudo` 命令则不同，可在不切换用户的情况下执行单条命令。
 
-不过 `sudo` 命令不是每个 Linux 发行版都默认安装，所以如果你当前系统上没有该命令的话需要先安装才行：
+不过 `sudo` 命令不是每个 Linux 发行版都默认安装，所以如果你当前系统上没有该命令的话需要先安装才行。说到这里就要特别推荐一个属于 Linux 玩家的网站了：[command-not-found.com](https://command-not-found.com)。该网站专门用于查找命令，并提示你每个主流的 Linux 发行版该如何安装你所查询的命令。
 
-**Debian系列：**
-
-```bash
-apt install -y sudo
-```
-
-**RHEL系列：**
-
-```bash
-yum install -y sudo
-```
+[https://command-not-found.com/sudo](https://command-not-found.com/sudo)
 
 安装完成之后还不能直接使用，我们还需要将用户加到 `/etc/sudoers` 配置文件中才行。该配置文件数据格式如下：
 
@@ -175,13 +164,12 @@ groupadd sudos
 %sudos	ALL=(ALL:ALL) NOPASSWD: ALL
 ```
 
-之后我们只需要将需要执行管理员命令的用户加到该组下就好了，比如将用户 `ituknown` 加入到该组（`sudos`）：
+之后我们只需要将需要执行管理员命令的用户加到该组下就好了，比如将用户 `ituknown` 加入到该组（ `sudos` ）：
 
 ```bash
 sudo groupmems -g sudos -a ituknown
 ```
 
-
 --
 
-https://command-not-found.com/sudo
+🎉🎉🎉🎉~
