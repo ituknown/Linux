@@ -149,26 +149,30 @@ $ sudo cat /etc/shadow
 ituknown	ALL=(ALL:ALL) NOPASSWD: ALL
 ```
 
-另外，如果存在多个用户需要执行管理员命令场景的话，每次编辑 `sudoers` 配置文件也比较烦。所以更好的做法是使用用户组，比如创建一个 `sudos` 用户组：
+另外，如果存在多个用户需要执行管理员命令场景的话，每次编辑 `sudoers` 配置文件也比较烦。所以更好的做法是使用用户组，比如创建一个 `supers` 用户组：
 
 ```bash
-groupadd sudos
+groupadd supers
 ```
 
 之后将该组加到配置文件中即可：
 
 ```bash
-%sudos	ALL=(ALL:ALL) ALL
+%supers	ALL=(ALL:ALL) ALL
 
 # 如果想要该组下的用户免密执行, 就加上 NOPASSWD:
-%sudos	ALL=(ALL:ALL) NOPASSWD: ALL
+%supers	ALL=(ALL:ALL) NOPASSWD: ALL
 ```
 
-之后我们只需要将需要执行管理员命令的用户加到该组下就好了，比如将用户 `ituknown` 加入到该组（ `sudos` ）：
+之后我们只需要将需要执行管理员命令的用户加到该组下就好了，比如将用户 `ituknown` 加入到该组（ `supers` ）：
 
 ```bash
-sudo groupmems -g sudos -a ituknown
+sudo groupmems -g supers -a ituknown
 ```
+
+|**Note**|
+|:-----|
+|实际上默认已存在一个名为 `sudos` 的用户组，完全不需要再创建 `supers` 用户组，直接使用 `sudos` 组即可！|
 
 --
 
