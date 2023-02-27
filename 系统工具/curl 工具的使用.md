@@ -1,3 +1,5 @@
+# 前言
+
 cURL 是 Linux 下非常强大的 HTTP 工具，可用于各种网络协议的 HTTP 请求（GET、POST、DELETE 及 PUT 等）。另外，还可以用于文件下载和网页测试等。
 
 想了解 cURL 的全部用法可以在终端中输入下面的命令查阅，这里只会简单地说下常用的使用方式。
@@ -46,38 +48,36 @@ $ curl -o $file_name $remote_url
 $ curl -O $remote_url
 ```
 
-这两个参数的区别是：`-o` 参数我们需要指定一个下载到本地后的文件名。而 `-O` 参数不需要指定下载后的文件名，因为它会使用远程的文件名。
+这两个参数的区别是：`-o` 需要我们指定一个新的文件名，而 `-O` 则不需要，他会默认使用远程文件名。
 
-比如有个 mp4 的网络文件地址是：[http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4](http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4)。
+比如有个 Ubuntu 的网络镜像文件，地址是：[https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)。
 
-如果使用 `-O` 参数的话下载到本地的文件名是 [190204084208765161.mp4](http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4)，不够友好。不过如果使用 `-o` 参数的话，我们重新指定一个文件名。
-
-使用 `-O` 参数下载示例：
+如果使用 `-O` 参数的话下载到本地的文件名是 ubuntu-22.04.2-desktop-amd64.iso：
 
 ```bash
-$ curl -O http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4
+$ curl -O https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
 
 $ ls
-190204084208765161.mp4
+ubuntu-22.04.2-desktop-amd64.iso
 ```
 
-使用 `-o` 参数下载示例：
+另外，我们也可以使用 `-o` 参数重命名该文件：
 
 ```bash
-$ curl -o test.mp4 http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4
+$ curl -o ubuntu.iso https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
 
 $ ls
-190204084208765161.mp4	test.mp4
+ubuntu.iso
 ```
 
-有时候我们可能仅仅需要测试下网网速，不需要真正的下载到本地。这个我们可以将文件标准输出重定向到 /dev/null：
+不过，有时候我们可能想测试一个文件（如网络是否ok），不需要真正的去下载。这个我们可以将文件标准输出重定向到 /dev/null 设备：
 
 ```bash
-$ curl -o /dev/null http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4
+$ curl -o /dev/null https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
 ```
 
 
-## 文件重定向跟踪
+# 文件重定向跟踪
 
 有时候需要下载的文件被重定向了，比如想要下载 mysql 软件包：
 
@@ -95,17 +95,19 @@ total 0
 -rw-r--r-- 1 root root 0 Oct 21 21:50 mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 ```
 
-所以我们就需要进行重定向跟踪，cURL 提供了 -L 参数。-L 参数指明若有重定向则跟踪重定向，这样即使文件被重定向了也能够正确下载了：
+所以我们就需要进行重定向跟踪，cURL 提供了 -L 参数。-L 参数表示若地址已被重定向，则跟踪重定向。这样即使文件被重定向了也能够正确下载了：
 
 
 ```bash
 $ curl -O -L https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 ```
 
-**小提示：在实际使用中，建议每次下载文件时都加上 -L 参数。**
+| **Note**                                         |
+| :----------------------------------------------- |
+| 在实际使用中，在下载文件时强烈建议加上 -L 参数。 |
 
 
-## 文件下载进度条
+# 文件下载进度条
 
 默认情况下，下载文件时不会显示进度条。而是显示一箩筐百分比的输出，如下：
 
@@ -137,7 +139,7 @@ $ curl -# -L -O https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux
 这是不是就清爽多了？
 
 
-## 断点续传
+# 断点续传
 
 断点续传这个功能在实际中很有用，比如上面的 mysql 文件比较大，下载的比较慢。但是你又急着干其他事情，怎么办？没事，先终端任务。之后再使用断点续传即可。
 
@@ -170,7 +172,7 @@ $ curl -# -L -O https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux
 等下载到 10% 时手动终止任务（ctrl + c），并使用 -C 参数，后面接着一个偏移量继续下载：
 
 ```bash
-$ curl -# -L -O -C https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
+$ curl -# -L -O -C 117870592 https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 ```
 
 等下载到 20% 时再次手动终止任务（ctrl + c），并使用 -C 参数，后面使用 - 代替具体偏移量继续下载：
@@ -179,12 +181,14 @@ $ curl -# -L -O -C https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-li
 $ curl -# -L -O -C - https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 ```
 
-可以看下下面的 asciinema 演示示例：
+| **Note**                                        |
+| :---------------------------------------------- |
+| 在实际使用时应该使用 `-C -` 代替 `-C $偏移量`。 |
 
-[![asciicast](https://asciinema.org/a/444124.svg)](https://asciinema.org/a/444124)
 
 
-## 批量下载
+
+# 批量下载
 
 这种下载方式需要保证网络文件具有一定的规则才行，最典型的就是前缀相同，后缀是递增数值。
 
@@ -202,7 +206,7 @@ jdk-9.tar.gz
 $ curl -O http://ip:port/software/jdk-[7-9].tar.gz
 ```
 
-## 连接超时
+# 连接超时
 
 设置连接超时时间：
 
@@ -217,7 +221,7 @@ $ curl --connect-timeout 1 google.com
 curl: (28) Connection timed out after 1000 milliseconds
 ```
 
-## 失败重试
+# 失败重试
 
 在请求或下载文件时如果由于网络问题终止下载，我们可以设置失败重试参数：
 
@@ -302,9 +306,7 @@ $ curl -O -L -x 192.168.1.8:7890 https://github.com/xx/xx/releases/download/v1.7
 
 ```bash
 $ curl -e $your_websit_domain $remote_url
-
 # 或
-
 $ curl --referer $your_websit_domain $remote_url
 ```
 
@@ -326,11 +328,9 @@ $ curl --referfer "www.aliyun.com" http://bucket.aliyun.com/hangzhou_oss/xxx.png
 cURL 提供了 `-u`（同 `--user`） 参数用于指定用户名密码，命令如下：
 
 ```bash
-curl -u $username:$password $remote_url
-
+$ curl -u $username:$password $remote_url
 # 或
-
-curl --user $username:$password $remote_url
+$ curl --user $username:$password $remote_url
 ```
 
 示例下载 ftp 服务器文件：
@@ -351,7 +351,7 @@ $ curl -T /opt/software/ubunti-18.iso -u webuser:admin123 ftp://172.17.5.2:9000/
 ```
 
 
-# CRUD 请求
+# HTTP 请求
 
 这个就比较厉害了，cURL 不仅可以用于文件上传下载，还能发送 GET、PUT、DELETE、POST 等请求，这也是我们日常工作中用于接口测试最常用的姿势。
 
@@ -359,12 +359,11 @@ $ curl -T /opt/software/ubunti-18.iso -u webuser:admin123 ftp://172.17.5.2:9000/
 
 ```log
 -X, --request <command>    : 发送指定请求 <GET, HEAD, POST and PUT>
--I, --head                 : 发送 HEAD 请求
+-I, --head                 : 发送 HEAD 请求, 仅输出响应头
 
--i, --include              : 用于输出响应头(配合 --request 参数使用)
 -v, --verbose              : 用于输出请求以及响应头
 
--H, --header               : 请求请求头
+-H, --header               : 设置请求头
 
 -F, --form <name=content>  : 发送 Form 请求
                              默认会使用 application/x-www-form-urlencoded,
@@ -375,12 +374,48 @@ $ curl -T /opt/software/ubunti-18.iso -u webuser:admin123 ftp://172.17.5.2:9000/
 
 看几个简单的示例（以 POST 请求做说明，其他同理）：
 
-## POST multipart/form-data 单文件上传
+## GET 请求
+
+```bash
+$ curl -XGET https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
+```
+
+## HEAD 请求（输出响应头）
+
+这个感觉特别有用，可以用于测试响应头信息。比如想要下载文件，但是不知道文件的类型以及大小，我们就可以使用 HEAD 请求。
+
+比如下载 ubuntu 的镜像文件：[https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)，这个文件到底有多大我们不知道，不过可以使用 HEAD 请求查看响应头信息：
+
+```bash
+$ curl -I https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
+HTTP/1.1 200 Connection established
+
+HTTP/1.1 200 OK
+Date: Mon, 27 Feb 2023 06:09:42 GMT
+Server: Apache/2.4.29 (Ubuntu)
+Last-Modified: Thu, 23 Feb 2023 04:13:52 GMT
+ETag: "125b50000-5f5563d8c2da5"
+Accept-Ranges: bytes
+Content-Length: 4927586304
+Content-Type: application/x-iso9660-image
+```
+
+可以看到，Content-Length 是 4927586304 字节，转换一下单位后就是 4.58G 左右。另外，还可以看到文件流类型是 application/x-iso9660-image，说明是一个 ISO 文件。
+
+## POST 请求
+
+### POST multipart/form-data 单文件上传
 
 ```BASH
-curl -X POST http://localhost:8080/upload \
-  -F "file=@/Users/appleboy/test.zip" \
-  -H "Content-Type: multipart/form-data"
+$ curl -X POST http://localhost:8080/upload \
+-F "zipfile=@/Users/appleboy/test.zip" \
+-H "Content-Type: multipart/form-data"
+```
+
+其中 `-F "zipfile=@/Users/appleboy/test.zip"` 等同于 HTML 的 input 标签：
+
+```html
+<input type="file" name="zipfile" value="/Users/appleboy/test.zip" />
 ```
 
 对应的后台代码（Go语言为例）：
@@ -392,7 +427,7 @@ func main() {
 	router.MaxMultipartMemory = 8 << 20  // 8 MiB
 	router.POST("/upload", func(c *gin.Context) {
 		// Single file
-		file, _ := c.FormFile("file")
+		file, _ := c.FormFile("zipfile")
 		log.Println(file.Filename)
 
 		// Upload the file to specific dst.
@@ -404,13 +439,13 @@ func main() {
 }
 ```
 
-## POST multipart/form-data 多文件上传
+### POST multipart/form-data 多文件上传
 
 ```bash
-curl -X POST http://localhost:8080/upload \
-  -F "upload[]=@/Users/appleboy/test1.zip" \
-  -F "upload[]=@/Users/appleboy/test2.zip" \
-  -H "Content-Type: multipart/form-data"
+$ curl -X POST http://localhost:8080/upload \
+-F "zipfile[]=@/Users/appleboy/test1.zip" \
+-F "zipfile[]=@/Users/appleboy/test2.zip" \
+-H "Content-Type: multipart/form-data"
 ```
 
 对应的后台代码（Go语言为例）：
@@ -423,7 +458,7 @@ func main() {
 	router.POST("/upload", func(c *gin.Context) {
 		// Multipart form
 		form, _ := c.MultipartForm()
-		files := form.File["upload[]"]
+		files := form.File["zipfile[]"]
 
 		for _, file := range files {
 			log.Println(file.Filename)
@@ -437,23 +472,25 @@ func main() {
 }
 ```
 
-## POST application/json 请求
+### POST application/json 请求
 
-**方式一：**
+最简单的 JSON 请求就是直接拼接字符串：
 
 ```bash
-curl -XPOST "localhost:8080/account" -H 'Content-Type: application' -d'{
+$ curl -XPOST "localhost:8080/account" \
+-H 'Content-Type: application' \
+-d'{
 "username": "LiLei",
 "age": 18
 }'
 ```
 
 
-**方式二：**
-
-这种方式是从文件中读取二进制流文件数据传输，适用于大 JSON 数据请求。比如一个 JSON 文件 `account.json` 在当前 `_file` 目录下，内容为：
+不过，如果一个 JSON 字符串特别大，更有效的方式是将 JSON 写到某个文件中。即从文件中读取二进制流文件数据传输，适用于大 JSON 数据请求。比如一个 JSON 文件 `account.json` 在当前 `_file` 目录下，内容为：
 
 ```json
+$ cat _file/account.json
+
 {
 	"username": "LiLei",
 	"age": 18
@@ -463,7 +500,9 @@ curl -XPOST "localhost:8080/account" -H 'Content-Type: application' -d'{
 我们可以使用 `--data-binary` 参数从文件中读取二进制流来发起请求，任何数据在网络中其实都是以二进制流的形式传输的。我们只需要指定 `Content-Type` 就可以达到与方式一等效的请求（实际上方式一也是二进制流）：
 
 ```bash
-curl -XPOST "localhost:8080/account" -H "Content-Type: application/json" --data-binary "@_file/accounts.json"
+$ curl -XPOST "localhost:8080/account" \
+-H "Content-Type: application/json" \
+--data-binary "@_file/accounts.json"
 ```
 
 对应的后台代码（Go语言为例）：
