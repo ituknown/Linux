@@ -1,21 +1,21 @@
 
 `ifconfig`命令是 Linux 网络管理工具，该命令是 interface configuration（即接口配置） 的缩写。该工具主要用于配置和查看网络接口的状态，在日常使用中，我们可以利用 `ifconfig` 命令分配一个新网络、启动或禁用网卡以及管理 ARP 缓存，甚至可以实现路由管理等等。
 
-**注意：**`**ifconfig**`** 命令的作用是一次性生效的，即修改之后重启机器就失效了。想要永久修改需要去编辑 /etc 目录下的网络配置文件。**
+|**Note**|
+|:-------|
+|ifconfig` 命令的作用是一次性生效的，即修改之后重启机器就失效了。想要永久修改需要去编辑 /etc 目录下的网络配置文件。|
 
 # 命令安装
 
-新在的 Linux 发行版中，已经不推荐使用 `ifconfig` 命令进行网络管理，推荐替代品是 `[ip](https://linuxize.com/post/linux-ip-command/)` 命令，如果在输入 `ifconfig` 命令后提示 “ifconfig: command not found” 即表示当前系统默认没有集成该工具包，想要使用该命令需要先安装工具包 `net-tools`。
+`ifconfig` 命令通常不是各Linux发行版自带的系统命令，如果你输入 `ifconfig` 命令后提示 “ifconfig: command not found” 即表示当前系统默认没有集成该工具包，想要使用该命令需要先安装工具包 `net-tools`。
 
-**Debian/Ubuntu 安装 **`**net-tools**`
+特别说明的一点是：在新的 Linux 发行版中，已经不推荐使用 `ifconfig` 命令进行网络管理，取而代之的是使用系统自带的 [ip](https://linuxize.com/post/linux-ip-command/) 命令。
 
 在 Debian/Ubuntu 发行版中安装 `net-tools` 工具直接执行下面的命令即可：
 
 ```bash
 sudo apt-get install -y net-tools
 ```
-
-**RHEL/CentOS 安装 **`**net-tools**`
 
 在 RHEL/CentOS 发行版中安装 `net-tools` 工具执行下面的命令即可：
 
