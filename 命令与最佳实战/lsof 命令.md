@@ -27,7 +27,7 @@ loginwind   138 mingrn97  txt       REG                1,4    268144 11529215003
 loginwind   138 mingrn97  txt       REG                1,4    228968 1152921500312198772 /System/Library/CoreServices/SystemAppearance.bundle/Contents/Resources/FunctionRowAppearance.car
 ```
 
-**说明：**由于直接使用 `lsof` 打开的文件过多，所以通过 `more` 命令进行分页查看。这里每行显示一个打开的文件，若不指定条件默认将显示所有进程打开的所有文件。
+**说明：** 由于直接使用 `lsof` 打开的文件过多，所以通过 `more` 命令进行分页查看。这里每行显示一个打开的文件，若不指定条件默认将显示所有进程打开的所有文件。
 
 下面是 lsof 输出各列信息的意义：
 
@@ -197,12 +197,12 @@ $ kill -9 `lsof -nP -u $user -t`
 `-i` 基本语法如下：
 
 ```bash
-$ lsof -i [46][protocol][@hostname|hostaddr][:service|port]
+$ lsof -i [4|6][protocol][@hostname|hostaddr][:service|port]
 ```
 
 ## 指定IP协议
 
-[46] 表示的是 IPv4 和 IPv6 协议，比如列出机器所有的 IPv4 文件信息：
+[4|6] 表示的是 IPv4 和 IPv6 协议，比如列出机器所有的 IPv4 文件信息：
 
 ```bash
 $ lsof -nP -i4
