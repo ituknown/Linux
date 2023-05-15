@@ -369,3 +369,7 @@ $ ip route del default
 ```bash
 $ ip route add 192.168.121.0/24 via 192.168.1.1
 ```
+
+--
+
+https://linuxize.com/post/linux-ip-command/
