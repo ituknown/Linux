@@ -1,88 +1,118 @@
 # 前言
 
-有时候，我们会有这样的需求：手动跟踪命令的输出内容，同时又想将输出的内容写入文件，确保之后可以用来参考。
+EOF 是 Linux 多行输入语法，在具体说 EOF 语法之前先想下为什么需要多行输入。
 
-巧了，linux 就提供了这么一个命令 `tee`。使用 `man` 查看对 `tee` 的解释是：
+现在有一个 ip.txt 文件，如果想要向该文件中输入一个 baidu.com 网站该怎么做？想到的第一个答案就是使用 echo 命令：
 
-read from standard input and write to standard output and files。
-
-说人话就是：从标准输入读取数据并写到标准输出或者到指定文件。
-
-下面就具体说下。
-# tee 命令介绍
-
-`tee` 命令基于标准输入读取数据，标准输出或文件写入数据。看下这个命令的基本语法：
 ```bash
-tee [OPTION]... [FILE]...
+echo baidu.com > ip.txt
 ```
 
-现在由于某些原因你想使用 `tracepath` 命令追踪请求节点路径，同时你又想将输出结果记录到文件中，这个使用就有 `tee` 命令的用武之地了。
+如果我现在还要输入 taobao.com 呢？继续使用 echo：
 
-比如请求 baidu.com 并记录请求路径：
 ```bash
-tracepath -4 baidu.com | sudo tee tracepath.txt
+echo taobao.com >> ip.txt
 ```
-命令不仅将输出信息打印在控制台，当终止打印后我们还可以继续看 tracepath.txt 文件中记录的信息：
-```bash
-$ cat tracepath.txt
- 1?: [LOCALHOST]                      pmtu 1500
- 1:  _gateway                                              0.465ms
- 1:  _gateway                                              0.740ms
- 2:  _gateway                                              0.749ms pmtu 1492
- 2:  114.86.224.1                                          7.844ms
- 3:  61.152.6.41                                           3.163ms
- 4:  61.152.25.14                                          4.997ms
- 5:  202.97.97.221                                        27.067ms
-```
-这样就明白 `tee` 命令的基本用户了。
 
-# tee 命令的运用
+那我现在要是还有 100 个网站都这么输入？是不是太过傻X了？这就到了 EOF 的用武之地。
 
-`tee` 命令在某些时候特别有用，比如当我们写一个脚本时在脚本中生成一个 `sh` 脚本就可以借助 `tee` 命令。
+# EOF基本使用
 
-比如下面的 consul 安装脚本，在 consul 下载之后进行解压，同时创建一个 `restart.sh` 脚本：
+EOF 全称叫 End Of File，就是文件结束符。EOF 语法是成对出现，也就是说以 EOF 开始同时以 EOF 结束。EOF 用法通常如下格式：
 
 ```bash
-#!/bin/bash
-
-# Create consul workspace
-mkdir -p /data/software/consul
-cd /data/software/consul
-
-# Download consul v1.8.4 from official
-# Unzip the software package, and create Soft connection
-wget https://releases.hashicorp.com/consul/1.8.4/consul_1.8.4_linux_amd64.zip
-unzip consul_1.8.4_linux_amd64.zip -d consul_1.8.4
-ln -s consul_1.8.4 consul
-
-# Write consul service restart script
-sudo tee consul/restart.sh <<-'EOF'
-#!/bin/bash
-
-PID=`ps -ef | grep consul | grep -v grep | awk '{print $2}'`
-
-if [ -n "$PID" ]; then
-   echo "find consul process: $PID"
-   if ps -p $PID >/dev/null; then
-      echo "$PID is running, kill and restart....."
-      kill -9 $PID
-   else
-      echo "$ process is not running, restart......"
-   fi
-else
-   echo "$process is not exist, start......"
-fi
-
-nohup ./consul agent -server -bootstrap-expect=1 -ui -bind 0.0.0.0 -client 0.0.0.0 -datacenter=dev -data-dir=$PWD/data > $PWD/consul.log 2>&1 &
+<< EOF
 EOF
-
-cd consul
-
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "consul and script installation complete."
-echo "You can launch Consul service directly by running the script(sh restart.sh)"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 ```
-# 参考资料
 
-- [为初学者介绍的 Linux tee 命令（6 个例子）](https://linux.cn/article-9435-1.html)
+或者
+
+```bash
+<<- EOF
+EOF
+```
+
+比如我现在就继续将剩下的网站输入到 ip.txt 文件中：
+
+```bash
+cat >> ip.txt << EOF
+tianbao.com
+google.com
+tencent.com
+EOF
+```
+
+这个命令的意思就是配合 cat 命令将多行文本追加到 ip.txt 文件中。
+
+这里可能会有一个疑问，在上面的基本语法中还有一个 或者 语法，这个语法就仅仅多了一个 `-` 符号。现在就来说下具体的区别：
+
+# cat <<EOF 与 cat <<-EOF 的区别
+
+首先要说明的是，不管是 `<<EOF` 还是 `<<-EOF` 都是获取标准输入(`stdin`)，并在 EOF 处结束 stdin，输出 stdout（标准输出）。
+
+有问题，找男人(`man`)。`<<-` 在 `man` 中的解释是：
+
+If the redirection operator is `<<-`, then all leading tab characters are stripped from input lines and  the  line  containing  delimiter.
+
+通俗的将就是，使用 `<<-` 会自动去除结束 EOF 前面的制表符。
+
+比如如果使用下面的示例（结束 EOF 前面有个空格）：
+
+```bash
+cat >> ip.txt <<EOF
+edu.com
+ EOF
+```
+
+回车后不会当做 stdout（标准输出），而是继续作为 stdin（标准输入）。直白点就是回车后不能确认，必须在新行写个 EOF 才会结束标准输入：
+
+```bash
+cat >> ip.txt <<EOF
+edu.com
+	EOF
+EOF
+```
+
+而 `<<-` 就没有这个问题，它会将结束 EOF 语法前面的制表符自动去除。如果将上面的示例换成 `<<-` 就会发现正常结束 stdin：
+
+```bash
+cat >> ip.txt <<-'EOF'
+edu.com
+	EOF
+```
+
+这就是 `<<-` 和 `<<` 的主要区别。
+
+# 需要知道的几个符号
+
+看了上面有关 EOF 的介绍有没有会 `<<` 、`>>` 有些好奇？在 linux 中有四种这样的符号：
+
+- `<`：输入重定向
+- `>`：输出重定向
+- `>>`：输出重定向，进行追加，不会覆盖之前内容
+- `<<`：标准输入来自命令行的一对分隔号的中间内容
+
+比如使用下面的命令就会将 `baidu.com` 写入 ip.txt 文件中，如果该文件中已经有内容就会被覆盖：
+
+```bash
+$ cat ip.txt
+baidu.com
+taobao.com
+tianbao.com
+google.com
+tencent.com
+
+# 使用 > 会覆盖文件中的内容
+echo 'baidu.com' > ip.txt
+
+$ cat ip.txt
+baidu.com
+```
+
+再比如 `>>` 该符号是追加的意思，继续下面的命令：
+
+```bash
+echo 'taobao.com' >> ip.txt
+```
+
+之后看 ip.txt 内容就会发现之前的 baidu.com 没有被覆盖，这就是主要区别。
