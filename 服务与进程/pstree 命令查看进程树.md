@@ -22,7 +22,7 @@ Operating System: Debian GNU/Linux 10 (buster)
 
 # pstree 基本使用
 
-`pstree`  语法如下：
+`pstree`   语法如下：
 
 ```bash
 $ pstree [option] [PID | USER]
@@ -38,9 +38,9 @@ $ pstree
 
 输出示例：
 
-![pstree](http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree.png)
+<img src="http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree.png" alt="pstree" height="300">
 
-它会列出默认的树形结构，另外你会看到某些进程有折叠的情况。如 ModemManager 进程并没有显示子进程树而是显示 `2*[{ModemManager}]`，说明它还有2个子进程但默认被折叠了，等下会具体说明。
+它会列出默认的树形结构，另外你会看到某些进程有折叠的情况。如 ModemManager 进程并没有显示子进程树而是显示 `2*[{ModemManager}]`，说明它还有 2 个子进程但默认被折叠了，等下会具体说明。
 
 # 显示进程的命令参数
 
@@ -52,13 +52,13 @@ $ pstree -a
 
 输出示例：
 
-![pstree-a](http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-a.png)
+<img src="http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-a.png" alt="pstree-a" height="300">
 
 现在可以看到 pstree 命令输出树状结构时还额外显示一些进程的命令行选项。如 aria2c 进程，它在启动时额外指定了运行参数 `--conf-path=/opt/aria2/aria2.conf` 。
 
 # 展示子进程树
 
-还是以上面输出的进程树为例，ModemManager 进程还有2个子进程，但默认被隐藏了，我们可以使用 `-c` 参数强制显示所有的子进程树：
+还是以上面输出的进程树为例，ModemManager 进程还有 2 个子进程，但默认被隐藏了，我们可以使用 `-c` 参数强制显示所有的子进程树：
 
 ```bash
 $ pstree -c
@@ -66,13 +66,13 @@ $ pstree -c
 
 输出示例：
 
-![pstree-c](http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-c.png)
+<img src="http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-c.png" alt="pstree-c" height="300">
 
 现在就将所有的子进程显示出来了~
 
-# 显示进程的PID
+# 显示进程的 PID
 
-上面演示的进程时显示的都只是干巴巴的进程命令，实际上并不利于我们排查问题，排查问题怎么能少的了PID（进程号）呢？所以我们可以使用 `-p` 参数显示进程的 PID：
+上面演示的进程时显示的都只是干巴巴的进程命令，实际上并不利于我们排查问题，排查问题怎么能少的了 PID（进程号）呢？所以我们可以使用 `-p` 参数显示进程的 PID：
 
 ```bash
 $ pstree -p
@@ -80,7 +80,7 @@ $ pstree -p
 
 输出示例：
 
-![pstree-p](http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-p.png)
+<img src="http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-p.png" alt="pstree-p" height="300">
 
 现在你会发现进程树的每个进程都显示了进程的 PID，最显眼的 root 进程 systemd 的 PID 为 1，这是 Linux 系统的所有进程的祖宗！
 
@@ -102,14 +102,13 @@ zlbr        5244    5135  0 13:33 pts/0    00:00:00 grep --color=auto aria2
 $ pstree -H 4740
 ```
 
-| **注意** |
-| :--- |
+| **注意**                                  |
+| :---------------------------------------- |
 | `-H` 参数后面跟的是进程的 PID，不能省略！ |
-
 
 输出示例：
 
-![pstree-H](http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-H.png)
+<img src="http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-H.png" alt="pstree-H" height="300">
 
 # 只显示指定进程的进程树
 
@@ -135,7 +134,7 @@ $ pstree -t
 
 输出示例：
 
-![pstree-t](http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-t.png)
+<img src="http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-t.png" alt="pstree-t" height="300">
 
 # 显示指定用户的进程树
 
@@ -153,9 +152,7 @@ $ pstree root
 
 输出结果：
 
-
-![pstree-u-root](http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-u-root.png)
-
+<img src="http://linux-media.knowledge.ituknown.cn/SrvAndProcess/pstree/pstree-u-root.png" alt="pstree-u-root" height="300">
 
 --
 
