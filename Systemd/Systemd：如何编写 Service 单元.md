@@ -61,3 +61,13 @@ KillMode=mixed
 [Install]
 WantedBy=multi-user.target
 ```
+
+--
+
+[https://en.wikipedia.org/wiki/Systemd](https://en.wikipedia.org/wiki/Systemd)
+
+[https://www.freedesktop.org/software/systemd/man/systemd.unit.html](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
+
+[https://www.shellhacks.com/systemd-service-file-example/#comment-24301](https://www.shellhacks.com/systemd-service-file-example/#comment-24301)
+
+[https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files#unit-specific-section-directives](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files#unit-specific-section-directives)
