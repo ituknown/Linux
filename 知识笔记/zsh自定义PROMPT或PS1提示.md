@@ -16,11 +16,7 @@ export PROMPT='%n@%m %1~ %#'
 
 另外，`%#` 是zsh的提示符，默认提示符号是%，当具有超级用户权限时会显示`#`。
 
-
-
-![default_prompt.png](http://linux-media.knowledge.ituknown.cn/KnowledgeNotes/zsh_prompt/default_prompt.png)
-
-
+<img src="http://linux-media.knowledge.ituknown.cn/KnowledgeNotes/zsh_prompt/default_prompt.png" alt="default_prompt.png" width="500">
 
 因此，如果想要完整的展示用户所在目录，只保留 `%~ %#` 就可以了（即`%1~` 替换为`%~` 就可以展示完整路径）：
 
@@ -45,7 +41,7 @@ export PROMPT='%F{13}%~ %F{50}%B%# %f%b'
 - `%f` 表示后面恢复默认颜色
 - `%b` 表示后面恢复常规字体
 
-![advice_color.png](http://linux-media.knowledge.ituknown.cn/KnowledgeNotes/zsh_prompt/advice_color.png)
+<img src="http://linux-media.knowledge.ituknown.cn/KnowledgeNotes/zsh_prompt/advice_color.png" alt="advice_color.png" width="500">
 
 另外，zsh 还定义了 git_prompt_info 变量，用于 git 信息提示，具体可以自行摸索。我常用的 PROMPT 是：
 
