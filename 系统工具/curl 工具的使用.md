@@ -33,36 +33,39 @@ $ curl baidu.com
 $ curl baidu.com > baidu.html
 ```
 
+# 文件下载及重命名
 
-# 文件下载
+想要使用 cURL 工具实现网络文件下载，我们可以使用如下参数：
 
-想要使用 cURL 工具实现网络文件下载，我们可以使用 `-o` 或 `-O` 参数（一个大写一个小写）。
+| 参数 | 说明 |
+| :--- | :--- |
+| `--output-dir <dir>` | 将文件下载到指定目录（可选参数，默认下载到当前目录） |
+| `-o, --output <file>` | 下载并重命名文件 |
+| `-O, --remote-name` | 直接使用远程文件名 |
 
 命令如下：
 
 ```bash
-$ curl -o $file_name $remote_url
+$ curl [--output-dir $dir] -o $file_name $remote_url
 
-$ curl -O $remote_url
+$ curl [--output-dir $dir] -O $remote_url
 ```
-
-这两个参数的区别是：`-o` 需要我们指定一个新的文件名，而 `-O` 则不需要，他会默认使用远程文件名。
 
 比如有个 Ubuntu 的网络镜像文件，地址是：[https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)。
 
-如果使用 `-O` 参数的话下载到本地的文件名是 ubuntu-22.04.2-desktop-amd64.iso：
+如果使用 `-O, --remote-name` 参数的话下载到本地的文件名是 ubuntu-22.04.2-desktop-amd64.iso：
 
 ```bash
-$ curl -O https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
+$ curl --remote-name https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
 
 $ ls
 ubuntu-22.04.2-desktop-amd64.iso
 ```
 
-另外，我们也可以使用 `-o` 参数重命名该文件：
+另外，我们也可以使用 `-o, --output <file>` 参数重命名该文件：
 
 ```bash
-$ curl -o ubuntu.iso https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
+$ curl --output ubuntu.iso https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
 
 $ ls
 ubuntu.iso
@@ -73,7 +76,6 @@ ubuntu.iso
 ```bash
 $ curl -o /dev/null https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso
 ```
-
 
 # 文件重定向跟踪
 
@@ -86,7 +88,7 @@ https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.
 该软件包就被重定向了。如果直接使用 cURL 下载的话，是没办法下载到正确的文件的：
 
 ```bash
-$ curl -O https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
+$ curl --remote-name https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 
 $ ls -lh
 total 0
@@ -97,13 +99,12 @@ total 0
 
 
 ```bash
-$ curl -O -L https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
+$ curl --remote-name -L https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 ```
 
 | **Note**                                         |
 | :----------------------------------------------- |
 | 在实际使用中，在下载文件时强烈建议加上 -L 参数。 |
-
 
 # 文件下载进度条
 
@@ -135,7 +136,6 @@ $ curl -# -L -O https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux
 ```
 
 这是不是就清爽多了？
-
 
 # 断点续传
 
@@ -182,9 +182,6 @@ $ curl -# -L -O -C - https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-
 | **Note**                                        |
 | :---------------------------------------------- |
 | 在实际使用时应该使用 `-C -` 代替 `-C $偏移量`。 |
-
-
-
 
 # 批量下载
 
@@ -260,7 +257,6 @@ curl: (28) Connection timed out after 1001 milliseconds
 
 **最大重试时间：**
 
-
 正常来说，最大重试时间是 `retry` * `retry-delay`，但是我们可以通过指定 `--retry-max-time` 来重置最大失败时间。比如设置的重试次数是3，重试间隔为 3s，理论上失败时间到达 9s 才会取消继续执行。但是如果将 `--retry-max-time` 设置为 6 秒，那么实际上只会重试两次就终止了。
 
 ```bash
@@ -272,14 +268,13 @@ Warning: Problem : timeout. Will retry in 3 seconds. 2 retries left.
 curl: (28) Connection timed out after 1001 milliseconds
 ```
 
-
 # 设置代理服务器
 
 curl 这个工具在大多时候可能都是用于文件下载，最典型的就是下载 github 上的软件包，国内的网速简直快的感人。这个时候我们可能就需要借助代理服务器去下载了~
 
 比如我想要下载 Github 上的软件包：[https://github.com/xx/xx/releases/download/v1.7.1/file-v1.7.1.gz](https://github.com/xx/xx/releases/download/v1.7.1/file-v1.7.1.gz)
 
-如果直接使用 cURL 下载的话可能会很慢，不过 cURL 提供了一个 `-x` 参数用于设置代理服务器：
+如果直接使用 cURL 下载的话可能会很慢，不过 cURL 提供了一个 `-x, --proxy` 参数用于设置代理服务器：
 
 ```bash
 $ curl -x $proxy_server $remote_url
@@ -294,7 +289,6 @@ $ curl -O -L -x 192.168.1.8:7890 https://github.com/xx/xx/releases/download/v1.7
 ```
 
 **注意使用 -L 参数，用于跟踪重定向**
-
 
 # 设置 Referer
 
@@ -318,7 +312,6 @@ $ curl --referer $your_websit_domain $remote_url
 $ curl --referfer "www.aliyun.com" http://bucket.aliyun.com/hangzhou_oss/xxx.png
 ```
 
-
 #  用户认证
 
 如果是下载/上传普通的网络文件还好，但是如果是 FTP 服务器文件可能就需要一定得权限才行，典型的就是需要用户进行登录。
@@ -337,7 +330,6 @@ $ curl --user $username:$password $remote_url
 $ curl -O -u webuser:admin123 ftp://172.17.5.2:9000/software/os/debian-10.iso
 ```
 
-
 # 文件上传
 
 cURL 还可以用于文件上传，使用 -T 参数即可，后面跟具体的文件。
@@ -347,7 +339,6 @@ cURL 还可以用于文件上传，使用 -T 参数即可，后面跟具体的�
 ```bash
 $ curl -T /opt/software/ubunti-18.iso -u webuser:admin123 ftp://172.17.5.2:9000/software/os/
 ```
-
 
 # HTTP 请求
 
@@ -381,6 +372,8 @@ $ curl -XGET https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.is
 ## HEAD 请求（输出响应头）
 
 这个感觉特别有用，可以用于测试响应头信息。比如想要下载文件，但是不知道文件的类型以及大小，我们就可以使用 HEAD 请求。
+
+使用参数：`-I, --head`
 
 比如下载 ubuntu 的镜像文件：[https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)，这个文件到底有多大我们不知道，不过可以使用 HEAD 请求查看响应头信息：
 
