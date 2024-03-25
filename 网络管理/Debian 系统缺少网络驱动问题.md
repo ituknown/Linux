@@ -34,7 +34,7 @@ Debian 的驱动程序都被打包到一个 firmware 文件中（这个包里面
 
 # 在安装系统时直接安装网络驱动
 
-如果你要想在系统安装是就安装网络驱动，需要另外准备一个可移动介质（如 U 盘），将 firmware.zip 解压后的文件全部拷贝到可移动介质中（注意，这些 deb 文件不能放在可移动介质的文件夹内，必须在第一级。推荐的方式是将可移动介质格式化后，直接将压缩后的 deb 包文件直接拷贝进去）。在安装系统时到配置网络模块这一步选择 **Yes**（如下图）：
+如果你要想在系统安装是就安装网络驱动，需要另外准备一个可移动介质（如 U 盘），将 firmware.zip 解压后的文件全部拷贝到可移动介质中（注意，这些 deb 文件必须放在根目录或 /firmware 目录下。推荐的方式是将可移动介质格式化后，直接将压缩后的 deb 包文件直接拷贝进去）。在安装系统时到配置网络模块这一步选择 **Yes**（如下图）：
 
 ![hw-detect_load_firmware_0-1642308292i75tY4](http://linux-media.knowledge.ituknown.cn/NetworkManager/Debian-NoNetworkDriver/hw-detect_load_firmware_0-1642308292i75tY4.png)
 
@@ -45,6 +45,10 @@ Debian 的驱动程序都被打包到一个 firmware 文件中（这个包里面
 因为我的是笔记本就直接选择 Wireless 了，然后耐心等待吧。安装完成后就会看到网络模块正常了：
 
 ![show-desktop-after-install-driver-16422558589Wybrr](http://linux-media.knowledge.ituknown.cn/NetworkManager/Debian-NoNetworkDriver/show-desktop-after-install-driver-16422558589Wybrr.png)
+
+|**Debian官网文档原话如下**|
+|:----------------------|
+|Official installation images do not include non-free firmware. The most common method to load such firmware is from some removable medium such as a USB stick. Alternatively, unofficial installation images containing non-free firmware can be found at https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/. To prepare a USB stick (or other medium like a hard drive partition), <u>*the firmware files or packages must be placed in either the root directory or a directory named /firmware of the file system on the medium*</u>. The recommended file system to use is FAT as that is most certain to be supported during the early stages of the installation.|
 
 # 在系统安装后安装网络驱动
 
