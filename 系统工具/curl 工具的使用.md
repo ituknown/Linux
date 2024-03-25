@@ -476,6 +476,15 @@ $ curl -XPOST "localhost:8080/account" \
 }'
 ```
 
+更简单的做法是：
+
+```bash
+$ curl --json '{"username":"LiLei","age":18}' "localhost:8080/account"
+
+# 从指定文件读取JSON内容
+$ curl --json @- https://example.com < json.txt
+$ curl --json @json.txt https://example.com
+```
 
 不过，如果一个 JSON 字符串特别大，更有效的方式是将 JSON 写到某个文件中。即从文件中读取二进制流文件数据传输，适用于大 JSON 数据请求。比如一个 JSON 文件 `account.json` 在当前 `_file` 目录下，内容为：
 
