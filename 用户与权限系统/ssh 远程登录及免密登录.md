@@ -201,7 +201,43 @@ $ sudo systemctl restart sshd
 使用 `ssh-keygen` 命令创建一个 rsa 非对称加密文件：
 
 ```bash
-$ ssh-keygen -t rsa [-f ~/.ssh/custom_file]
+$ ssh-keygen [options]
+
+常用选项:
+
+-t <type>：指定密钥类型，如 rsa、dsa、ecdsa 等。
+-b <bits>：指定密钥长度，常用 2048 或 4096 位。
+-C <comment>：添加备注信息
+-f <output_file>：指定密钥对存储文件路径。默认为 ~/.ssh/id_rsa 和 ~/.ssh/id_rsa.pub。
+
+-N ""：在生成密匙对时明确指定不设置密码
+```
+
+示例：
+
+```bash
+$ ssh-keygen -t rsa -b 2048 -N ""
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/magician/.ssh/id_rsa): 
+Your identification has been saved in /home/magician/.ssh/id_rsa
+Your public key has been saved in /home/magician/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:bA7VTkabn1ex8sKPYy4elPGWD4EtJ6tCVyaPmlwNKVY magician@magician
+The key's randomart image is:
++---[RSA 2048]----+
+|         E.    . |
+|        .o.oo   o|
+|       o.+*B = ..|
+|      .o.+O.X.=. |
+|      ..S+.*oB.. |
+|      o+= o ..*  |
+|       =.. . + o |
+|        .  .+ .  |
+|          ....   |
++----[SHA256]-----+
+
+$ ls ~/.ssh/
+id_rsa  id_rsa.pub
 ```
 
 之后就会在你的 `~/.ssh` 目录下多了一对 rsa 文件，如果不使用 `-f` 参数指定具体的文件名的话默认文件名是 `id_rsa` 和 `id_rsa.pub`：
