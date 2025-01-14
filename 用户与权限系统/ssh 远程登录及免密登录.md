@@ -194,11 +194,11 @@ PermitRootLogin no
 $ sudo systemctl restart sshd
 ```
 
-# rsa 实现免密登录
+# SSH Key 实现免密登录
 
-有没有发现每次使用 `ssh username@host:port` 命令很累，而且每次都要输入密码。有没有什么解决办法呢？当然有了，使用 rsa 非对称加密即可~
+有没有发现每次使用 `ssh username@host:port` 命令很累，而且每次都要输入密码。有没有什么解决办法呢？当然有了，使用 SSH Key 即可~
 
-使用 `ssh-keygen` 命令创建一个 rsa 非对称加密文件：
+使用 `ssh-keygen` 命令创建一对非对称加密公私钥文件：
 
 ```bash
 $ ssh-keygen [options]
@@ -210,15 +210,15 @@ $ ssh-keygen [options]
 -C <comment>：添加备注信息
 -f <output_file>：指定密钥对存储文件路径。默认为 ~/.ssh/id_rsa 和 ~/.ssh/id_rsa.pub。
 
--N ""：在生成密匙对时明确指定不设置密码
+-N ""：设置私钥密码保护，如果使用空字符串表示不设置密码（设置密码可以更安全~）
 ```
 
 示例：
 
 ```bash
-$ ssh-keygen -t rsa -b 2048 -N ""
+$ ssh-keygen -t rsa -b 2048 -C "" -N ""
 Generating public/private rsa key pair.
-Enter file in which to save the key (/home/magician/.ssh/id_rsa): 
+Enter file in which to save the key (/home/magician/.ssh/id_rsa):
 Your identification has been saved in /home/magician/.ssh/id_rsa
 Your public key has been saved in /home/magician/.ssh/id_rsa.pub
 The key fingerprint is:
@@ -301,8 +301,8 @@ Host alias
 - `alias` 是你为远程主机 `172.16.110.128` 设置的别名。
 - `Port` 是你要登录远程主机的端口号，默认就是 22。
 - `User` 是你要登录远程主机的用户，默认为 root。
-- `HostName` 是你的远程主机 IP。
-- `IdentityFile` 是你使用 `ssh-keygen` 命令生成的 rsa 私钥文件，必须与你发送的公钥是一对的。
+- `HostName` 是你的远程主机 IP 或域名。
+- `IdentityFile` 是你使用 `ssh-keygen` 命令生成的私钥文件路径，必须与你发送的公钥是一对的。
 - `PreferredAuthentications` 指定你登录远程主机认证方法，我们使用的是公钥，指定为 `publickey` ，当然也可以使用密码。
 
 以 [ssh 登录示例](#ssh-登录示例) 中的机器为例，配置如下：
@@ -334,75 +334,65 @@ $ scp ./tmp/baidu.png order_srv:Downloads
 $ scp order_srv:Downloads/baidu.png ./
 ```
 
-# rsa 文件设置密码问题
+# 解除 SSH Key 私钥文件密码保护
 
-|**注意**|
-|:---|
-|这里介绍的解决方案只适用于 Mac 和 Linux，如果你使用的是 Windows 系统的话就只能去谷歌度娘了。|
+| **注意**                                                   |
+| :------------------------------------------------------- |
+| 这里介绍的解决方案只适用于 Mac 和 Linux，如果你使用的是 Windows 系统的话就只能去谷歌度娘了。 |
 
-前面 [rsa 实现免密登录](#rsa-实现免密登录) 使用的是没有密码的 rsa 密匙对。但是如果你生成 rsa 文件时指定了密码的话可能会遇到一个问题，虽然使用 `ssh` 登录不要账号的密码的，但是却要 rsa 文件的密码。
+前面[SSH Key 实现免密登录](#ssh-key-实现免密登录)的示例中生成的密匙并没有设置私钥密码保护。但是如果你生成密匙时指定了私钥密码保护的话可能会遇到一个问题：使用 `ssh` 登录虽然不要账号的密码，但是却要秘钥文件的加密密码。
 
-比如我使用下面的命令生成 rsa 密匙对，指定的密码是 `1234`，rsa 文件是 `id_pwd`：
+比如我使用下面的命令生成密匙，指定的私钥密码是 `1234`，私钥文件是 `id_pwd`：
 
 ```bash
-$ ssh-keygen -t rsa -C "PwdTest" -N "1234" -f ~/.ssh/id_pwd
+$ ssh-keygen -t rsa -C "" -N "1234" -f ~/.ssh/id_pwd
 ```
 
-按照正常流程操作后给目标服务器起了个别名：`vm.trading`，然后使用 ssh 登录时要求输入 rsa 密匙对的口令密码（密码是前面设置的 `1234`）：
+按照正常流程操作后给目标服务器起了个别名：`vm.trading`，然后使用 ssh 登录时会要求输入私钥的密码（密码是前面设置的 `1234`）：
 
 ```bash
 $ ssh vm.trading
 Enter passphrase for key '/home/kali/.ssh/id_pwd':
 ```
 
-这就有点麻烦了，使用 rsa 密匙对的本质就是为了 “免密”，现在又来了一个 rsa 的密码。怎么解决呢？使用 `ssh-add` 命令来解决。
+这就有点麻烦了，使用密匙的本质就是为了 “免密”，现在又来了一个私钥的密码。怎么解决呢？
 
-命令如下（注意 `~/.ssh/id_pwd` 是你的私钥文件名）：
-
-```bash
-$ ssh-add ~/.ssh/id_pwd
-```
-
-之后会要求你输入 rsa 私钥密码：
-
-```
-Enter passphrase for /home/user/.ssh/id_pwd:
-```
-
-输入完成后输出如下信息即表示完成了：
-
-```
-Identity added: /home/user/.ssh/id_pwd (/home/user/.ssh/id_pwd)
-```
-
-之后，直接使用 `ssh vm.trading` 即可完成登录！
-
-但是，如果你在使用 `ssh-add` 命令是遇到了如下错误。原因是 `ssh-add` 与 `ssh` 需要一个环境变量来完成如何与 `ssh` 代理通信。
-
-```
-Could not open a connection to your authentication agent.
-```
-
-只需要执行下如下命令即可：
+简单，只需要执行下面命令即可：
 
 ```bash
-eval "$(ssh-agent)"
+ssh-keygen -p -f [私钥文件路径]
 ```
 
-不过，该命令无法持久，退出登录后下载再次登陆执行 `ssh-add` 命令依然会提示该问题。如果想要一劳永逸，在你的用户目录下配置文件（如 `~/.bash_profile`）中添加如下配置，当然也可以直接在系统配置 `/etc/profile` 中增加如下配置：
+验证原始密码之后会提示你输入新密码，不输入新密码直接回车即可！
+
+示例：
 
 ```bash
-# Add ssh-add to your Bash config file
-SSHAGENT=/usr/bin/ssh-agent
-SSHAGENTARGS="-s"
-if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT" ]; then
-    eval `$SSHAGENT $SSHAGENTARGS`
-    trap "kill $SSH_AGENT_PID" 0
-fi
+$ ssh-keygen -p -f ~/.ssh/id_pwd
+
+Enter old passphrase: <=== 先验证原密码
+Key has comment ''
+Enter new passphrase (empty for no passphrase): <== 新密码不要输入任何内容，直接回车即可
+Enter same passphrase again:
+Your identification has been saved with the new passphrase.
 ```
 
-接着重试一下上面 `ssh-add ~/.ssh/id_pwd` 命令就好了~
+然后就完事了！相反，如果想给私钥文件设置密码保护，只需要重新执行该命令设置一个新密码即可！
 
+题外话，如何确认私钥文件是否有密码保护？执行下面命令即可：
+
+```bash
+ssh-keygen -y -f [私钥文件路径]
+```
+
+如果能直接导出公钥说明没有开启密码保护。反之，要求你输入密码说明私钥开启了密码保护。
+
+示例：
+
+```bash
+$ ssh-keygen -y -f ~/.ssh/id_pwd
+Enter passphrase: <== 要求输入密码，说明开启了密码保护
+```
 
 # 常见问题
 
