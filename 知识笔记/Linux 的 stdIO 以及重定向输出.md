@@ -6,7 +6,7 @@
 
 在 wikipedia 上有对 standard io 的介绍（见文章最后的参考链接），其中有张图片对标准流做个很直接的概括，如下：
 
-![stdIO-1649829063KYw06O](https://ituknown.cn/linux-media/KnowledgeNotes/stdIO/stdIO-1649829063KYw06O.png)
+![stdIO-1649829063KYw06O](https://ituknown.org/linux-media/KnowledgeNotes/stdIO/stdIO-1649829063KYw06O.png)
 
 标准流有三个来源，分别是键盘、程序和展示设备（通常是显示屏幕）。其中键盘输入的信息被称为标准输入流，程序在执行过程中会产生相应的输出流。程序或命令行正常执行时输出的信息被称为标准输出，程序或命令行在执行过程中产生错误（如指令不存在）时输出的信息被称为标准错误。
 
@@ -211,7 +211,7 @@ Prefect~
 $ sh example.sh 1>print.log 2>print.log
 ```
 
-![toyoungtosimple-1649829220qI7j9i](https://ituknown.cn/linux-media/KnowledgeNotes/stdIO/toyoungtosimple-1649829220qI7j9i.jpg)
+![toyoungtosimple-1649829220qI7j9i](https://ituknown.org/linux-media/KnowledgeNotes/stdIO/toyoungtosimple-1649829220qI7j9i.jpg)
 
 当我们执行完该命令后，显示终端确实没有任何输出信息了（输出流都被我们重定向了），但是 print.log 文件中的内容：
 
