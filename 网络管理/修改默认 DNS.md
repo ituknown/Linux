@@ -1,5 +1,5 @@
 
-### 使用 `systemd-resolved`（现代 Debian/Ubuntu 使用）
+### 使用 systemd-resolved（现代 Debian/Ubuntu 使用）
 
 在修改之前，可以先查看下 DNS 信息：
 
@@ -50,7 +50,7 @@ sudo systemctl restart systemd-resolved
 ```
 
 
-### 使用 `netplan`（Ubuntu 18.04+）
+### 使用 netplan（Ubuntu 18.04+）
 
 Netplan 是 Ubuntu（从 17.10 开始）默认的网络配置工具，通过 YAML 文件配置，用于在系统启动时配置网络接口，最终将配置应用到后台的实际网络管理服务（如 systemd-networkd 或 NetworkManager）。
 
