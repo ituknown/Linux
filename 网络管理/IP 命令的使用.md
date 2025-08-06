@@ -6,7 +6,6 @@
 
 需要特别说明的是，`ip` 命令虽然可以用来管理网络，但更多的是用于查询使用。因为使用 `ip` 命令修改的信息是不会保存到系统配置文件中的，当你重启机器后所有的修改也就失效了。另外，当我们使用 `ip` 命令执行修改操作时需要使用超级管理员用户（`root`）或具有超级管理员权限（`sudo`）的用户，要记住这点！
 
-
 # 如何使用 ip 命令
 
 再次说明一下，`ip` 命令是 Linux 发行版自带的网络管理工具，是 `iproute2` 包的一部分，无需安装任何额外的工具，开箱即用。这也是为什么推荐大家使用 `ip` 命令去替代 `ifconfig` 命令的原因。
@@ -18,7 +17,6 @@ ip [ OPTIONS ] OBJECT { COMMAND | help }
 ```
 
 另外也可以直接在 Terminal 中输入 `ip` 或 `ip help` 命令查看详细使用信息，如下：
-
 
 ![ip-help-1637489799GoJYS5](https://ituknown.org/linux-media/NetworkManager/ip-command/ip-help-1637489799GoJYS5.png)
 
@@ -61,7 +59,6 @@ STATE := { permanent | noarp | stale | reachable | none |
 
 再次说明，`ip` 命令更多的适用于输出展示。如果想要做修改操作需要有超级管理员权限，最重要的是使用 `ip` 所做的修改操作是不会写到系统配置文件的，重启系统后所做的修改也就失效了。
 
-
 # 网络 IP 管理
 
 管理网络 IP 使用的是 address 对象，或者直接使用缩写 addr 或 a。下面是该对象的命令语法：
@@ -79,7 +76,6 @@ del  : 删除指定 IP 地址(ADDRESS)
 ```
 
 而 `INTERFACE` 指的就是你的网络接口，即网卡。
-
 
 ## 显示所有 IP 信息
 
@@ -99,12 +95,9 @@ $ ip -c addr show
 
 ![ip-addr-show-1637491949IdhydV](https://ituknown.org/linux-media/NetworkManager/ip-command/ip-addr-show-1637491949IdhydV.png)
 
-
-
 | **说明**                                                     |
 | :----------------------------------------------------------- |
 | 当用于展示输出时，`show` 参数可以忽略。即使用 `ip -c addr` 也能得到上面一样的输出。 |
-
 
 ## 只显示 IPv4 或 IPv6
 
@@ -125,7 +118,6 @@ $ ip -c -6 addr show
 下面是只展示 IPv4 的示例：
 
 ![ip-addr-show-v4-1637492302ZUowIy](https://ituknown.org/linux-media/NetworkManager/ip-command/ip-addr-show-v4-1637492302ZUowIy.png)
-
 
 ## 只显示指定网卡信息
 
@@ -165,25 +157,19 @@ ip addr add ADDRESS dev INTERFACE
 $ sudo ip addr add 192.168.1.100/24 dev wlp3s0
 ```
 
-
 | **注意**                                                     |
 | :----------------------------------------------------------- |
 | 想要执行上面的命令，你需要使用超级管理员用户（`root`）或具有超级管理员权限（`sudo`）的用户。否则会给你提示错误信息：`RTNETLINK answers: Operation not permitted` |
 
-
 当执行成功后，再次查看网络接口信息你就会发现多出了一个新的 IP 地址，这个地址就是你之前分配的：
-
 
 ![ip-addr-add-1637493376QfNxUr](https://ituknown.org/linux-media/NetworkManager/ip-command/ip-addr-add-1637493376QfNxUr.png)
 
-
 从上面的输出你也能够看出来，一个网络接口可以同时分配多个 IP 地址，也就是说你现在还可以继续分配。
-
 
 | **再次说明**                                                 |
 | :----------------------------------------------------------- |
 | 使用 `ip` 命令做的修改操作是一次性的，当你重启系统后就失效了。 |
-
 
 ## 删除网络接口的 IP 地址
 
@@ -200,7 +186,6 @@ $ ip addr del 192.168.1.100/24 dev wlp3s0
 ```
 
 这里就不做输出展示了~
-
 
 # 网络接口管理
 
@@ -232,7 +217,6 @@ $ ip -c link show
 
 ![ip-link-show-1637494262HOkOvE](https://ituknown.org/linux-media/NetworkManager/ip-command/ip-link-show-1637494262HOkOvE.png)
 
-
 ## 显示指定网络接口信息
 
 同样的，我们可以只显示指定的网络接口信息。比如我只想展示名为 `wlp3s0` 的网络接口信息：
@@ -241,11 +225,9 @@ $ ip -c link show
 $ ip link show dev wlp3s0
 ```
 
-
 | **NOTE**                                                     |
 | :----------------------------------------------------------- |
 | 其实 `dev` 参数是可以忽略的，即：`ip link show wlp3s0`。但是为了容易理解，所以从最开始就一直没有忽略。 |
-
 
 ## 启用禁用指定网络接口
 
@@ -267,11 +249,9 @@ ip link set INTERFACE { up | down }
 $ ip link set wlp3s0 down
 ```
 
-
 | **说明**                                                     |
 | :----------------------------------------------------------- |
 | 因为我使用的是 SSH 连接的，就不做演示的，否则就断线无法使用 SSH 连接了~ |
-
 
 # 路由表管理
 
@@ -282,7 +262,6 @@ ip route [ COMMAND ] [ SELECTOR ]
 ```
 
 最常用的 `[ COMMAND ]` 有：`list`、`add` 和 `del`。
-
 
 ## 显示路由表信息
 
@@ -305,7 +284,6 @@ $ ip -c route list
 ![ip-route-list-1637495453gRZuvr](https://ituknown.org/linux-media/NetworkManager/ip-command/ip-route-list-1637495453gRZuvr.png)
 
 其中第一条 `default` 信息也就是我们常说的网关信息，也就是说我当前系统的 IP 网关为：`192.168.1.1`。
-
 
 ## 显示指定路由表信息
 
@@ -341,7 +319,6 @@ $ sudo ip route add 192.168.121.0/24 via 192.168.1.1
 
 之后就会看到多了一条路由表信息：
 
-
 ```bash
 $ ip -c route list
 default via 192.168.1.1 dev wlp3s0 proto dhcp metric 600
@@ -352,7 +329,6 @@ default via 192.168.1.1 dev wlp3s0 proto dhcp metric 600
 192.168.121.0/24 via 192.168.1.1 dev wlp3s0  <== 注意看这里
 192.168.123.0/24 dev vmnet1 proto kernel scope link src 192.168.123.1
 ```
-
 
 ## 删除路由表信息
 
