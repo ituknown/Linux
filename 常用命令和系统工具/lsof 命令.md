@@ -68,7 +68,6 @@ loginwind   138 mingrn97  txt       REG                1,4    136152 11529215003
 另外，还有一个参数 `-l`，该参数含义是列出用户的 `UID`。看上面的输出示例中 `USER` 栏信息，默认展示的是用户名，如果加上 `-l` 参数输出的就会是用户的 `UID`：
 
 ```bash
-
 $ lsof -lnP
 
 COMMAND     PID     USER   FD      TYPE             DEVICE  SIZE/OFF                NODE NAME

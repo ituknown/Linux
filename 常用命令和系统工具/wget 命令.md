@@ -24,7 +24,6 @@ man wget
 
 下面简单说下：
 
-
 # 下载网络文件
 
 想要网络文件直接在 wget 后面跟相应的文件链接即可：
@@ -75,7 +74,6 @@ wget -O $output_file_name $url
 $ wget -O mysql-8.0.27.tar.xz https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 ```
 
-
 # 下载网络文件到指定目录
 
 默认情况下，wget 命令会将网络文件下载到当前目录（即执行 wget 命令所在的目录）。
@@ -91,7 +89,6 @@ wget -P $DIR $url
 ```bash
 $ wget -P /opt https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-i686.tar.xz
 ```
-
 
 # 下载网络文件到指定目录并重命名
 
@@ -118,7 +115,6 @@ $ wget -O /opt/mysql.tar.xz https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-
 ```
 
 使用 -O 参数不仅可以直接重命名文件还可以指定下载到指定的目录。
-
 
 # 指定用户名密码
 
@@ -151,7 +147,6 @@ $ wget --ftp-password=${password} ftp://${username}@ip:port/software/os/ubuntu12
 ```
 
 **注意：** 示例中` ${username}` 和 `${password}` 是你的用户名密码。
-
 
 # 断点续传/下载
 

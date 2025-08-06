@@ -9,9 +9,11 @@ read from standard input and write to standard output and files。
 说人话就是：从标准输入读取数据并写到标准输出或者到指定文件。
 
 下面就具体说下。
+
 # tee 命令介绍
 
 `tee` 命令基于标准输入读取数据，标准输出或文件写入数据。看下这个命令的基本语法：
+
 ```bash
 tee [OPTION]... [FILE]...
 ```
@@ -19,10 +21,13 @@ tee [OPTION]... [FILE]...
 现在由于某些原因你想使用 `tracepath` 命令追踪请求节点路径，同时你又想将输出结果记录到文件中，这个使用就有 `tee` 命令的用武之地了。
 
 比如请求 baidu.com 并记录请求路径：
+
 ```bash
 tracepath -4 baidu.com | sudo tee tracepath.txt
 ```
+
 命令不仅将输出信息打印在控制台，当终止打印后我们还可以继续看 tracepath.txt 文件中记录的信息：
+
 ```bash
 $ cat tracepath.txt
  1?: [LOCALHOST]                      pmtu 1500
@@ -34,6 +39,7 @@ $ cat tracepath.txt
  4:  61.152.25.14                                          4.997ms
  5:  202.97.97.221                                        27.067ms
 ```
+
 这样就明白 `tee` 命令的基本用户了。
 
 # tee 命令的运用
@@ -83,6 +89,7 @@ echo "consul and script installation complete."
 echo "You can launch Consul service directly by running the script(sh restart.sh)"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 ```
+
 # 参考资料
 
 - [为初学者介绍的 Linux tee 命令（6 个例子）](https://linux.cn/article-9435-1.html)

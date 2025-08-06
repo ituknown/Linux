@@ -2,13 +2,13 @@
 
 # 语法
 
-```
+```bash
 dpkg [option] [package.deb|package]
 ```
 
 其中 `[option]` 指可选参数，`package.deb` 指的是离线软件包，`package` 指的是基于 `package.deb` 安装的系统软件。
 
-下面是参数 option 说明
+下面是参数 option 说明：
 
 ```
 -i,--install <package.deb>              安装离线软件包
