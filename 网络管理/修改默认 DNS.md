@@ -51,7 +51,7 @@ sudo resolvectl status
 2. 查看特定网卡的 DNS 配置（以网卡 enp2s0 为例）：
 
 ```bash
-sudo resolvectl status -i eth0
+sudo resolvectl status -i enp2s0
 ```
 
 输出示例：
@@ -68,6 +68,25 @@ Current DNS Server: 172.21.101.11
 Link 2 (enp2s0)
 Current Scopes: LLMNR/IPv4 LLMNR/IPv6
      Protocols: -DefaultRoute +LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+```
+
+> 如果你不知道自己的网卡名，可以使用 `ip -c addr` 查看，示例：
+
+```bash
+$ ip -c addr
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:15:5d:ce:ea:17 brd ff:ff:ff:ff:ff:ff
+    inet 172.24.130.189/20 brd 172.24.143.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::215:5dff:fece:ea17/64 scope link
+       valid_lft forever preferred_lft forever
 ```
 
 ## 网卡临时设置 DNS
@@ -98,6 +117,12 @@ Link 2 (enp2s0)
 Current Scopes: DNS LLMNR/IPv4 LLMNR/IPv6
      Protocols: +DefaultRoute +LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
    DNS Servers: 172.21.100.241 # <=== 临时设置的 DNS
+```
+
+如果想快速临时设置 DNS 可以自定义一个 alias 命令，如：
+
+```bash
+alias set_dns_172 = 'sudo resolvectl dns enp2s0 172.21.100.241'
 ```
 
 ## 清空临时 DNS
@@ -140,7 +165,6 @@ FallbackDNS=1.1.1.1
 ```bash
 sudo systemctl restart systemd-resolved
 ```
-
 
 # 使用 netplan（Ubuntu 18.04+）
 
