@@ -34,10 +34,10 @@ $ export ftp_proxy="protocol://username:pwd@proxy_server:port"
 export all_proxy="socks5://proxy_server:port"
 ```
 
-而 `no_proxy` 则是按需要设置，比如我想要 `ituknown.org` 的所有子域名以及 `localhost` 不走代理就按照如下方式设置即可：
+而 `no_proxy` 则是按需要设置，比如我想要 `media.ituknown.org` 的所有子域名以及 `localhost` 不走代理就按照如下方式设置即可：
 
 ```bash
-export np_proxy="*.ituknown.org,127.0.0.1,localhost"
+export np_proxy="*.media.ituknown.org,127.0.0.1,localhost"
 ```
 
 | **注意** |

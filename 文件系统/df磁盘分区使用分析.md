@@ -4,7 +4,7 @@
 
 Linux 与 Windows 系统不同，它没有盘符的概念。在 Windows 中，想要查看磁盘的使用情况我们只需要打开我的电脑就能很清楚的看到各个盘符的总量以及使用情况。但是在 Linux 中我们没法最直接实现这种效果，主要原因是 Linux 的文件系统都是挂在的概念，可以将任意一个可移动磁盘挂在到任意目录。比如在安装操作系统的时候都会有一个分区选择环节（如下图），我们可以选择文件分区模式或者自定义分区，当安装完成后我们就可以看到 `/` 目录是挂在在 sda 设备上的。
 
-![selected-for-partitioning-16549295524KRat6l1](https://ituknown.org/linux-media/Filesystem/df/selected-for-partitioning-16549295524KRat6l1.png)
+![selected-for-partitioning-16549295524KRat6l1](https://media.ituknown.org/linux-media/Filesystem/df/selected-for-partitioning-16549295524KRat6l1.png)
 
 而 `df` 命令其实就是用于观察系统对应的挂载点以及挂载点的使用情况。
 
@@ -48,7 +48,6 @@ Filesystem    [Type]    1K-blocks | Size    Used    Available    Use%    Mounted
 
 命令示例：
 
-
 ```bash
 $ df
 Filesystem     1K-blocks      Used Available Use% Mounted on
@@ -66,7 +65,7 @@ tmpfs               5120         4      5116   1% /run/lock
 tmpfs            1631064       940   1630124   1% /run/user/1000
 ```
 
-**Filesystem：** 其实就是我们的存储设备（也可以称为挂载点），比如系统的 `/` 目录就是挂载到 `/dev/sda1` 设备的。`sda1` 就是具体的存储设备，这个设备就相当于 Windwos 系统中的盘符。有点区别是，在 Windows 系统中我们只要双击盘符就能进到。但是在 Linux 中不行（如下命令示例），我们必须将这个存储设备挂载到指定目录后才行使用，而进入这个设备的入口就是所挂载到的目录。
+**Filesystem：** 其实就是我们的存储设备（也可以称为挂载点），比如系统的 `/` 目录就是挂载到 `/dev/sda1` 设备的。 `sda1` 就是具体的存储设备，这个设备就相当于 Windwos 系统中的盘符。有点区别是，在 Windows 系统中我们只要双击盘符就能进到。但是在 Linux 中不行（如下命令示例），我们必须将这个存储设备挂载到指定目录后才行使用，而进入这个设备的入口就是所挂载到的目录。
 
 ```bash
 $ cd /dev/sda1
@@ -221,7 +220,6 @@ tmpfs            1631064    940   1630124   1% /run/user/1000
 
 这个是我们最常用的，就是用于查看文件或目录所挂载的文件系统。比如查看 `/home` 和 `/` 所挂载的文件系统：
 
-
 ```bash
 $ df -h /home/ /
 Filesystem      Size  Used Avail Use% Mounted on
@@ -229,7 +227,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 /dev/sda2       218G  163G   44G  79% /
 ```
 
-从输出中可以看到，`/home` 目录也是挂载在 `/dev/sda2` 设备下的，因为 `/home` 是 `/` 的一个子虚拟目录。
+从输出中可以看到， `/home` 目录也是挂载在 `/dev/sda2` 设备下的，因为 `/home` 是 `/` 的一个子虚拟目录。
 
 # 资源链接
 

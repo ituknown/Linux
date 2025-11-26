@@ -30,7 +30,7 @@ $ pstree [option] [PID | USER]
 
 具体参数可以使用 `man pstree` 或 `pstree --help` 命令查看，下面只介绍在日常中常用的命令！
 
-**`pstree` 最简单最基本的用法就是直接使用不加任何参数**，如下：
+** `pstree` 最简单最基本的用法就是直接使用不加任何参数**，如下：
 
 ```bash
 $ pstree
@@ -38,9 +38,9 @@ $ pstree
 
 输出示例：
 
-<img src="https://ituknown.org/linux-media/SrvAndProcess/pstree/pstree.png" alt="pstree" height="300">
+<img src="https://media.ituknown.org/linux-media/SrvAndProcess/pstree/pstree.png" alt="pstree" height="300">
 
-它会列出默认的树形结构，另外你会看到某些进程有折叠的情况。如 ModemManager 进程并没有显示子进程树而是显示 `2*[{ModemManager}]`，说明它还有 2 个子进程但默认被折叠了，等下会具体说明。
+它会列出默认的树形结构，另外你会看到某些进程有折叠的情况。如 ModemManager 进程并没有显示子进程树而是显示 `2*[{ModemManager}]` ，说明它还有 2 个子进程但默认被折叠了，等下会具体说明。
 
 # 显示进程的命令参数
 
@@ -52,7 +52,7 @@ $ pstree -a
 
 输出示例：
 
-<img src="https://ituknown.org/linux-media/SrvAndProcess/pstree/pstree-a.png" alt="pstree-a" height="300">
+<img src="https://media.ituknown.org/linux-media/SrvAndProcess/pstree/pstree-a.png" alt="pstree-a" height="300">
 
 现在可以看到 pstree 命令输出树状结构时还额外显示一些进程的命令行选项。如 aria2c 进程，它在启动时额外指定了运行参数 `--conf-path=/opt/aria2/aria2.conf` 。
 
@@ -66,7 +66,7 @@ $ pstree -c
 
 输出示例：
 
-<img src="https://ituknown.org/linux-media/SrvAndProcess/pstree/pstree-c.png" alt="pstree-c" height="300">
+<img src="https://media.ituknown.org/linux-media/SrvAndProcess/pstree/pstree-c.png" alt="pstree-c" height="300">
 
 现在就将所有的子进程显示出来了~
 
@@ -80,7 +80,7 @@ $ pstree -p
 
 输出示例：
 
-<img src="https://ituknown.org/linux-media/SrvAndProcess/pstree/pstree-p.png" alt="pstree-p" height="300">
+<img src="https://media.ituknown.org/linux-media/SrvAndProcess/pstree/pstree-p.png" alt="pstree-p" height="300">
 
 现在你会发现进程树的每个进程都显示了进程的 PID，最显眼的 root 进程 systemd 的 PID 为 1，这是 Linux 系统的所有进程的祖宗！
 
@@ -108,7 +108,7 @@ $ pstree -H 4740
 
 输出示例：
 
-<img src="https://ituknown.org/linux-media/SrvAndProcess/pstree/pstree-H.png" alt="pstree-H" height="300">
+<img src="https://media.ituknown.org/linux-media/SrvAndProcess/pstree/pstree-H.png" alt="pstree-H" height="300">
 
 # 只显示指定进程的进程树
 
@@ -122,11 +122,11 @@ $ pstree -s 4740
 systemd───aria2c # 输出
 ```
 
-这回你会看到，直接使用 `-s` 输出的比较简单，想要更详细的输出我们可以额外增加前面介绍的参数，如 `-c`、`-a`、`-p` 等。
+这回你会看到，直接使用 `-s` 输出的比较简单，想要更详细的输出我们可以额外增加前面介绍的参数，如 `-c` 、 `-a` 、 `-p` 等。
 
 # 显示进程的线程名
 
-`pstree` 显示的进程树默认是不显示线程名的，不过有时候线程名非常重要，因为大多时候排查问题通过看线程名叫什么就基本知道啥问题了。`pstree` 显示进程的线程名使用 `-t` 参数，如下：
+`pstree` 显示的进程树默认是不显示线程名的，不过有时候线程名非常重要，因为大多时候排查问题通过看线程名叫什么就基本知道啥问题了。 `pstree` 显示进程的线程名使用 `-t` 参数，如下：
 
 ```bash
 $ pstree -t
@@ -134,7 +134,7 @@ $ pstree -t
 
 输出示例：
 
-<img src="https://ituknown.org/linux-media/SrvAndProcess/pstree/pstree-t.png" alt="pstree-t" height="300">
+<img src="https://media.ituknown.org/linux-media/SrvAndProcess/pstree/pstree-t.png" alt="pstree-t" height="300">
 
 # 显示指定用户的进程树
 
@@ -152,7 +152,7 @@ $ pstree root
 
 输出结果：
 
-<img src="https://ituknown.org/linux-media/SrvAndProcess/pstree/pstree-u-root.png" alt="pstree-u-root" height="300">
+<img src="https://media.ituknown.org/linux-media/SrvAndProcess/pstree/pstree-u-root.png" alt="pstree-u-root" height="300">
 
 --
 

@@ -16,7 +16,7 @@ sdb2
 sdb3
 ```
 
-这些抽象的文件我们是无法直接使用的。比如正常来说，既然 `sda` 是一块磁盘设备，那我我应该能够 `cd` 进入到该设备的，结果提示 `“Not a directory”`：
+这些抽象的文件我们是无法直接使用的。比如正常来说，既然 `sda` 是一块磁盘设备，那我我应该能够 `cd` 进入到该设备的，结果提示 `“Not a directory”` ：
 
 ```bash
 $ cd /dev/sda
@@ -55,9 +55,9 @@ NAME       MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
 
 现在可以很清晰的可以看到 Linux 的根目录 `/` 是挂载到 `/dev/sda2` 磁盘分区的，并且除了 `/boot/efi` 外没有其他任何目录再挂载磁盘设备。而 `/` 是所有目录的根目录，也就是说，其实我们的所有文件都是存储在 `/dev/sda2` 磁盘分区的。
 
-之所以会这样是因为我在安装系统时在分区这一步我选择了 `“All files in one partition”`，每个人在这一步可能都会选择不同的分区模式所以可能都有些不一样。
+之所以会这样是因为我在安装系统时在分区这一步我选择了 `“All files in one partition”` ，每个人在这一步可能都会选择不同的分区模式所以可能都有些不一样。
 
-![selected-for-partitioning-1656123276fzofeK](https://ituknown.org/linux-media/Filesystem/mount/selected-for-partitioning-1656123276fzofeK.png)
+![selected-for-partitioning-1656123276fzofeK](https://media.ituknown.org/linux-media/Filesystem/mount/selected-for-partitioning-1656123276fzofeK.png)
 
 那么现在来想一下，Linux 系统为什么要这么设计？这么设计有什么好处吗？
 
@@ -84,7 +84,7 @@ NAME       MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
 mount [options] <source> <directory>
 ```
 
-`mount` 命令所表示的含义就是将 `<source>` 挂载到 `<directory>`，我们可以理解为 `<directory>` 就是进入 `<source>` 的入口。
+`mount` 命令所表示的含义就是将 `<source>` 挂载到 `<directory>` ，我们可以理解为 `<directory>` 就是进入 `<source>` 的入口。
 
 来看下 `<source>` 可以有哪些：
 
@@ -103,9 +103,9 @@ PARTUUID=<uuid>         文件设备的 PARTUUID
 -U,--uuid <uuid>        同 UUID=<uuid>
 ```
 
-`<device>` 很好理解，关键的是 `LABEL`、`UUID` 这些是什么？
+`<device>` 很好理解，关键的是 `LABEL` 、 `UUID` 这些是什么？
 
-其实 `UUID`、`LABEL` 等就是磁盘文件设备的一些属性数据（可以参考下 [磁盘分区管理](磁盘分区管理.md)），我们可以使用 `blkid` 命令查看：
+其实 `UUID` 、 `LABEL` 等就是磁盘文件设备的一些属性数据（可以参考下 [磁盘分区管理](磁盘分区管理.md)），我们可以使用 `blkid` 命令查看：
 
 ```bash
 $ sudo blkid
@@ -118,7 +118,7 @@ $ sudo blkid
 ...
 ```
 
-可以看到，当我们使用 `blkid` 命令查看磁盘分区表时就会显示分区表对应的 UUID、LABEL、PARTUUID 以及 PARTLABEL。在实际中根据自己喜好选择，个人更喜欢使用分区表的 `PARTUUID`。
+可以看到，当我们使用 `blkid` 命令查看磁盘分区表时就会显示分区表对应的 UUID、LABEL、PARTUUID 以及 PARTLABEL。在实际中根据自己喜好选择，个人更喜欢使用分区表的 `PARTUUID` 。
 
 再来看下常用的 `[options]` 有哪些：
 
@@ -232,7 +232,7 @@ $ echo "hello" > ~/Volume/hello.txt
 -bash: /home/ituknown/Volume/hello.txt: Read-only file system
 ```
 
-结果提示 `~/Volume` 是个只读的文件系统，原因是因为我们在挂载时指定了以只读（`ro`）的方式挂载该文件系统。那现在该怎么办呢？
+结果提示 `~/Volume` 是个只读的文件系统，原因是因为我们在挂载时指定了以只读（ `ro` ）的方式挂载该文件系统。那现在该怎么办呢？
 
 有两种方式：
 
@@ -288,7 +288,7 @@ $ sudo mount -o rw /dev/sdb1 ~/Volume
 
 ## 指定设备 source 进行挂载
 
-上面我们都是以具体的设备来进行挂载的，在最开始的时候也说了，`<source>` 其实可以是设备的 `UUID`、`LABEL` 甚至是具体的目录，而在实际使用中我更推荐使用 `UUID`。
+上面我们都是以具体的设备来进行挂载的，在最开始的时候也说了， `<source>` 其实可以是设备的 `UUID` 、 `LABEL` 甚至是具体的目录，而在实际使用中我更推荐使用 `UUID` 。
 
 我们先使用 `blkid` 看下设备的属性信息：
 
@@ -371,7 +371,7 @@ UUID="ad4fbc0e-5281-4400-86c3-742a9395e5b1" /home/ituknown/Volume1 ext4 defaults
 /dev/sdb2 /home/ituknown/Volume2 vfat rw 0 0
 ```
 
-这个内容中的文件系统我分别使用文件系统的 UUID 和 文件系统的设备地址，权限我分别使用了 `defaults` 和 `rw`，也是为了告诉大家这里与 `mount`  命令如出一辙！
+这个内容中的文件系统我分别使用文件系统的 UUID 和 文件系统的设备地址，权限我分别使用了 `defaults` 和 `rw` ，也是为了告诉大家这里与 `mount` 命令如出一辙！
 
 **最后，很重要的一点！当配置写好之后不要忘记使用 `mount` 命令做测试，看下是否挂载成功。如果 `/etc/fstab` 文件的挂载配置有问题可能会导致无法正常启动！！！**
 

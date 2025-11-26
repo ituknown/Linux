@@ -16,7 +16,7 @@ Linux 主要有两种运行模式，分别是命令行模式和 X11 图形界面
 | 5   | X11模式          | 这个就是 **桌面版 GUI 图形模式**，也是桌面版 Ubuntu 及其他桌面版默认的运行模式。 |
 | 6   | 重启模式         | 这个是重启模式，注意是无限重启！除非你非常熟悉 Linux，否者不要使用该模式。|
 
-上面表格中每一种级别都有具体的说明，而我们经常使用的命令行模式其实就是 Linux 的 `runleve3`，而桌面版 GUI 其实就是 Linux 的 `runlevel5`。
+上面表格中每一种级别都有具体的说明，而我们经常使用的命令行模式其实就是 Linux 的 `runleve3` ，而桌面版 GUI 其实就是 Linux 的 `runlevel5` 。
 
 # 查看当前系统运行级别
 
@@ -28,7 +28,8 @@ $ runlevel
 
 下面是桌面版 Ubuntu 输出示例：
 ​
-![Ubuntu-Desktop-Default-Runlevel-1637546756qbfbg0](https://ituknown.org/linux-media/SystemManager/runlevels/Ubuntu-Desktop-Default-Runlevel-1637546756qbfbg0.png)
+
+![Ubuntu-Desktop-Default-Runlevel-1637546756qbfbg0](https://media.ituknown.org/linux-media/SystemManager/runlevels/Ubuntu-Desktop-Default-Runlevel-1637546756qbfbg0.png)
 
 注意看截图中的输出：
 
@@ -48,10 +49,10 @@ N 5
 ​
 如我想将当前用户的运行级别修改为 3（多用户命令行模式），在终端中输入如下命令即可：
 ​
+
 ```bash
 $ sudo telinit 3
 ```
-
 
 | **注意** |
 | :-------|
@@ -59,22 +60,22 @@ $ sudo telinit 3
 
 还是以我们当前的 GUI Ubuntu 为例，如下：
 
-![Ubuntu-Desktop-Change-Runlevel-1637546811zSwqNT](https://ituknown.org/linux-media/SystemManager/runlevels/Ubuntu-Desktop-Change-Runlevel-1637546811zSwqNT.png)
+![Ubuntu-Desktop-Change-Runlevel-1637546811zSwqNT](https://media.ituknown.org/linux-media/SystemManager/runlevels/Ubuntu-Desktop-Change-Runlevel-1637546811zSwqNT.png)
 
 当我们输入密码回车确认后就会立即进入命令行模式（即 Runleve3）：
 
-![linux-runlevel3-loginpage-1637546889GRM14C](https://ituknown.org/linux-media/SystemManager/runlevels/linux-runlevel3-loginpage-1637546889GRM14C.png)
+![linux-runlevel3-loginpage-1637546889GRM14C](https://media.ituknown.org/linux-media/SystemManager/runlevels/linux-runlevel3-loginpage-1637546889GRM14C.png)
 
 之后登录到系统，再次输入 `runlevel` 命令查看运行级别，你会得到如下输出：
 ​
-![linux-runlevel3-show-1637546934N1rSC4](https://ituknown.org/linux-media/SystemManager/runlevels/linux-runlevel3-show-1637546934N1rSC4.png)
 
-你看，这回不是 `N 3` 而是 `5  3` 了。记住，前面一个表示当前系统具有其他运行级别，后面一个表示当前用户的运行级别。另外，这仅仅是修改当前登录用户的运行级别，也就是说当我们重启（`reboot`）后就失效了~
+![linux-runlevel3-show-1637546934N1rSC4](https://media.ituknown.org/linux-media/SystemManager/runlevels/linux-runlevel3-show-1637546934N1rSC4.png)
+
+你看，这回不是 `N 3` 而是 `5  3` 了。记住，前面一个表示当前系统具有其他运行级别，后面一个表示当前用户的运行级别。另外，这仅仅是修改当前登录用户的运行级别，也就是说当我们重启（ `reboot` ）后就失效了~
 ​
 |**Note**|
 |:-------|
 |如果你按照上面的示例操作输入 `telinit 3` 后，你的屏幕变成空白而不是切入到命令行模式。是因为你处于一现在是 TTY。只需要在键盘上按住 Alt+F1 组合键（或其他功能键）就可以进入命令终端了。 |
-
 
 # initd 和 Systemd
 
@@ -89,22 +90,21 @@ $ sudo telinit 3
 
 # Systemd 管理运行级别
 
-Systemd 内置了许多工具，可用于我们做服务管理的是 `systemctl`。`systemctl` 可用于控制服务运行、停止及关系服务运行状态等，当然也可以用于管理系统运行级别了。
+Systemd 内置了许多工具，可用于我们做服务管理的是 `systemctl` 。 `systemctl` 可用于控制服务运行、停止及关系服务运行状态等，当然也可以用于管理系统运行级别了。
 
 `Systemd` 管理系统都是以单元的形式，也就是说 Linux 的每种运行级别都对应着 `Systemd` 的一个单元文件。但实际上 `Systemd` 在运行级别上只有五个单元，对应关系如下：
 
-
 | 运行级别（Runlevels） | Systemctl 控制单元  |
 | :-------------------- | :------------------ |
-| 0                     | `poweroff.target`   |
-| 1                     | `rescue.target`     |
+| 0                     | `poweroff.target` |
+| 1                     | `rescue.target` |
 | 2                     | `multi-user.target` |
 | 3                     | `multi-user.target` |
 | 4                     | `multi-user.target` |
-| 5                     | `graphical.target`  |
-| 6                     | `reboot.target`     |
+| 5                     | `graphical.target` |
+| 6                     | `reboot.target` |
 
-也就是说，`Systemd` 单元与 Linux 七种运行级别是一种兼容模式。比如  Runlevel2、Runlevel3、Runlevel4 都对应着 `Systemd` 的 `multi-user.target` 单元，即多用户命令行模式。而 X11 图形界面模式对应着 `Systemd` 的 `graphical.target`，这点需要注意。
+也就是说， `Systemd` 单元与 Linux 七种运行级别是一种兼容模式。比如  Runlevel2、Runlevel3、Runlevel4 都对应着 `Systemd` 的 `multi-user.target` 单元，即多用户命令行模式。而 X11 图形界面模式对应着 `Systemd` 的 `graphical.target` ，这点需要注意。
 ​
 | 注意                                                                                                                                                                    |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -112,6 +112,7 @@ Systemd 内置了许多工具，可用于我们做服务管理的是 `systemctl`
 
 前面表格列出的是 Linux 运行级别与 systemd 单元文件的对照关系，实际上我们也可以直接使用下面的命令查看：
 ​
+
 ```bash
 $ ls -l /usr/lib/systemd/system/runlevel*
 # 或
@@ -122,7 +123,7 @@ $ ls -l /lib/systemd/system/runlevel*
 | :----- |
 | `/usr/lib/systemd` 是 systemd 系统服务才有的目录，如果你的发行版使用的不是 systemd 作为系统管理工具可能没有该目录，不过现在基本上所有的 Linux 发行版使用的都是 systemd 作为管理工具，毕竟 initd 已经过时了！ |
 
-输出示例如下，你会发现 `runlevel[2-4].target` 都指向 `multi-user.target`：
+输出示例如下，你会发现 `runlevel[2-4].target` 都指向 `multi-user.target` ：
 
 ```log
 lrwxrwxrwx 1 root root   15 Jul  8 21:03 /lib/systemd/system/runlevel0.target -> poweroff.target
@@ -146,13 +147,13 @@ $ systemctl get-default
 
 这个命令就会输出自己的运行单元，下面是桌面版 Ubuntu 输出示例：
 
-![systemctl-getdefault-1637547018eANBA9](https://ituknown.org/linux-media/SystemManager/runlevels/systemctl-getdefault-1637547018eANBA9.png)
+![systemctl-getdefault-1637547018eANBA9](https://media.ituknown.org/linux-media/SystemManager/runlevels/systemctl-getdefault-1637547018eANBA9.png)
 
 会发现当前系统默认的运行级别对应着 systemd 的 graphical.target 单元，也就是图形界面。
 
 ## systemctl 修改运行级别
 
-`systemctl` 修改运行级别直接使用 `set-default` 命令即可，比如我想将当前桌面版 Ubuntu 修改为多用户命令行模式（`multi-user.target`），那么直接在命令行中输入如下命令即可（需要超级管理员角色）：
+`systemctl` 修改运行级别直接使用 `set-default` 命令即可，比如我想将当前桌面版 Ubuntu 修改为多用户命令行模式（ `multi-user.target` ），那么直接在命令行中输入如下命令即可（需要超级管理员角色）：
 
 ```bash
  $ sudo systemctl set-default multi-user.target
@@ -160,17 +161,19 @@ $ systemctl get-default
 
 除了使用 `systemctl` 命令外我们也可以通过创建软链接的方式设置运行模式：
 ​
+
 ```bash
 $ sudo ln -sf /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 ```
 
 下面是 Ubuntu 桌面版执行示例：
 
-![systemctl-changeto-multiuser-1637547106uxVfrX](https://ituknown.org/linux-media/SystemManager/runlevels/systemctl-changeto-multiuser-1637547106uxVfrX.png)
-​
-之后重启（`reboot`）重新登录就会发现编程了命令行模式了（注意看灰色框标识的命令）：
+![systemctl-changeto-multiuser-1637547106uxVfrX](https://media.ituknown.org/linux-media/SystemManager/runlevels/systemctl-changeto-multiuser-1637547106uxVfrX.png)
 
-![systemctl-multiuser-show-1637547120HUymZa](https://ituknown.org/linux-media/SystemManager/runlevels/systemctl-multiuser-show-1637547120HUymZa.png)
+​
+之后重启（ `reboot` ）重新登录就会发现编程了命令行模式了（注意看灰色框标识的命令）：
+
+![systemctl-multiuser-show-1637547120HUymZa](https://media.ituknown.org/linux-media/SystemManager/runlevels/systemctl-multiuser-show-1637547120HUymZa.png)
 
 # initd 管理运行级别
 
@@ -178,6 +181,7 @@ initd 系统管理工具已经被慢慢的淘汰了，目前使用该管理工�
 
 所有使用 initd 作为系统管理的 Linux 发行版在 `/etc` 目录下都会有一个 `inittab` 配置文件即可，修改文件最后一行的 `id:` 配置即可：
 ​
+
 ```properties
 # inittab is only used by upstart for the default runlevel.
 #
@@ -209,12 +213,14 @@ id:5:initdefault:   <== 注意这里
 
 如果想要使用 X11 模式就选择 runlevel5，对应的值为：
 ​
+
 ```
 id:5:initdefault:
 ```
 
 如果想要使用服务器使用的多用户命令行模式就选择 runlevel3 即可：
 ​
+
 ```
 id:3:initdefault:
 ```
